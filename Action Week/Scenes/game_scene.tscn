@@ -1,0 +1,106 @@
+[gd_scene load_steps=7 format=3 uid="uid://dew8rdjqh7og2"]
+
+[ext_resource type="PackedScene" uid="uid://b1c8msk3p2gkp" path="res://Objects/dummy.tscn" id="1_w4v2a"]
+[ext_resource type="Texture2D" uid="uid://bn7rjh8fqxnlu" path="res://icon.svg" id="2_ipkcv"]
+[ext_resource type="Script" path="res://Scenes/UI.gd" id="3_2llna"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_pmhbl"]
+size = Vector2(2400, 128)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dce8l"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.556863)
+skew = Vector2(-0.72, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 55.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_88kwp"]
+bg_color = Color(0.364706, 0.698039, 0.156863, 1)
+skew = Vector2(-0.765, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="GameScene" type="Node2D"]
+
+[node name="Dummy" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
+position = Vector2(256, 403)
+SPEED = 500.0
+JUMP_VELOCITY = -800.0
+id = 1
+enemy_player = NodePath("../Dummy2")
+player_layer = 1
+attack_layer = 3
+enemy_layer = 4
+
+[node name="Dummy2" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
+position = Vector2(886, 413)
+SPEED = 500.0
+JUMP_VELOCITY = -800.0
+id = 2
+enemy_player = NodePath("../Dummy")
+player_layer = 4
+attack_layer = 5
+enemy_layer = 1
+
+[node name="Floor" type="StaticBody2D" parent="."]
+position = Vector2(590, 664)
+collision_layer = 2
+collision_mask = 9
+
+[node name="Sprite2D" type="Sprite2D" parent="Floor"]
+scale = Vector2(18.7031, 1)
+texture = ExtResource("2_ipkcv")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor"]
+shape = SubResource("RectangleShape2D_pmhbl")
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("3_2llna")
+
+[node name="Main" type="Control" parent="UI"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HealthBar1" type="ProgressBar" parent="UI/Main"]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 16.0
+offset_right = 423.0
+offset_bottom = 45.0
+theme_override_styles/background = SubResource("StyleBoxFlat_dce8l")
+theme_override_styles/fill = SubResource("StyleBoxFlat_88kwp")
+max_value = 2.0
+step = 1.0
+value = 2.0
+show_percentage = false
+
+[node name="HealthBar2" type="ProgressBar" parent="UI/Main"]
+layout_mode = 0
+offset_left = 710.0
+offset_top = 19.0
+offset_right = 1108.0
+offset_bottom = 48.0
+max_value = 2.0
+step = 1.0
+value = 2.0
+fill_mode = 1
+show_percentage = false
+
+[connection signal="hp_update" from="Dummy" to="UI" method="_on_dummy_hp_update"]
+[connection signal="hp_update" from="Dummy2" to="UI" method="_on_dummy_2_hp_update"]
