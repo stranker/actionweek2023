@@ -72,6 +72,8 @@ func _fsm():
 			if is_on_floor():
 				if abs(velocity.x) > 0:
 					set_state(State.RUN)
+			if Input.is_action_just_pressed("jump" + str(id)):
+				set_state(State.JUMP)
 			elif not is_on_floor() and velocity.y > 0:
 				set_state(State.FALL)
 			if Input.is_action_just_pressed("attack" + str(id)) and can_attack:
