@@ -1271,13 +1271,14 @@ font_size = 32
 font_color = Color(0, 1, 0, 1)
 shadow_color = Color(0, 0, 0, 1)
 
-[node name="Dummy" type="CharacterBody2D" node_paths=PackedStringArray("attack_collision", "right_attack_area", "left_attack_area")]
+[node name="Dummy" type="CharacterBody2D" node_paths=PackedStringArray("attack_collision", "right_attack_area", "left_attack_area", "grab_area")]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_3prxl")
 attack_collision = NodePath("Visible/Skin/Body/RightHand/RightAttackArea/AttackCollision")
 right_attack_area = NodePath("Visible/Skin/Body/RightHand/RightAttackArea")
 left_attack_area = NodePath("Visible/Skin/Body/LeftHand/LeftAttackArea")
+grab_area = NodePath("Visible/Skin/GrabArea")
 special_scene = ExtResource("2_x7x1q")
 attack_distance = 50.0
 

@@ -60,6 +60,8 @@ func _ready(): #Start()
 	right_attack_area.set_collision_mask_value(enemy_layer, true)
 	left_attack_area.set_collision_layer_value(attack_layer, true)
 	left_attack_area.set_collision_mask_value(enemy_layer, true)
+	grab_area.set_collision_layer_value(attack_layer, true)
+	grab_area.set_collision_mask_value(enemy_layer, true)
 	set_state(State.IDLE)
 	pass
 
