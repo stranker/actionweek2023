@@ -18,4 +18,6 @@ func _end_round():
 	tween.stop()
 	tween.tween_property(Engine, "time_scale", 1, 0.2).set_trans(Tween.TRANS_EXPO)
 	tween.play()
+	await get_tree().create_timer(2).timeout
+	get_tree().reload_current_scene()
 	pass 

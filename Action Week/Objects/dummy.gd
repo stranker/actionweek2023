@@ -20,6 +20,7 @@ enum State {
 	FALL,
 	ATTACK,
 	GUARD,
+	GRAB,
 	SPECIAL,
 	HIT,
 	DEAD
@@ -31,6 +32,7 @@ var facing_direction : Vector2 = Vector2.RIGHT
 @export var attack_collision : CollisionShape2D
 @export var right_attack_area : Area2D
 @export var left_attack_area : Area2D
+@export var grab_area : Area2D
 
 var can_attack : bool = true
 var is_dead : bool = false
@@ -70,48 +72,31 @@ func _fsm():
 	match current_state:
 		State.IDLE:
 			if is_on_floor():
+				check_grab_input()
+				check_jump_input()
 				if abs(velocity.x) > 0:
 					set_state(State.RUN)
-			if Input.is_action_just_pressed("jump" + str(id)):
-				set_state(State.JUMP)
-			elif not is_on_floor() and velocity.y > 0:
-				set_state(State.FALL)
-			if Input.is_action_just_pressed("attack" + str(id)) and can_attack:
-				set_state(State.ATTACK)
-			if Input.is_action_just_pressed("special" + str(id)) and can_attack:
-				set_state(State.SPECIAL)
-			if Input.is_action_just_pressed("guard" + str(id)) and guard_stamina > 0:
-				set_state(State.GUARD)
-			if Input.is_action_just_pressed("jump" + str(id)):
-				set_state(State.JUMP)
+			else:
+				if velocity.y > 0:
+					set_state(State.FALL)
+			check_attack_input()
+			check_press_guard_input()
 		State.RUN:
 			if is_on_floor():
 				if abs(velocity.x) < 0.1:
 					set_state(State.IDLE)
-				if Input.is_action_just_pressed("jump" + str(id)):
-					set_state(State.JUMP)
-			if Input.is_action_just_pressed("attack" + str(id)) and can_attack:
-				set_state(State.ATTACK)
-			if Input.is_action_just_pressed("special" + str(id)) and can_attack:
-				set_state(State.SPECIAL)
-			if Input.is_action_just_pressed("guard" + str(id)) and guard_stamina > 0:
-				set_state(State.GUARD)
+				check_grab_input()
+				check_jump_input()
+			check_attack_input()
+			check_press_guard_input()
 		State.JUMP:
-			if Input.is_action_just_pressed("attack" + str(id)) and can_attack:
-				set_state(State.ATTACK)
-			if Input.is_action_just_pressed("special" + str(id)) and can_attack:
-				set_state(State.SPECIAL)
-			if Input.is_action_just_pressed("guard" + str(id)) and guard_stamina > 0:
-				set_state(State.GUARD)
+			check_attack_input()
+			check_press_guard_input()
 			if not is_on_floor() and velocity.y > 0:
 				set_state(State.FALL)
 		State.FALL:
-			if Input.is_action_just_pressed("attack" + str(id)) and can_attack:
-				set_state(State.ATTACK)
-			if Input.is_action_just_pressed("special" + str(id)) and can_attack:
-				set_state(State.SPECIAL)
-			if Input.is_action_just_pressed("guard" + str(id)) and guard_stamina > 0:
-				set_state(State.GUARD)
+			check_attack_input()
+			check_press_guard_input()
 			if is_on_floor() and velocity.y >= 0:
 				if abs(velocity.x) > 0:
 					set_state(State.RUN)
@@ -120,10 +105,33 @@ func _fsm():
 		State.ATTACK:
 			pass
 		State.GUARD:
-			can_recover_guard = false
-			if Input.is_action_just_released("guard" + str(id)) or guard_stamina <= 0:
-				set_state(State.IDLE)
-				$RecoverGuardTimer.start()
+			check_release_guard_input()
+	pass
+
+func check_attack_input():
+	if Input.is_action_just_pressed("attack" + str(id)) and can_attack:
+		set_state(State.ATTACK)
+	pass
+
+func check_jump_input():
+	if Input.is_action_just_pressed("jump" + str(id)) and is_on_floor():
+		set_state(State.JUMP)
+	pass
+
+func check_press_guard_input():
+	if Input.is_action_just_pressed("guard" + str(id)) and guard_stamina > 0:
+		set_state(State.GUARD)
+	pass
+
+func check_release_guard_input():
+	if Input.is_action_just_released("guard" + str(id)) or guard_stamina <= 0:
+		set_state(State.IDLE)
+		$RecoverGuardTimer.start()
+	pass
+
+func check_grab_input():
+	if Input.is_action_just_pressed("grab" + str(id)):
+		set_state(State.GRAB)
 	pass
 
 func set_state(new_state : State):
@@ -148,6 +156,8 @@ func set_state(new_state : State):
 			_dead_state()
 		State.GUARD:
 			_guard_state()
+		State.GRAB:
+			_grab_state()
 		State.HIT:
 			_hit_state()
 	pass
@@ -182,17 +192,27 @@ func _special_state():
 	pass
 
 func _dead_state():
+	dead.emit()
 	$AnimationPlayer.play("dead")
 	pass
 
 func _guard_state():
+	can_recover_guard = false
 	$AnimationPlayer.play("guard")
 	pass
 
 func _hit_state():
-	$AnimationPlayer.play("hit")
-	await get_tree().create_timer(0.3).timeout
-	set_state(State.IDLE)
+	if hp <= 0:
+		is_dead = true
+		set_state(State.DEAD)
+	else:
+		$AnimationPlayer.play("hit")
+	pass
+
+func _grab_state():
+	$AnimationPlayer.play("grab")
+	velocity.x = 0
+	pass
 
 func _physics_process(delta): #FixedUpdate()
 	if can_attack and not is_dead:
@@ -222,7 +242,6 @@ func _physics_process(delta): #FixedUpdate()
 			_movement(delta)
 		State.GUARD:
 			velocity.x = 0
-	#print_debug(velocity)
 	move_and_slide()
 	pass
 
@@ -252,19 +271,18 @@ func attack():
 
 func take_damage(damage : int):
 	if is_dead: return
+	hp -= damage
+	hp_update.emit(hp)
+	set_state(State.HIT)
+	pass
+
+func hit(damage : int):
 	if current_state == State.GUARD:
 		guard_stamina -= damage
 		guard_stamina = clamp(guard_stamina, 0, 50)
 		guard_stamina_update.emit(guard_stamina)
 	else:
-		hp -= damage
-		hp_update.emit(hp)
-		if hp <= 0:
-			is_dead = true
-			dead.emit()
-			set_state(State.DEAD)
-		else:
-			set_state(State.HIT)
+		take_damage(damage)
 	pass
 
 func reset_attack():
@@ -292,3 +310,14 @@ func _on_attack_combo_timer_timeout():
 func _on_recover_guard_timer_timeout():
 	can_recover_guard = true
 	pass # Replace with function body.
+
+
+func _on_grab_area_body_entered(body):
+	var dummy : Dummy = body as Dummy
+	dummy.grab()
+	pass # Replace with function body.
+
+func grab():
+	can_attack = false
+	take_damage(20)
+	pass
