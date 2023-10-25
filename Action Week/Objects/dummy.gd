@@ -8,6 +8,7 @@ class_name Dummy
 @export var id : int = 0
 @export var hp : int = 100
 @export var enemy_player : Dummy
+@export var debug_enabled : bool = false
 
 signal hp_update(hp)
 signal guard_stamina_update(stamina)
@@ -65,6 +66,7 @@ func _ready(): #Start()
 	left_attack_area.set_collision_mask_value(enemy_layer, true)
 	grab_area.set_collision_layer_value(attack_layer, true)
 	grab_area.set_collision_mask_value(enemy_layer, true)
+	$Debug.visible = debug_enabled
 	set_state(State.IDLE)
 	pass
 
@@ -296,6 +298,7 @@ func take_damage(damage : int):
 	if is_dead: return
 	hp -= damage
 	hp_update.emit(hp)
+	velocity.x = -facing_direction.x * 150
 	set_state(State.HIT)
 	pass
 
@@ -315,13 +318,13 @@ func reset_attack():
 
 func _on_right_attack_area_body_entered(body):
 	var dummy : Dummy = body as Dummy
-	dummy.take_damage(damage_per_combo * attack_combo)
+	dummy.hit(damage_per_combo * attack_combo)
 	pass # Replace with function body.
 
 
 func _on_left_attack_area_body_entered(body):
 	var dummy : Dummy = body as Dummy
-	dummy.take_damage(damage_per_combo * attack_combo)
+	dummy.hit(damage_per_combo * attack_combo)
 	pass # Replace with function body.
 
 
@@ -342,6 +345,7 @@ func _on_grab_area_body_entered(body):
 	pass # Replace with function body.
 
 func grab():
+	if is_dead: return
 	set_state(State.GRABBED)
 	pass
 

@@ -1503,6 +1503,8 @@ one_shot = true
 wait_time = 2.0
 one_shot = true
 
+[node name="AttackRecoverTimer" type="Timer" parent="."]
+
 [node name="Debug" type="Control" parent="."]
 z_index = 10
 layout_mode = 3
@@ -1517,6 +1519,9 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_top = -4.0
+offset_right = 102.0
+offset_bottom = 44.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_colors/font_color = Color(0, 1, 0, 1)
