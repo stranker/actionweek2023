@@ -189,6 +189,8 @@ func _attack_state():
 func _jump_state():
 	$AnimationPlayer.play("jump")
 	velocity.y = JUMP_VELOCITY
+	$Jump.pitch_scale = randf_range(1.2,1.9)
+	$Jump.play()
 	pass
 
 func _fall_state():
@@ -358,4 +360,12 @@ func check_grab_success():
 		$AnimationPlayer.stop()
 		set_state(State.IDLE)
 	grab_success = false
+	pass
+
+func check_drag_end_state():
+	if is_dead:
+		$AnimationPlayer.play("dead")
+		velocity.x = 0
+	else:
+		set_state(State.IDLE)
 	pass

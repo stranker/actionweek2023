@@ -1,13 +1,16 @@
 extends Node2D
 
+signal end_round(player_id)
 
 func _on_dummy_2_dead():
 	_end_round()
+	end_round.emit(1)
 	pass # Replace with function body.
 
 
 func _on_dummy_dead():
 	_end_round()
+	end_round.emit(2)
 	pass # Replace with function body.
 
 func _end_round():
