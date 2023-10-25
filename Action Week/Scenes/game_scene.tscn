@@ -1,15 +1,17 @@
-[gd_scene load_steps=7 format=3 uid="uid://dew8rdjqh7og2"]
+[gd_scene load_steps=15 format=3 uid="uid://dew8rdjqh7og2"]
 
+[ext_resource type="Script" path="res://Scenes/game_scene.gd" id="1_7qcci"]
 [ext_resource type="PackedScene" uid="uid://b1c8msk3p2gkp" path="res://Objects/dummy.tscn" id="1_w4v2a"]
 [ext_resource type="Texture2D" uid="uid://bn7rjh8fqxnlu" path="res://icon.svg" id="2_ipkcv"]
 [ext_resource type="Script" path="res://Scenes/UI.gd" id="3_2llna"]
+[ext_resource type="Texture2D" uid="uid://rmo2fj6q20xl" path="res://Scenes/Background.jpg" id="5_oiqdb"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pmhbl"]
 size = Vector2(2400, 128)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dce8l"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 0.556863)
-skew = Vector2(-0.72, 0)
+skew = Vector2(-0.76, 0)
 border_width_left = 4
 border_width_top = 4
 border_width_right = 4
@@ -21,18 +23,94 @@ corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 expand_margin_left = 5.0
 expand_margin_top = 5.0
-expand_margin_right = 55.0
+expand_margin_right = 5.0
 expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_88kwp"]
 bg_color = Color(0.364706, 0.698039, 0.156863, 1)
-skew = Vector2(-0.765, 0)
+skew = Vector2(-0.76, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ufru0"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.556863)
+skew = Vector2(-0.76, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7c088"]
+bg_color = Color(0.847059, 0.67451, 0, 1)
+skew = Vector2(-0.76, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0cj7q"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.556863)
+skew = Vector2(0.76, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dme0w"]
+bg_color = Color(0.364706, 0.698039, 0.156863, 1)
+skew = Vector2(0.76, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dmimc"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.556863)
+skew = Vector2(0.76, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6me2b"]
+bg_color = Color(0.847059, 0.67451, 0, 1)
+skew = Vector2(0.76, 0)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
 [node name="GameScene" type="Node2D"]
+script = ExtResource("1_7qcci")
 
 [node name="Dummy" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
 position = Vector2(256, 403)
@@ -79,28 +157,61 @@ grow_vertical = 2
 
 [node name="HealthBar1" type="ProgressBar" parent="UI/Main"]
 layout_mode = 0
-offset_left = 25.0
+offset_left = 24.0
 offset_top = 16.0
-offset_right = 423.0
+offset_right = 422.0
 offset_bottom = 45.0
 theme_override_styles/background = SubResource("StyleBoxFlat_dce8l")
 theme_override_styles/fill = SubResource("StyleBoxFlat_88kwp")
-max_value = 2.0
 step = 1.0
-value = 2.0
+value = 100.0
+show_percentage = false
+
+[node name="GuardStaminaBar1" type="ProgressBar" parent="UI/Main"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 56.0
+offset_right = 252.0
+offset_bottom = 73.0
+theme_override_styles/background = SubResource("StyleBoxFlat_ufru0")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7c088")
+max_value = 50.0
+value = 50.0
 show_percentage = false
 
 [node name="HealthBar2" type="ProgressBar" parent="UI/Main"]
 layout_mode = 0
-offset_left = 710.0
-offset_top = 19.0
-offset_right = 1108.0
-offset_bottom = 48.0
-max_value = 2.0
+offset_left = 728.0
+offset_top = 16.0
+offset_right = 1126.0
+offset_bottom = 45.0
+theme_override_styles/background = SubResource("StyleBoxFlat_0cj7q")
+theme_override_styles/fill = SubResource("StyleBoxFlat_dme0w")
 step = 1.0
-value = 2.0
+value = 100.0
 fill_mode = 1
 show_percentage = false
 
+[node name="GuardStaminaBar2" type="ProgressBar" parent="UI/Main"]
+layout_mode = 0
+offset_left = 904.0
+offset_top = 56.0
+offset_right = 1108.0
+offset_bottom = 73.0
+theme_override_styles/background = SubResource("StyleBoxFlat_dmimc")
+theme_override_styles/fill = SubResource("StyleBoxFlat_6me2b")
+max_value = 50.0
+step = 1.0
+value = 50.0
+show_percentage = false
+
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("5_oiqdb")
+centered = false
+
+[connection signal="dead" from="Dummy" to="." method="_on_dummy_dead"]
+[connection signal="guard_stamina_update" from="Dummy" to="UI" method="_on_dummy_guard_stamina_update"]
 [connection signal="hp_update" from="Dummy" to="UI" method="_on_dummy_hp_update"]
+[connection signal="dead" from="Dummy2" to="." method="_on_dummy_2_dead"]
+[connection signal="guard_stamina_update" from="Dummy2" to="UI" method="_on_dummy_2_guard_stamina_update"]
 [connection signal="hp_update" from="Dummy2" to="UI" method="_on_dummy_2_hp_update"]
