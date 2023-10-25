@@ -1,4 +1,4 @@
-[gd_scene load_steps=21 format=3 uid="uid://b1c8msk3p2gkp"]
+[gd_scene load_steps=22 format=3 uid="uid://b1c8msk3p2gkp"]
 
 [ext_resource type="Script" path="res://Objects/dummy.gd" id="1_3prxl"]
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_0j6c5"]
@@ -1175,6 +1175,7 @@ tracks/7/keys = {
 
 [sub_resource type="Animation" id="Animation_aeaqb"]
 resource_name = "grab"
+length = 1.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -1194,7 +1195,7 @@ tracks/1/path = NodePath("Visible/Skin/Body/Head:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.8, 1),
+"times": PackedFloat32Array(0, 0.2, 0.7, 0.9),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
 "values": [0.0, 0.08629, 0.196658, 0.0]
@@ -1206,10 +1207,10 @@ tracks/2/path = NodePath("Visible/Skin/Body/LeftHand:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.5, 0.7, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.2, 0.5, 0.7, 0.9, 1, 1.1, 1.3, 1.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-30, 2.66667), Vector2(-37.3405, 3.76606), Vector2(24.2741, -3.6428), Vector2(24.2741, -3.6428), Vector2(-30, 2.66667)]
+"values": [Vector2(-30, 2.66667), Vector2(-37.3405, 3.76606), Vector2(22.8793, -15.8042), Vector2(22.7188, -10.5781), Vector2(22.7188, -10.5781), Vector2(8.07383, -14.9011), Vector2(7.57383, -22.9011), Vector2(32.0738, -23.4011), Vector2(-30, 2.66667)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -1218,10 +1219,10 @@ tracks/3/path = NodePath("Visible/Skin/Body/RightHand:position")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.5, 0.7, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.2, 0.5, 0.7, 0.9, 1, 1.1, 1.3, 1.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(24, 0.666667), Vector2(26.6137, -18.9132), Vector2(51.6681, -6.05447), Vector2(51.6681, -6.05447), Vector2(24, 0.666667)]
+"values": [Vector2(24, 0.666667), Vector2(26.6137, -18.9132), Vector2(50.2734, -18.2159), Vector2(50.1128, -12.9898), Vector2(50.1128, -12.9898), Vector2(35.4679, -17.3127), Vector2(34.9679, -25.3127), Vector2(59.4679, -25.8127), Vector2(24, 0.666667)]
 }
 tracks/4/type = "value"
 tracks/4/imported = false
@@ -1230,7 +1231,7 @@ tracks/4/path = NodePath("Visible/Skin/GrabArea/CollisionShape2D:disabled")
 tracks/4/interp = 1
 tracks/4/loop_wrap = true
 tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.5, 0.7, 1),
+"times": PackedFloat32Array(0, 0.5, 0.7, 0.9),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
 "values": [true, false, false, true]
@@ -1242,12 +1243,126 @@ tracks/5/path = NodePath(".")
 tracks/5/interp = 1
 tracks/5/loop_wrap = true
 tracks/5/keys = {
-"times": PackedFloat32Array(1),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0.9, 1.6),
+"transitions": PackedFloat32Array(1, 1),
 "values": [{
+"args": [],
+"method": &"check_grab_success"
+}, {
 "args": [0],
 "method": &"set_state"
 }]
+}
+
+[sub_resource type="Animation" id="Animation_fj62k"]
+resource_name = "grabbed"
+length = 2.0
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Visible/Skin/Body:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8, 1.1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(21, -7), Vector2(21, -7), Vector2(-2.5, -39), Vector2(-1.5, 0), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Visible/Skin/Body:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.8, 1.1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, -0.786857, -1.3585, 0.0]
+}
+tracks/2/type = "method"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath(".")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"values": [{
+"args": [false],
+"method": &"set_physics_process"
+}, {
+"args": [true],
+"method": &"set_physics_process"
+}, {
+"args": [],
+"method": &"take_grab_damage"
+}, {
+"args": [0],
+"method": &"set_state"
+}]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Visible/Skin/Body/LeftFoot:rotation")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.8, 1.1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.783427, -0.591644, -0.0133494]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Visible/Skin/Body/RightFoot:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.8, 1.1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 1.15892, -0.145004, 0.00759092]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Visible/Skin/Body/LeftHand:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.8, 1.1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(-30, 2.66667), Vector2(-40.6282, -20.9189), Vector2(-32.7408, -45.1142), Vector2(-30, 2.66667)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Visible/Skin/Body/RightHand:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.8, 1.1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(24, 0.666667), Vector2(35.0301, -19.3944), Vector2(28.7359, -32.791), Vector2(24, 0.666667)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Visible/Skin/Body/Head:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.8, 1.1, 1.5, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.2172, 0.0295541, -0.450292, 0.445829, 0.0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_qmohw"]
@@ -1259,6 +1374,7 @@ _data = {
 "dead": SubResource("Animation_21yta"),
 "fall": SubResource("Animation_msnjy"),
 "grab": SubResource("Animation_aeaqb"),
+"grabbed": SubResource("Animation_fj62k"),
 "guard": SubResource("Animation_ebhgm"),
 "hit": SubResource("Animation_pfjkv"),
 "idle": SubResource("Animation_tb135"),

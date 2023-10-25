@@ -21,6 +21,7 @@ enum State {
 	ATTACK,
 	GUARD,
 	GRAB,
+	GRABBED,
 	SPECIAL,
 	HIT,
 	DEAD
@@ -35,8 +36,10 @@ var facing_direction : Vector2 = Vector2.RIGHT
 @export var grab_area : Area2D
 
 var can_attack : bool = true
+var can_move: bool = true
 var is_dead : bool = false
 var can_recover_guard : bool = false
+var grab_success : bool = false
 
 @export var player_layer : int
 @export var attack_layer : int
@@ -160,6 +163,8 @@ func set_state(new_state : State):
 			_guard_state()
 		State.GRAB:
 			_grab_state()
+		State.GRABBED:
+			_grabbed_state()
 		State.HIT:
 			_hit_state()
 	pass
@@ -167,6 +172,8 @@ func set_state(new_state : State):
 func _idle_state():
 	$AnimationPlayer.play("idle")
 	reset_attack()
+	velocity = Vector2.ZERO
+	can_move = true
 	pass
 
 func _run_state():
@@ -196,6 +203,7 @@ func _special_state():
 func _dead_state():
 	dead.emit()
 	$AnimationPlayer.play("dead")
+	velocity = Vector2.ZERO
 	pass
 
 func _guard_state():
@@ -214,6 +222,12 @@ func _hit_state():
 func _grab_state():
 	$AnimationPlayer.play("grab")
 	velocity.x = 0
+	pass
+
+func _grabbed_state():
+	can_attack = false
+	can_move = false
+	$AnimationPlayer.play("grabbed")
 	pass
 
 func _physics_process(delta): #FixedUpdate()
@@ -237,17 +251,20 @@ func _physics_process(delta): #FixedUpdate()
 		State.RUN:
 			_movement(delta)
 		State.ATTACK:
-			_movement_attack(delta)
+			_no_movement()
 		State.JUMP:
 			_movement(delta)
 		State.FALL:
 			_movement(delta)
+		State.GRABBED:
+			_movement_grabbed(delta)
 		State.GUARD:
-			velocity.x = 0
+			_no_movement()
 	move_and_slide()
 	pass
 
 func _movement(delta):
+	if not can_move: return
 	var direction = Input.get_axis("move_left" + str(id), "move_right" + str(id))
 	if direction:
 		velocity.x = direction * SPEED
@@ -255,8 +272,12 @@ func _movement(delta):
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 	pass
 
-func _movement_attack(delta):
+func _no_movement():
 	velocity.x = 0
+	pass
+
+func _movement_grabbed(delta):
+	velocity = -facing_direction * 500
 	pass
 
 func attack():
@@ -317,9 +338,20 @@ func _on_recover_guard_timer_timeout():
 func _on_grab_area_body_entered(body):
 	var dummy : Dummy = body as Dummy
 	dummy.grab()
+	grab_success = true
 	pass # Replace with function body.
 
 func grab():
-	can_attack = false
+	set_state(State.GRABBED)
+	pass
+
+func take_grab_damage():
 	take_damage(20)
+	pass
+
+func check_grab_success():
+	if not grab_success:
+		$AnimationPlayer.stop()
+		set_state(State.IDLE)
+	grab_success = false
 	pass
