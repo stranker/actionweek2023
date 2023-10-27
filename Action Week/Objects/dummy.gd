@@ -88,6 +88,7 @@ func _fsm():
 					set_state(State.FALL)
 			check_attack_input()
 			check_press_guard_input()
+			check_special_input()
 		State.RUN:
 			if is_on_floor():
 				if abs(velocity.x) < 0.1:
@@ -96,6 +97,7 @@ func _fsm():
 				check_jump_input()
 			check_attack_input()
 			check_press_guard_input()
+			check_special_input()
 		State.JUMP:
 			check_attack_input()
 			check_press_guard_input()
@@ -139,6 +141,11 @@ func check_release_guard_input():
 func check_grab_input():
 	if Input.is_action_just_pressed("grab" + str(id)):
 		set_state(State.GRAB)
+	pass
+
+func check_special_input():
+	if Input.is_action_just_pressed("special" + str(id)):
+		set_state(State.SPECIAL)
 	pass
 
 func set_state(new_state : State):
@@ -198,10 +205,21 @@ func _fall_state():
 	pass
 
 func _special_state():
-	velocity.y = 0
 	var special = special_scene.instantiate()
 	get_tree().root.add_child(special)
 	special.init(global_position, facing_direction, attack_layer, enemy_layer)
+	special.start.connect(on_special_start)
+	special.finish.connect(on_special_finish)
+	pass
+
+func on_special_start():
+	velocity.y = 0
+	can_move = false
+	pass
+
+func on_special_finish():
+	can_move = true
+	set_state(State.IDLE)
 	pass
 
 func _dead_state():
