@@ -13,6 +13,8 @@ class_name Dummy
 signal hp_update(hp)
 signal guard_stamina_update(stamina)
 signal dead()
+signal special_start(special_name)
+signal special_end()
 
 enum State {
 	IDLE,
@@ -205,21 +207,23 @@ func _fall_state():
 	pass
 
 func _special_state():
-	var special = special_scene.instantiate()
-	get_tree().root.add_child(special)
-	special.init(global_position, facing_direction, attack_layer, enemy_layer)
+	var special : Special = special_scene.instantiate() as Special
 	special.start.connect(on_special_start)
 	special.finish.connect(on_special_finish)
+	get_tree().root.add_child(special)
+	special.init(global_position, facing_direction, attack_layer, enemy_layer)
 	pass
 
-func on_special_start():
-	velocity.y = 0
+func on_special_start(special_name : String):
+	velocity = Vector2.ZERO
 	can_move = false
+	special_start.emit(special_name)
 	pass
 
 func on_special_finish():
 	can_move = true
 	set_state(State.IDLE)
+	special_end.emit()
 	pass
 
 func _dead_state():
@@ -281,6 +285,8 @@ func _physics_process(delta): #FixedUpdate()
 		State.GRABBED:
 			_movement_grabbed(delta)
 		State.GUARD:
+			_no_movement()
+		State.SPECIAL:
 			_no_movement()
 	move_and_slide()
 	pass

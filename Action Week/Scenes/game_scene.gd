@@ -24,3 +24,7 @@ func _end_round():
 	await get_tree().create_timer(2).timeout
 	get_tree().reload_current_scene()
 	pass 
+
+
+func _on_dummy_special_start(special_name):
+	pass # Replace with function body.
