@@ -34,7 +34,7 @@ attack_layer = 5
 enemy_layer = 1
 
 [node name="Floor" type="StaticBody2D" parent="."]
-position = Vector2(590, 585)
+position = Vector2(584, 632)
 collision_layer = 2
 collision_mask = 9
 
