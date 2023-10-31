@@ -15,6 +15,8 @@ signal guard_stamina_update(stamina)
 signal dead()
 signal special_start(special_name)
 signal special_end()
+signal connect_hit(hits)
+signal end_connect_hit()
 
 enum State {
 	IDLE,
@@ -37,6 +39,7 @@ var facing_direction : Vector2 = Vector2.RIGHT
 @export var right_attack_area : Area2D
 @export var left_attack_area : Area2D
 @export var grab_area : Area2D
+@export var guard_anim : AnimationPlayer
 
 var can_attack : bool = true
 var can_move: bool = true
@@ -55,6 +58,7 @@ var start_attack_distance : Vector2
 var attack_combo : int = 1
 @export var damage_per_combo : = 5
 @export var guard_stamina : float = 50
+var connected_hit = 0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -211,7 +215,7 @@ func _special_state():
 	special.start.connect(on_special_start)
 	special.finish.connect(on_special_finish)
 	get_tree().root.add_child(special)
-	special.init(global_position, facing_direction, attack_layer, enemy_layer)
+	special.init(self, global_position, facing_direction, attack_layer, enemy_layer)
 	pass
 
 func on_special_start(special_name : String):
@@ -333,6 +337,7 @@ func hit(damage : int):
 		guard_stamina -= damage
 		guard_stamina = clamp(guard_stamina, 0, 50)
 		guard_stamina_update.emit(guard_stamina)
+		guard_anim.play("hit")
 	else:
 		take_damage(damage)
 	pass
@@ -344,15 +349,25 @@ func reset_attack():
 
 func _on_right_attack_area_body_entered(body):
 	var dummy : Dummy = body as Dummy
-	dummy.hit(damage_per_combo * attack_combo)
+	attack_player(dummy)
 	pass # Replace with function body.
 
 
 func _on_left_attack_area_body_entered(body):
 	var dummy : Dummy = body as Dummy
-	dummy.hit(damage_per_combo * attack_combo)
+	attack_player(dummy)
 	pass # Replace with function body.
 
+func attack_player(player : Dummy):
+	player.hit(damage_per_combo * attack_combo)
+	add_connected_hit()
+	pass
+
+func add_connected_hit():
+	connected_hit += 1
+	connect_hit.emit(connected_hit)
+	$ConnectedHitsTimer.start()
+	pass
 
 func _on_attack_combo_timer_timeout():
 	attack_combo = 1
@@ -393,3 +408,9 @@ func check_drag_end_state():
 	else:
 		set_state(State.IDLE)
 	pass
+
+
+func _on_connected_hits_timer_timeout():
+	end_connect_hit.emit()
+	connected_hit = 0
+	pass # Replace with function body.

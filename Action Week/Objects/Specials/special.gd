@@ -12,6 +12,6 @@ func _on_start():
 	start.emit(special_name)
 	pass
 
-func init(pos : Vector2, facing_direction : Vector2, attack_layer : int, enemy_layer : int):
+func init(player : Dummy, pos : Vector2, facing_direction : Vector2, attack_layer : int, enemy_layer : int):
 	_on_start()
 	pass

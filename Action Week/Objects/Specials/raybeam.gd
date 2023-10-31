@@ -1,17 +1,21 @@
 extends Special
 
-func init(pos : Vector2, facing_direction : Vector2, attack_layer : int, enemy_layer : int):
-	super.init(pos, facing_direction, attack_layer, enemy_layer)
+var ref_player : Dummy
+
+func init(player : Dummy, pos : Vector2, facing_direction : Vector2, attack_layer : int, enemy_layer : int):
+	super.init(player, pos, facing_direction, attack_layer, enemy_layer)
 	global_position = pos
 	scale.x = facing_direction.x
 	set_collision_layer_value(attack_layer, true)
 	set_collision_mask_value(enemy_layer, true)
+	ref_player = player
 	pass
 
 func _on_body_entered(body):
 	var dummy : Dummy = body as Dummy
 	dummy.take_damage(damage)
 	$CollisionShape2D.set_deferred("disabled", true)
+	ref_player.add_connected_hit()
 	await get_tree().create_timer(0.1).timeout
 	$CollisionShape2D.set_deferred("disabled", false)
 	pass # Replace with function body.
