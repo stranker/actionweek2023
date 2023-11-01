@@ -1,35 +1,53 @@
-[gd_scene load_steps=17 format=3 uid="uid://cvttj0867drlk"]
+[gd_scene load_steps=19 format=3 uid="uid://cvttj0867drlk"]
 
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="1_so0nr"]
+[ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="2_rv2cw"]
 
 [sub_resource type="GDScript" id="GDScript_yljfq"]
 resource_name = "player_widget"
 script/source = "extends Control
-
 @export var health_bar : ProgressBar
 @export var stamina_bar : ProgressBar
 @export var ulti_text : RichTextLabel
 @export var anim : AnimationPlayer
+@export var hits_control : Control
 @export var hits_text : Label
 @export var player : Dummy
+@export var hits_text_offset : float = 600
 
 var showing_hits : bool = false
+var hits_control_initial_pos : Vector2
+
+@export var flipped : bool = false
+
+var hits_tween : Tween
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	player.hp_update.connect(set_health)
-	player.guard_stamina_update.connect(set_stamina)
-	player.special_start.connect(set_ulti_text)
-	player.special_end.connect(hide_ulti)
-	player.connect_hit.connect(set_hits_text)
-	player.end_connect_hit.connect(hide_connect_hit)
+	if player:
+		player.hp_update.connect(set_health)
+		player.guard_stamina_update.connect(set_stamina)
+		player.special_start.connect(set_ulti_text)
+		player.special_end.connect(hide_ulti)
+		player.connect_hit.connect(set_hits_text)
+		player.end_connect_hit.connect(hide_connect_hit)
 	ulti_text.hide()
-	hits_text.hide()
+	hits_control.hide()
+	update_flipped()
 	pass # Replace with function body.
 
+func update_flipped():
+	update_flip_element(self, flipped, true)
+	update_flip_element(ulti_text, flipped, true)
+	update_flip_element(hits_control, flipped, true)
+	hits_control_initial_pos = hits_control.position
+	ulti_text.text_direction = Control.TEXT_DIRECTION_LTR if not flipped else TEXT_DIRECTION_RTL
+	pass
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func update_flip_element(element : Control, flipped : bool, update_position : bool):
+	element.scale.x = 1 if not flipped else -1
+	if update_position:
+		element.position.x = element.position.x if not flipped else element.position.x + element.size.x
 	pass
 
 func set_health(health : int):
@@ -52,15 +70,24 @@ func hide_ulti():
 func set_hits_text(hits : int):
 	hits_text.text = str(hits)
 	if not showing_hits:
-		hits_text.show()
-		anim.play(\"start_hit\")
+		hits_control.show()
+		var tween  = create_tween()
+		var final_pos = hits_text_offset + hits_control.size.x if flipped else hits_text_offset - hits_control.size.x
+		tween.tween_property(hits_control, \"position\", Vector2(final_pos, hits_control.position.y), 0.2)
+		tween.play()
 		showing_hits = true
+	else:
+		var tween  = create_tween()
+		tween.set_parallel(true)
+		tween.tween_property(hits_control, \"scale\", Vector2(1 if not flipped else -1, 1) * 1.1, 0.2)
+		tween.parallel().tween_property(hits_control, \"scale\", Vector2(1 if not flipped else -1, 1), 0.2).set_delay(0.2).set_trans(Tween.TRANS_EXPO).set_ease(Tween.EASE_IN)
+		tween.play()
 	pass
 
 func hide_connect_hit():
 	showing_hits = false
-	anim.play_backwards(\"start_hit\")
-	hits_text.hide()
+	hits_control.hide()
+	hits_control.position.x = hits_control_initial_pos.x
 	pass
 "
 
@@ -139,26 +166,14 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerWidget/Hits:position")
+tracks/0/path = NodePath("UltiText:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(330, 95)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("PlayerWidget/Hits:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 1)]
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_vhbis"]
@@ -207,7 +222,7 @@ length = 0.3
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerWidget/Hits:position")
+tracks/0/path = NodePath("Hits/Amount:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -219,7 +234,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("PlayerWidget/Hits:modulate")
+tracks/1/path = NodePath("Hits/Amount:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -228,10 +243,39 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Hits/Amount:visible")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_sajip"]
+resource_name = "hit_continue"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("PlayerWidget/Hits:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rj1ji"]
 _data = {
 "RESET": SubResource("Animation_u7576"),
+"hit_continue": SubResource("Animation_sajip"),
 "special": SubResource("Animation_vhbis"),
 "start_hit": SubResource("Animation_7ubju")
 }
@@ -239,16 +283,20 @@ _data = {
 [sub_resource type="RichTextEffect" id="RichTextEffect_2kpfw"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_bduew"]
-font_size = 120
+font = ExtResource("2_rv2cw")
+font_size = 86
+font_color = Color(1, 0.835294, 0.313726, 1)
 outline_size = 20
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_61udi"]
-font_size = 86
+font = ExtResource("2_rv2cw")
+font_size = 56
+font_color = Color(1, 0.835294, 0.313726, 1)
 outline_size = 20
 outline_color = Color(0, 0, 0, 1)
 
-[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "ulti_text", "anim", "hits_text")]
+[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "ulti_text", "anim", "hits_control", "hits_text")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -260,7 +308,9 @@ health_bar = NodePath("HealthBar")
 stamina_bar = NodePath("GuardStaminaBar")
 ulti_text = NodePath("UltiText")
 anim = NodePath("Anim")
-hits_text = NodePath("Hits")
+hits_control = NodePath("Hits")
+hits_text = NodePath("Hits/Amount")
+hits_text_offset = 200.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 layout_mode = 1
@@ -287,15 +337,13 @@ value = 50.0
 show_percentage = false
 
 [node name="Ulti" type="Control" parent="."]
-visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = -800.0
 offset_top = -301.5
-offset_right = -439.0
+offset_right = 361.0
 offset_bottom = 301.5
 grow_vertical = 2
 
@@ -334,45 +382,59 @@ text = "COMELA"
 label_settings = SubResource("LabelSettings_aqwfg")
 
 [node name="Anim" type="AnimationPlayer" parent="."]
-root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_rj1ji")
 }
 
 [node name="UltiText" type="RichTextLabel" parent="."]
+clip_contents = false
 layout_mode = 1
-offset_left = 24.0
-offset_top = 88.0
-offset_right = 576.0
+offset_left = 40.0
+offset_top = 128.0
+offset_right = 512.0
 offset_bottom = 192.0
 theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 30
-theme_override_font_sizes/normal_font_size = 72
+theme_override_fonts/normal_font = ExtResource("2_rv2cw")
+theme_override_font_sizes/normal_font_size = 56
 bbcode_enabled = true
-text = "PLACEHOLDER"
+text = "Ray Beam"
+fit_content = true
+scroll_active = false
 custom_effects = [SubResource("RichTextEffect_2kpfw")]
+deselect_on_focus_loss_enabled = false
 
-[node name="Hits" type="Label" parent="."]
-layout_mode = 0
-offset_left = 320.0
-offset_top = 144.0
-offset_right = 398.0
-offset_bottom = 312.0
+[node name="Hits" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 0
+offset_left = -260.0
+offset_top = 164.0
+offset_right = -155.0
+offset_bottom = 337.0
+
+[node name="Amount" type="Label" parent="Hits"]
+layout_mode = 1
+offset_left = 4.0
+offset_top = 34.0
+offset_right = 72.0
+offset_bottom = 138.0
 text = "6"
 label_settings = SubResource("LabelSettings_bduew")
+vertical_alignment = 1
 
-[node name="HitsText" type="Label" parent="Hits"]
+[node name="HitLabel" type="Label" parent="Hits/Amount"]
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -1.0
-offset_top = -47.0
-offset_right = 145.0
-offset_bottom = 80.0
+offset_left = 4.0
+offset_top = -30.0
+offset_right = 150.0
+offset_bottom = 45.0
 grow_horizontal = 0
 grow_vertical = 2
 text = "HIT"
 label_settings = SubResource("LabelSettings_61udi")
+vertical_alignment = 1

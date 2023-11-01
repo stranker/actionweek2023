@@ -86,6 +86,11 @@ grow_vertical = 2
 layout_mode = 1
 player = NodePath("../../../Dummy")
 
+[node name="PlayerWidget2" parent="UI/Main" node_paths=PackedStringArray("player") instance=ExtResource("5_ewiew")]
+layout_mode = 1
+player = NodePath("../../../Dummy2")
+flipped = true
+
 [node name="Background" type="Sprite2D" parent="."]
 texture = ExtResource("5_oiqdb")
 centered = false
