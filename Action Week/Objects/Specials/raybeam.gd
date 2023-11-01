@@ -13,10 +13,10 @@ func init(player : Dummy, pos : Vector2, facing_direction : Vector2, attack_laye
 
 func _on_body_entered(body):
 	var dummy : Dummy = body as Dummy
-	dummy.take_damage(damage)
-	$CollisionShape2D.set_deferred("disabled", true)
+	dummy.hit(damage)
 	ref_player.add_connected_hit()
-	await get_tree().create_timer(0.1).timeout
+	$CollisionShape2D.set_deferred("disabled", true)
+	await get_tree().create_timer(0.15).timeout
 	$CollisionShape2D.set_deferred("disabled", false)
 	pass # Replace with function body.
 
