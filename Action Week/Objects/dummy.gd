@@ -10,6 +10,8 @@ class_name Dummy
 @export var enemy_player : Dummy
 @export var debug_enabled : bool = false
 
+var hurt_particles_scene = preload("res://Objects/Particles/hurt_particles.tscn")
+
 signal hp_update(hp)
 signal guard_stamina_update(stamina)
 signal dead()
@@ -17,6 +19,7 @@ signal special_start(special_name)
 signal special_end()
 signal connect_hit(hits)
 signal end_connect_hit()
+signal big_impact()
 
 enum State {
 	IDLE,
@@ -324,22 +327,31 @@ func attack():
 	start_attack_distance = global_position
 	pass
 
-func take_damage(damage : int):
+func take_damage(damage : int, damage_pos : Vector2):
 	if is_dead: return
 	hp -= damage
 	hp_update.emit(hp)
 	velocity.x = -facing_direction.x * 150
 	set_state(State.HIT)
+	_add_hurt_particles(damage_pos)
 	pass
 
-func hit(damage : int):
+func _add_hurt_particles(damage_pos : Vector2):
+	var hurt_particles : Node2D = hurt_particles_scene.instantiate()
+	get_tree().root.add_child(hurt_particles)
+	hurt_particles.global_position = damage_pos
+	pass
+
+func hit(damage : int, damage_pos : Vector2):
 	if current_state == State.GUARD:
 		guard_stamina -= damage
 		guard_stamina = clamp(guard_stamina, 0, 50)
 		guard_stamina_update.emit(guard_stamina)
 		guard_anim.play("hit")
+		return false
 	else:
-		take_damage(damage)
+		take_damage(damage, damage_pos)
+		return true
 	pass
 
 func reset_attack():
@@ -349,18 +361,22 @@ func reset_attack():
 
 func _on_right_attack_area_body_entered(body):
 	var dummy : Dummy = body as Dummy
-	attack_player(dummy)
+	attack_player(dummy, $Visible/Skin/Body/RightHand.global_position)
 	pass # Replace with function body.
 
 
 func _on_left_attack_area_body_entered(body):
 	var dummy : Dummy = body as Dummy
-	attack_player(dummy)
+	attack_player(dummy, $Visible/Skin/Body/LeftHand.global_position)
 	pass # Replace with function body.
 
-func attack_player(player : Dummy):
-	player.hit(damage_per_combo * attack_combo)
-	add_connected_hit()
+func attack_player(player : Dummy, pos : Vector2):
+	if player.is_dead: return
+	var sucess_hit = player.hit(damage_per_combo * attack_combo, pos)
+	if sucess_hit:
+		add_connected_hit()
+		if attack_combo == 3:
+			big_impact.emit()
 	pass
 
 func add_connected_hit():
@@ -391,7 +407,7 @@ func grab():
 	pass
 
 func take_grab_damage():
-	take_damage(20)
+	take_damage(20, global_position)
 	pass
 
 func check_grab_success():

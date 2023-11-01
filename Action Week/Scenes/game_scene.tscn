@@ -26,7 +26,7 @@ enemy_layer = 4
 [node name="Dummy2" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
 position = Vector2(886, 413)
 SPEED = 500.0
-JUMP_VELOCITY = -1400.0
+JUMP_VELOCITY = -1000.0
 id = 2
 enemy_player = NodePath("../Dummy")
 player_layer = 4
@@ -71,8 +71,20 @@ texture = ExtResource("2_ipkcv")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floor3"]
 shape = SubResource("RectangleShape2D_pmhbl")
 
+[node name="Background" type="Sprite2D" parent="."]
+texture = ExtResource("5_oiqdb")
+centered = false
+
 [node name="UI" type="CanvasLayer" parent="."]
 script = ExtResource("3_2llna")
+
+[node name="BigImpactRect" type="ColorRect" parent="UI"]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="Main" type="Control" parent="UI"]
 layout_mode = 3
@@ -90,10 +102,6 @@ player = NodePath("../../../Dummy")
 layout_mode = 1
 player = NodePath("../../../Dummy2")
 flipped = true
-
-[node name="Background" type="Sprite2D" parent="."]
-texture = ExtResource("5_oiqdb")
-centered = false
 
 [connection signal="dead" from="Dummy" to="." method="_on_dummy_dead"]
 [connection signal="dead" from="Dummy2" to="." method="_on_dummy_2_dead"]

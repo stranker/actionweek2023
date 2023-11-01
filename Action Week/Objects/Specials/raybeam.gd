@@ -13,7 +13,8 @@ func init(player : Dummy, pos : Vector2, facing_direction : Vector2, attack_laye
 
 func _on_body_entered(body):
 	var dummy : Dummy = body as Dummy
-	dummy.hit(damage)
+	if dummy.is_dead: return
+	dummy.hit(damage, body.global_position)
 	ref_player.add_connected_hit()
 	$CollisionShape2D.set_deferred("disabled", true)
 	await get_tree().create_timer(0.15).timeout
