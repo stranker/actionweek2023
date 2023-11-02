@@ -1,10 +1,14 @@
-[gd_scene load_steps=25 format=3 uid="uid://b1c8msk3p2gkp"]
+[gd_scene load_steps=29 format=3 uid="uid://b1c8msk3p2gkp"]
 
 [ext_resource type="Script" path="res://Objects/dummy.gd" id="1_3prxl"]
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_0j6c5"]
 [ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="2_3i6w4"]
 [ext_resource type="AudioStream" uid="uid://dpq8mimucscnt" path="res://Audio/SFx/jump.wav" id="4_61bu2"]
 [ext_resource type="Texture2D" uid="uid://bucme7b1vh8pn" path="res://Objects/Specials/CircleParticle.png" id="5_y0rpl"]
+[ext_resource type="AudioStream" uid="uid://ceg2ep21cn43w" path="res://Audio/SFx/hurt.wav" id="6_eclac"]
+[ext_resource type="AudioStream" uid="uid://w4xxc2eec6ug" path="res://Audio/SFx/punch1.wav" id="7_a7jn5"]
+[ext_resource type="AudioStream" uid="uid://cycwngvv84b6p" path="res://Audio/SFx/hit_floor.wav" id="8_7hfog"]
+[ext_resource type="AudioStream" uid="uid://l4p7gnma1fyu" path="res://Audio/SFx/hit.wav" id="8_348el"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iux6w"]
 size = Vector2(32, 32)
@@ -1623,8 +1627,26 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Jump" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(7, -64)
 stream = ExtResource("4_61bu2")
 pitch_scale = 1.94
+
+[node name="Hurt" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(52, -31)
+stream = ExtResource("6_eclac")
+pitch_scale = 1.2
+
+[node name="Punch" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(13, -66)
+stream = ExtResource("7_a7jn5")
+
+[node name="Hit" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(13, -66)
+stream = ExtResource("8_348el")
+
+[node name="HitFloor" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(13, -66)
+stream = ExtResource("8_7hfog")
 
 [connection signal="body_entered" from="Visible/Skin/Body/LeftHand/LeftAttackArea" to="." method="_on_left_attack_area_body_entered"]
 [connection signal="body_entered" from="Visible/Skin/Body/RightHand/RightAttackArea" to="." method="_on_right_attack_area_body_entered"]

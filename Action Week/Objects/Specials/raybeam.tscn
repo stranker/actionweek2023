@@ -1,8 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://dsk8ym0h5fu7f"]
+[gd_scene load_steps=14 format=3 uid="uid://dsk8ym0h5fu7f"]
 
 [ext_resource type="Script" path="res://Objects/Specials/raybeam.gd" id="1_80f8x"]
 [ext_resource type="Texture2D" uid="uid://btks1m0waipk2" path="res://Objects/Specials/Raybeam.png" id="1_h0nle"]
 [ext_resource type="Texture2D" uid="uid://bucme7b1vh8pn" path="res://Objects/Specials/CircleParticle.png" id="2_fib7e"]
+[ext_resource type="AudioStream" uid="uid://dk54bc30khxra" path="res://Audio/SFx/ray_beam.wav" id="4_e4gf5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lpgc5"]
 size = Vector2(208, 176)
@@ -264,6 +265,11 @@ emitting = false
 amount = 120
 process_material = SubResource("ParticleProcessMaterial_kp3v4")
 texture = ExtResource("2_fib7e")
+
+[node name="Sound" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_e4gf5")
+volume_db = 2.0
+autoplay = true
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

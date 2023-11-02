@@ -131,4 +131,4 @@ explosiveness = 1.0
 scale = Vector2(5.9375, 5.9375)
 sprite_frames = SubResource("SpriteFrames_5y4wc")
 autoplay = "default"
-frame_progress = 0.150508
+frame_progress = 0.786924

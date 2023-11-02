@@ -26,7 +26,7 @@ func _on_dummy_dead():
 	pass # Replace with function body.
 
 func _end_round():
-	Engine.time_scale = 0.1
+	Engine.time_scale = 0.15
 	await get_tree().create_timer(4, true, false, true)
 	var tween = create_tween()
 	tween.tween_property(Engine, "time_scale", 1, 2).set_trans(Tween.TRANS_EXPO)

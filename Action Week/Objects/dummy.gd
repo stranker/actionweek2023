@@ -211,7 +211,7 @@ func _attack_state():
 func _jump_state():
 	$AnimationPlayer.play("jump")
 	velocity.y = JUMP_VELOCITY
-	$Jump.pitch_scale = randf_range(1.2,1.9)
+	$Jump.pitch_scale = randf_range(1,1.2)
 	$Jump.play()
 	pass
 
@@ -325,6 +325,7 @@ func attack():
 	if not can_attack: return
 	can_attack = false
 	$AnimationPlayer.play("attack" + str(attack_combo))
+	$Punch.play()
 	pass
 
 func take_damage(damage : int, damage_pos : Vector2):
@@ -333,6 +334,8 @@ func take_damage(damage : int, damage_pos : Vector2):
 	hp -= damage
 	hp_update.emit(hp)
 	velocity.x = -facing_direction.x * 150
+	$Hurt.pitch_scale = randf_range(0.9, 1.1)
+	$Hurt.play()
 	set_state(State.HIT)
 	_add_hurt_particles(damage_pos)
 	pass
@@ -347,6 +350,7 @@ func _add_dust_particles():
 	var dust_particles : Node2D = dust_particles_scene.instantiate()
 	get_tree().root.add_child(dust_particles)
 	dust_particles.init($Visible/Skin/Body/LeftFoot.global_position)
+	$HitFloor.play()
 	pass
 
 func _add_guard_particles(pos : Vector2):
@@ -388,6 +392,7 @@ func attack_player(player : Dummy, pos : Vector2):
 	if player.is_dead: return
 	var sucess_hit = player.hit(damage_per_combo * attack_combo, pos)
 	if sucess_hit:
+		$Hit.play()
 		if not $AttackComboTimer.is_stopped():
 			attack_combo += 1
 			if attack_combo > 3:
