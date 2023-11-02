@@ -15,3 +15,8 @@ func _show_big_impact():
 	await get_tree().create_timer(0.12, true, false, true).timeout
 	Engine.time_scale = 1
 	pass
+
+
+func _on_game_scene_time_left(time):
+	$Main/Clock/Time.text = str(int(time))
+	pass # Replace with function body.

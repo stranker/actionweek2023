@@ -260,7 +260,7 @@ z_index = 10
 scale = Vector2(2, 2)
 sprite_frames = SubResource("SpriteFrames_iqb2e")
 autoplay = "default"
-frame_progress = 0.121248
+frame_progress = 0.625463
 
 [node name="BackShield" type="AnimatedSprite2D" parent="Shield"]
 self_modulate = Color(1, 1, 1, 0.54902)
@@ -269,7 +269,7 @@ position = Vector2(-2.08333, 0.416667)
 scale = Vector2(0.697706, 0.697706)
 sprite_frames = SubResource("SpriteFrames_iqb2e")
 autoplay = "default"
-frame_progress = 0.981124
+frame_progress = 0.485339
 
 [node name="Anim" type="AnimationPlayer" parent="Shield"]
 root_node = NodePath("../BackShield")

@@ -1,7 +1,8 @@
-[gd_scene load_steps=12 format=3 uid="uid://d1fu10a2y7lbu"]
+[gd_scene load_steps=18 format=3 uid="uid://d1fu10a2y7lbu"]
 
 [ext_resource type="Texture2D" uid="uid://c33cuvp01o3i2" path="res://Objects/Particles/HurtParticles.png" id="1_b33gf"]
 [ext_resource type="Texture2D" uid="uid://bucme7b1vh8pn" path="res://Objects/Specials/CircleParticle.png" id="2_xo20x"]
+[ext_resource type="Texture2D" uid="uid://duvjeyejmmew7" path="res://Objects/Particles/AttackParticles.png" id="3_bgt1c"]
 
 [sub_resource type="Curve" id="Curve_snkyf"]
 _data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.44632, 0.0, 0, 0]
@@ -35,10 +36,9 @@ script/source = "extends GPUParticles2D
 func _ready():
 	emitting = true
 	one_shot = true
-	for child in get_children():
-		child.emitting = true
-		child.one_shot = true
-	await get_tree().create_timer(1).timeout
+	$Particles1.one_shot = true
+	$Particles1.emitting = true
+	await get_tree().create_timer(0.2).timeout
 	queue_free()
 	pass # Replace with function body.
 "
@@ -76,6 +76,42 @@ color_ramp = SubResource("GradientTexture1D_hr3bk")
 hue_variation_min = 0.16
 hue_variation_max = 0.25
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_o26r8"]
+atlas = ExtResource("3_bgt1c")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_lgt8j"]
+atlas = ExtResource("3_bgt1c")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ybsq6"]
+atlas = ExtResource("3_bgt1c")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rhcwh"]
+atlas = ExtResource("3_bgt1c")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_5y4wc"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_o26r8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lgt8j")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ybsq6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rhcwh")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
 [node name="HurtParticles" type="GPUParticles2D"]
 z_index = 10
 process_material = SubResource("ParticleProcessMaterial_684g3")
@@ -90,3 +126,9 @@ process_material = SubResource("ParticleProcessMaterial_61crl")
 texture = ExtResource("2_xo20x")
 lifetime = 0.2
 explosiveness = 1.0
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(5.9375, 5.9375)
+sprite_frames = SubResource("SpriteFrames_5y4wc")
+autoplay = "default"
+frame_progress = 0.150508

@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://dew8rdjqh7og2"]
+[gd_scene load_steps=12 format=3 uid="uid://dew8rdjqh7og2"]
 
 [ext_resource type="Script" path="res://Scenes/game_scene.gd" id="1_7qcci"]
 [ext_resource type="PackedScene" uid="uid://b1c8msk3p2gkp" path="res://Objects/dummy.tscn" id="1_w4v2a"]
@@ -6,12 +6,25 @@
 [ext_resource type="Script" path="res://Scenes/UI.gd" id="3_2llna"]
 [ext_resource type="PackedScene" uid="uid://cvttj0867drlk" path="res://UI/player_widget.tscn" id="5_ewiew"]
 [ext_resource type="Texture2D" uid="uid://rmo2fj6q20xl" path="res://Scenes/Background.jpg" id="5_oiqdb"]
+[ext_resource type="Texture2D" uid="uid://c3u1bu2a80fyo" path="res://UI/Clock.png" id="7_p3568"]
+[ext_resource type="FontFile" uid="uid://ble18gxjisbqk" path="res://Fonts/ds_digital/DS-DIGII.TTF" id="8_qs4ge"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pmhbl"]
 size = Vector2(2400, 128)
 
+[sub_resource type="LabelSettings" id="LabelSettings_uywa6"]
+font = ExtResource("8_qs4ge")
+font_size = 92
+font_color = Color(1, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_djhju"]
+font = ExtResource("8_qs4ge")
+font_size = 72
+font_color = Color(1, 0.819608, 0, 1)
+
 [node name="GameScene" type="Node2D"]
 script = ExtResource("1_7qcci")
+round_time = 60.0
 
 [node name="Dummy" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
 position = Vector2(256, 403)
@@ -99,5 +112,73 @@ layout_mode = 1
 player = NodePath("../../../Dummy2")
 flipped = true
 
+[node name="Clock" type="TextureRect" parent="UI/Main"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -128.0
+offset_top = 8.0
+offset_right = 136.0
+offset_bottom = 140.0
+grow_horizontal = 2
+texture = ExtResource("7_p3568")
+stretch_mode = 5
+
+[node name="Time" type="Label" parent="UI/Main/Clock"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -52.0
+offset_top = -48.0
+offset_right = 52.0
+offset_bottom = 48.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "99"
+label_settings = SubResource("LabelSettings_uywa6")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Score1" type="Label" parent="UI/Main/Clock"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 12.0
+offset_top = -35.0
+offset_right = 47.0
+offset_bottom = 41.0
+grow_vertical = 2
+text = "0"
+label_settings = SubResource("LabelSettings_djhju")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Score2" type="Label" parent="UI/Main/Clock"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -51.0
+offset_top = -35.0
+offset_right = -16.0
+offset_bottom = 41.0
+grow_horizontal = 0
+grow_vertical = 2
+text = "0"
+label_settings = SubResource("LabelSettings_djhju")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RoundTimer" type="Timer" parent="."]
+
+[connection signal="time_left" from="." to="UI" method="_on_game_scene_time_left"]
 [connection signal="dead" from="Dummy" to="." method="_on_dummy_dead"]
 [connection signal="dead" from="Dummy2" to="." method="_on_dummy_2_dead"]
+[connection signal="timeout" from="RoundTimer" to="." method="_on_round_timer_timeout"]

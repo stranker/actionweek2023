@@ -324,13 +324,7 @@ func _movement_grabbed(delta):
 func attack():
 	if not can_attack: return
 	can_attack = false
-	if not $AttackComboTimer.is_stopped():
-		attack_combo += 1
-		if attack_combo > 3:
-			attack_combo = 1
-	$AttackComboTimer.start()
 	$AnimationPlayer.play("attack" + str(attack_combo))
-	start_attack_distance = global_position
 	pass
 
 func take_damage(damage : int, damage_pos : Vector2):
@@ -394,6 +388,11 @@ func attack_player(player : Dummy, pos : Vector2):
 	if player.is_dead: return
 	var sucess_hit = player.hit(damage_per_combo * attack_combo, pos)
 	if sucess_hit:
+		if not $AttackComboTimer.is_stopped():
+			attack_combo += 1
+			if attack_combo > 3:
+				attack_combo = 1
+		$AttackComboTimer.start()
 		add_connected_hit()
 		if attack_combo == 3:
 			big_impact.emit()
@@ -401,7 +400,8 @@ func attack_player(player : Dummy, pos : Vector2):
 
 func add_connected_hit():
 	connected_hit += 1
-	connect_hit.emit(connected_hit)
+	if connected_hit > 1:
+		connect_hit.emit(connected_hit)
 	$ConnectedHitsTimer.start()
 	pass
 
