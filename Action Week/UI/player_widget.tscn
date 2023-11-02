@@ -316,7 +316,7 @@ ulti_text = NodePath("UltiText")
 anim = NodePath("Anim")
 hits_control = NodePath("Hits")
 hits_text = NodePath("Hits/Amount")
-hits_text_offset = 200.0
+hits_text_offset = 400.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 layout_mode = 1

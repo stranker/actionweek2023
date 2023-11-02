@@ -1,10 +1,9 @@
-[gd_scene load_steps=34 format=3 uid="uid://b1c8msk3p2gkp"]
+[gd_scene load_steps=25 format=3 uid="uid://b1c8msk3p2gkp"]
 
 [ext_resource type="Script" path="res://Objects/dummy.gd" id="1_3prxl"]
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_0j6c5"]
 [ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="2_3i6w4"]
 [ext_resource type="AudioStream" uid="uid://dpq8mimucscnt" path="res://Audio/SFx/jump.wav" id="4_61bu2"]
-[ext_resource type="Texture2D" uid="uid://dj816im4obo2a" path="res://Objects/Guard.png" id="4_86y05"]
 [ext_resource type="Texture2D" uid="uid://bucme7b1vh8pn" path="res://Objects/Specials/CircleParticle.png" id="5_y0rpl"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iux6w"]
@@ -12,175 +11,6 @@ size = Vector2(32, 32)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_3kbi3"]
 size = Vector2(45.5, 62.5)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_c606e"]
-atlas = ExtResource("4_86y05")
-region = Rect2(0, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_sct5l"]
-atlas = ExtResource("4_86y05")
-region = Rect2(32, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4j66e"]
-atlas = ExtResource("4_86y05")
-region = Rect2(64, 0, 32, 32)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_oohfh"]
-atlas = ExtResource("4_86y05")
-region = Rect2(96, 0, 32, 32)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_iqb2e"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_c606e")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_sct5l")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4j66e")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_oohfh")
-}],
-"loop": true,
-"name": &"default",
-"speed": 8.0
-}]
-
-[sub_resource type="Animation" id="Animation_1vnhq"]
-length = 0.001
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("..:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("..:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("..:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(2, 2)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(0.697706, 0.697706)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(-2.08333, 0.416667)]
-}
-
-[sub_resource type="Animation" id="Animation_wycsm"]
-resource_name = "hit"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("..:visible")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("..:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.745098), Color(1, 1, 1, 0.745098), Color(1, 1, 1, 0)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("..:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Vector2(1.5, 1.5), Vector2(3, 3), Vector2(5, 5)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath(".:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector2(0.697706, 0.697706), Vector2(1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath(".:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Vector2(1, 2.98023e-07), Vector2(-2.77778, -0.111111)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_hf8pb"]
-_data = {
-"RESET": SubResource("Animation_1vnhq"),
-"hit": SubResource("Animation_wycsm")
-}
 
 [sub_resource type="GDScript" id="GDScript_h42q1"]
 resource_name = "player_shadow"
@@ -1586,15 +1416,16 @@ font_size = 32
 font_color = Color(0, 1, 0, 1)
 shadow_color = Color(0, 0, 0, 1)
 
-[node name="Dummy" type="CharacterBody2D" node_paths=PackedStringArray("attack_collision", "right_attack_area", "left_attack_area", "grab_area", "guard_anim") groups=["Player"]]
+[node name="Dummy" type="CharacterBody2D" node_paths=PackedStringArray("attack_collision", "right_attack_area", "left_attack_area", "grab_area") groups=["Player"]]
 collision_layer = 0
 collision_mask = 2
 script = ExtResource("1_3prxl")
+SPEED = 800.0
+JUMP_VELOCITY = -1000.0
 attack_collision = NodePath("Visible/Skin/Body/RightHand/RightAttackArea/AttackCollision")
 right_attack_area = NodePath("Visible/Skin/Body/RightHand/RightAttackArea")
 left_attack_area = NodePath("Visible/Skin/Body/LeftHand/LeftAttackArea")
 grab_area = NodePath("Visible/Skin/GrabArea")
-guard_anim = NodePath("Visible/Skin/Shield/Anim")
 special_scene = ExtResource("2_3i6w4")
 attack_distance = 50.0
 
@@ -1685,30 +1516,6 @@ shape = SubResource("RectangleShape2D_3kbi3")
 disabled = true
 debug_color = Color(0.894118, 0, 0.780392, 0.419608)
 
-[node name="Shield" type="AnimatedSprite2D" parent="Visible/Skin"]
-modulate = Color(1, 1, 1, 0)
-z_index = 10
-position = Vector2(30.5, -5.5)
-scale = Vector2(2, 2)
-sprite_frames = SubResource("SpriteFrames_iqb2e")
-autoplay = "default"
-frame_progress = 0.75501
-
-[node name="BackShield" type="AnimatedSprite2D" parent="Visible/Skin/Shield"]
-self_modulate = Color(1, 1, 1, 0.54902)
-show_behind_parent = true
-position = Vector2(-2.08333, 0.416667)
-scale = Vector2(0.697706, 0.697706)
-sprite_frames = SubResource("SpriteFrames_iqb2e")
-autoplay = "default"
-frame_progress = 0.384521
-
-[node name="Anim" type="AnimationPlayer" parent="Visible/Skin/Shield"]
-root_node = NodePath("../BackShield")
-libraries = {
-"": SubResource("AnimationLibrary_hf8pb")
-}
-
 [node name="Shadow" type="Sprite2D" parent="Visible" node_paths=PackedStringArray("player")]
 modulate = Color(0, 0, 0, 1)
 z_index = 1
@@ -1738,6 +1545,10 @@ one_shot = true
 
 [node name="ConnectedHitsTimer" type="Timer" parent="."]
 wait_time = 2.0
+one_shot = true
+
+[node name="CanBeAttackedTimer" type="Timer" parent="."]
+wait_time = 0.8
 one_shot = true
 
 [node name="Debug" type="Control" parent="."]
@@ -1773,3 +1584,4 @@ pitch_scale = 1.94
 [connection signal="timeout" from="AttackComboTimer" to="." method="_on_attack_combo_timer_timeout"]
 [connection signal="timeout" from="RecoverGuardTimer" to="." method="_on_recover_guard_timer_timeout"]
 [connection signal="timeout" from="ConnectedHitsTimer" to="." method="_on_connected_hits_timer_timeout"]
+[connection signal="timeout" from="CanBeAttackedTimer" to="." method="_on_can_be_attacked_timer_timeout"]

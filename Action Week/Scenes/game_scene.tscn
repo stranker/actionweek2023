@@ -15,8 +15,6 @@ script = ExtResource("1_7qcci")
 
 [node name="Dummy" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
 position = Vector2(256, 403)
-SPEED = 500.0
-JUMP_VELOCITY = -1000.0
 id = 1
 enemy_player = NodePath("../Dummy2")
 player_layer = 1
@@ -25,8 +23,6 @@ enemy_layer = 4
 
 [node name="Dummy2" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
 position = Vector2(886, 413)
-SPEED = 500.0
-JUMP_VELOCITY = -1000.0
 id = 2
 enemy_player = NodePath("../Dummy")
 player_layer = 4

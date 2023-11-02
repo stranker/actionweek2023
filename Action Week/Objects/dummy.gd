@@ -12,6 +12,7 @@ class_name Dummy
 
 var hurt_particles_scene = preload("res://Objects/Particles/hurt_particles.tscn")
 var dust_particles_scene = preload("res://Objects/Particles/dust_particles.tscn")
+var guard_particles_scene = preload("res://Objects/Particles/guard_particles.tscn")
 
 signal hp_update(hp)
 signal guard_stamina_update(stamina)
@@ -36,6 +37,7 @@ enum State {
 	HIT,
 	DEAD
 }
+
 @export var current_state : State = State.IDLE
 
 var facing_direction : Vector2 = Vector2.RIGHT
@@ -44,13 +46,13 @@ var facing_direction : Vector2 = Vector2.RIGHT
 @export var right_attack_area : Area2D
 @export var left_attack_area : Area2D
 @export var grab_area : Area2D
-@export var guard_anim : AnimationPlayer
 
 var can_attack : bool = false
 var can_move: bool = true
 var is_dead : bool = false
 var can_recover_guard : bool = false
 var grab_success : bool = false
+var can_be_attacked : bool = true
 
 @export var player_layer : int
 @export var attack_layer : int
@@ -316,7 +318,7 @@ func _no_movement():
 	pass
 
 func _movement_grabbed(delta):
-	velocity = -facing_direction * 500
+	velocity = -facing_direction * 800
 	pass
 
 func attack():
@@ -332,6 +334,7 @@ func attack():
 	pass
 
 func take_damage(damage : int, damage_pos : Vector2):
+	if not can_be_attacked: return
 	if is_dead: return
 	hp -= damage
 	hp_update.emit(hp)
@@ -352,12 +355,19 @@ func _add_dust_particles():
 	dust_particles.init($Visible/Skin/Body/LeftFoot.global_position)
 	pass
 
+func _add_guard_particles(pos : Vector2):
+	var guard_particles = guard_particles_scene.instantiate()
+	get_tree().root.add_child(guard_particles)
+	guard_particles.init(facing_direction, global_position)
+	pass
+
 func hit(damage : int, damage_pos : Vector2):
+	if not can_be_attacked: return false
 	if current_state == State.GUARD:
 		guard_stamina -= damage
 		guard_stamina = clamp(guard_stamina, 0, 50)
 		guard_stamina_update.emit(guard_stamina)
-		guard_anim.play("hit")
+		_add_guard_particles(damage_pos)
 		return false
 	else:
 		take_damage(damage, damage_pos)
@@ -418,6 +428,9 @@ func grab():
 
 func take_grab_damage():
 	take_damage(20, global_position)
+	_add_dust_particles()
+	can_be_attacked = false
+	$CanBeAttackedTimer.start()
 	pass
 
 func check_grab_success():
@@ -439,4 +452,10 @@ func check_drag_end_state():
 func _on_connected_hits_timer_timeout():
 	end_connect_hit.emit()
 	connected_hit = 0
+	pass # Replace with function body.
+
+
+func _on_can_be_attacked_timer_timeout():
+	can_be_attacked = true
+	print_debug("Can be attacked")
 	pass # Replace with function body.
