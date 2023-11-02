@@ -46,7 +46,7 @@ var facing_direction : Vector2 = Vector2.RIGHT
 @export var grab_area : Area2D
 @export var guard_anim : AnimationPlayer
 
-var can_attack : bool = true
+var can_attack : bool = false
 var can_move: bool = true
 var is_dead : bool = false
 var can_recover_guard : bool = false

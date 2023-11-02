@@ -187,12 +187,11 @@ resource_name = "player_shadow"
 script/source = "extends Sprite2D
 
 var initial_position : Vector2 = Vector2.ZERO
-var player : Dummy
+@export var player : Dummy
 var initialized : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	player = get_parent().get_parent() as Dummy
 	player.hit_floor.connect(on_player_hit_floor)
 	pass # Replace with function body.
 
@@ -1710,13 +1709,14 @@ libraries = {
 "": SubResource("AnimationLibrary_hf8pb")
 }
 
-[node name="Shadow" type="Sprite2D" parent="Visible"]
+[node name="Shadow" type="Sprite2D" parent="Visible" node_paths=PackedStringArray("player")]
 modulate = Color(0, 0, 0, 1)
 z_index = 1
 position = Vector2(11, 82)
 scale = Vector2(8.625, 3.10807)
 texture = ExtResource("5_y0rpl")
 script = SubResource("GDScript_h42q1")
+player = NodePath("../..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(5, -21)
