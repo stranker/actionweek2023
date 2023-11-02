@@ -12,6 +12,6 @@ func _show_big_impact():
 	await get_tree().create_timer(0.05).timeout
 	$BigImpactRect.hide()
 	Engine.time_scale = 0
-	await get_tree().create_timer(0.2, true, false, true).timeout
+	await get_tree().create_timer(0.12, true, false, true).timeout
 	Engine.time_scale = 1
 	pass

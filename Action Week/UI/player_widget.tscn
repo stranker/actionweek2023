@@ -51,11 +51,17 @@ func update_flip_element(element : Control, flipped : bool, update_position : bo
 	pass
 
 func set_health(health : int):
-	health_bar.value = health
+	var tween : Tween = create_tween()
+	tween.tween_property(health_bar, \"value\", health, 0.2).set_ease(Tween.EASE_IN)
+	tween.play()
+	#health_bar.value = health
 	pass
 
 func set_stamina(stamina : int):
-	stamina_bar.value = stamina
+	var tween : Tween = create_tween()
+	tween.tween_property(stamina_bar, \"value\", stamina, 0.2).set_ease(Tween.EASE_IN)
+	tween.play()
+	#stamina_bar.value = stamina
 	pass
 
 func set_ulti_text(special_name : String):
@@ -320,7 +326,6 @@ offset_right = 430.0
 offset_bottom = 52.0
 theme_override_styles/background = SubResource("StyleBoxFlat_dce8l")
 theme_override_styles/fill = SubResource("StyleBoxFlat_88kwp")
-step = 1.0
 value = 100.0
 show_percentage = false
 

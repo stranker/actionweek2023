@@ -11,6 +11,7 @@ class_name Dummy
 @export var debug_enabled : bool = false
 
 var hurt_particles_scene = preload("res://Objects/Particles/hurt_particles.tscn")
+var dust_particles_scene = preload("res://Objects/Particles/dust_particles.tscn")
 
 signal hp_update(hp)
 signal guard_stamina_update(stamina)
@@ -20,6 +21,7 @@ signal special_end()
 signal connect_hit(hits)
 signal end_connect_hit()
 signal big_impact()
+signal hit_floor()
 
 enum State {
 	IDLE,
@@ -120,6 +122,8 @@ func _fsm():
 					set_state(State.RUN)
 				else:
 					set_state(State.IDLE)
+				_add_dust_particles()
+				hit_floor.emit()
 		State.ATTACK:
 			pass
 		State.GUARD:
@@ -340,6 +344,12 @@ func _add_hurt_particles(damage_pos : Vector2):
 	var hurt_particles : Node2D = hurt_particles_scene.instantiate()
 	get_tree().root.add_child(hurt_particles)
 	hurt_particles.global_position = damage_pos
+	pass
+
+func _add_dust_particles():
+	var dust_particles : Node2D = dust_particles_scene.instantiate()
+	get_tree().root.add_child(dust_particles)
+	dust_particles.init($Visible/Skin/Body/LeftFoot.global_position)
 	pass
 
 func hit(damage : int, damage_pos : Vector2):

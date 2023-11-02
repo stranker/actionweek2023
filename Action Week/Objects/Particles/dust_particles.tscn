@@ -1,0 +1,115 @@
+[gd_scene load_steps=15 format=3 uid="uid://bbiwaob41wr5l"]
+
+[ext_resource type="Texture2D" uid="uid://c18a000jcdocm" path="res://Objects/Particles/Dust.png" id="1_aoeuy"]
+[ext_resource type="Texture2D" uid="uid://bg2tcbudt8ruj" path="res://Objects/Particles/DustEffect.png" id="2_gui8x"]
+
+[sub_resource type="Gradient" id="Gradient_wjfhw"]
+offsets = PackedFloat32Array(0.0148148, 0.266667, 0.659259, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_yhsq5"]
+gradient = SubResource("Gradient_wjfhw")
+
+[sub_resource type="Curve" id="Curve_kqo4e"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.71813, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_na383"]
+curve = SubResource("Curve_kqo4e")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_amtml"]
+emission_shape = 3
+emission_box_extents = Vector3(100, 1, 1)
+particle_flag_disable_z = true
+direction = Vector3(0, -1, 0)
+spread = 90.0
+flatness = 1.0
+gravity = Vector3(0, 10, 0)
+initial_velocity_min = 100.0
+initial_velocity_max = 300.0
+angular_velocity_min = -720.0
+angular_velocity_max = 720.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+angle_min = -720.0
+angle_max = 720.0
+scale_max = 4.0
+scale_curve = SubResource("CurveTexture_na383")
+color_ramp = SubResource("GradientTexture1D_yhsq5")
+
+[sub_resource type="GDScript" id="GDScript_gtnsn"]
+resource_name = "dust_particles"
+script/source = "extends GPUParticles2D
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	one_shot = true
+	await get_tree().create_timer(0.3).timeout
+	queue_free()
+	pass # Replace with function body.
+
+func init(pos : Vector2):
+	global_position = pos + Vector2(30, 30)
+	pass
+"
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nnblg"]
+atlas = ExtResource("2_gui8x")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vry4i"]
+atlas = ExtResource("2_gui8x")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hfs3d"]
+atlas = ExtResource("2_gui8x")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_linj8"]
+atlas = ExtResource("2_gui8x")
+region = Rect2(96, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_55ppa"]
+atlas = ExtResource("2_gui8x")
+region = Rect2(128, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yldkx"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nnblg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vry4i")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hfs3d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_linj8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_55ppa")
+}],
+"loop": true,
+"name": &"default",
+"speed": 12.0
+}]
+
+[node name="DustParticles" type="GPUParticles2D"]
+z_index = 10
+process_material = SubResource("ParticleProcessMaterial_amtml")
+texture = ExtResource("1_aoeuy")
+lifetime = 0.3
+explosiveness = 1.0
+visibility_rect = Rect2(-133.905, -67.9058, 244.521, 84.7453)
+script = SubResource("GDScript_gtnsn")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+self_modulate = Color(1, 1, 1, 0.631373)
+show_behind_parent = true
+scale = Vector2(4.5, 4.5)
+sprite_frames = SubResource("SpriteFrames_yldkx")
+autoplay = "default"
+frame_progress = 0.284618
