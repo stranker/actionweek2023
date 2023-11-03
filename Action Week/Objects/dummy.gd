@@ -6,7 +6,8 @@ class_name Dummy
 @export var JUMP_VELOCITY = -400.0
 
 @export var id : int = 0
-@export var hp : int = 100
+@export var max_hp : int = 100
+@onready var hp = max_hp
 @export var enemy_player : Dummy
 @export var debug_enabled : bool = false
 
@@ -16,13 +17,14 @@ var guard_particles_scene = preload("res://Objects/Particles/guard_particles.tsc
 
 signal hp_update(hp)
 signal guard_stamina_update(stamina)
-signal dead()
+signal dead(id)
 signal special_start(special_name)
 signal special_end()
 signal connect_hit(hits)
 signal end_connect_hit()
 signal big_impact()
 signal hit_floor()
+signal initialized(player)
 
 enum State {
 	IDLE,
@@ -60,17 +62,21 @@ var can_be_attacked : bool = true
 
 @export var special_scene : PackedScene
 @export var attack_distance : float = 200
-var start_attack_distance : Vector2
 
 var attack_combo : int = 1
 @export var damage_per_combo : = 5
-@export var guard_stamina : float = 50
+@export var max_guard_stamina : float = 50
+@onready var guard_stamina : float = max_guard_stamina
 var connected_hit = 0
+@onready var start_position = global_position
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready(): #Start()
+	GameManager.reset_game.connect(reset_player)
+	initialized.connect(GameManager.add_player)
+	dead.connect(GameManager.add_victory)
 	set_collision_layer_value(player_layer, true )
 	set_collision_mask_value(enemy_layer, true)
 	right_attack_area.set_collision_layer_value(attack_layer, true)
@@ -81,6 +87,22 @@ func _ready(): #Start()
 	grab_area.set_collision_mask_value(enemy_layer, true)
 	$Debug.visible = debug_enabled
 	set_state(State.IDLE)
+	initialized.emit(self)
+	pass
+
+func reset_player():
+	hp = max_hp
+	hp_update.emit(hp)
+	guard_stamina = max_guard_stamina
+	guard_stamina_update.emit(guard_stamina)
+	set_state(State.IDLE)
+	$CollisionShape2D.set_deferred("disabled", true)
+	await get_tree().create_timer(0.01).timeout
+	global_position = start_position
+	await get_tree().create_timer(0.01).timeout
+	$CollisionShape2D.set_deferred("disabled", false)
+	$AnimationPlayer.play("RESET")
+	is_dead = false
 	pass
 
 func _process(delta): #Update()
@@ -240,9 +262,10 @@ func on_special_finish():
 	pass
 
 func _dead_state():
-	dead.emit()
+	dead.emit(id)
 	$AnimationPlayer.play("dead")
 	velocity = Vector2.ZERO
+	$Dead.play()
 	pass
 
 func _guard_state():
@@ -325,6 +348,7 @@ func attack():
 	if not can_attack: return
 	can_attack = false
 	$AnimationPlayer.play("attack" + str(attack_combo))
+	$Punch.pitch_scale = randf_range(1, 1.2)
 	$Punch.play()
 	pass
 
@@ -333,7 +357,7 @@ func take_damage(damage : int, damage_pos : Vector2):
 	if is_dead: return
 	hp -= damage
 	hp_update.emit(hp)
-	velocity.x = -facing_direction.x * 150
+	velocity.x = -facing_direction.x * 300
 	$Hurt.pitch_scale = randf_range(0.9, 1.1)
 	$Hurt.play()
 	set_state(State.HIT)
@@ -401,6 +425,9 @@ func attack_player(player : Dummy, pos : Vector2):
 		add_connected_hit()
 		if attack_combo == 3:
 			big_impact.emit()
+			await get_tree().create_timer(0.05).timeout
+			$TakeIt.pitch_scale = randf_range(1.1, 1.4)
+			$TakeIt.play()
 	pass
 
 func add_connected_hit():
@@ -462,5 +489,4 @@ func _on_connected_hits_timer_timeout():
 
 func _on_can_be_attacked_timer_timeout():
 	can_be_attacked = true
-	print_debug("Can be attacked")
 	pass # Replace with function body.

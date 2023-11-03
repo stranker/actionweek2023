@@ -184,7 +184,6 @@ stream = ExtResource("9_lqsog")
 volume_db = -8.0
 autoplay = true
 
+[connection signal="end_round" from="." to="UI" method="_on_game_scene_end_round"]
 [connection signal="time_left" from="." to="UI" method="_on_game_scene_time_left"]
-[connection signal="dead" from="Dummy" to="." method="_on_dummy_dead"]
-[connection signal="dead" from="Dummy2" to="." method="_on_dummy_2_dead"]
 [connection signal="timeout" from="RoundTimer" to="." method="_on_round_timer_timeout"]

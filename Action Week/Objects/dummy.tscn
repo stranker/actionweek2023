@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://b1c8msk3p2gkp"]
+[gd_scene load_steps=31 format=3 uid="uid://b1c8msk3p2gkp"]
 
 [ext_resource type="Script" path="res://Objects/dummy.gd" id="1_3prxl"]
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_0j6c5"]
@@ -9,6 +9,8 @@
 [ext_resource type="AudioStream" uid="uid://w4xxc2eec6ug" path="res://Audio/SFx/punch1.wav" id="7_a7jn5"]
 [ext_resource type="AudioStream" uid="uid://cycwngvv84b6p" path="res://Audio/SFx/hit_floor.wav" id="8_7hfog"]
 [ext_resource type="AudioStream" uid="uid://l4p7gnma1fyu" path="res://Audio/SFx/hit.wav" id="8_348el"]
+[ext_resource type="AudioStream" uid="uid://da6kn0wa5uhki" path="res://Audio/SFx/dead.wav" id="10_leo1g"]
+[ext_resource type="AudioStream" uid="uid://hdd5l6syuvtc" path="res://Audio/SFx/take_it.wav" id="11_gny64"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iux6w"]
 size = Vector2(32, 32)
@@ -660,6 +662,20 @@ tracks/8/keys = {
 "transitions": PackedFloat32Array(1, 1),
 "update": 0,
 "values": [0.0, -1.58127]
+}
+tracks/9/type = "method"
+tracks/9/imported = false
+tracks/9/enabled = true
+tracks/9/path = NodePath(".")
+tracks/9/interp = 1
+tracks/9/loop_wrap = true
+tracks/9/keys = {
+"times": PackedFloat32Array(0.4),
+"transitions": PackedFloat32Array(1),
+"values": [{
+"args": [],
+"method": &"_add_dust_particles"
+}]
 }
 
 [sub_resource type="Animation" id="Animation_msnjy"]
@@ -1634,11 +1650,13 @@ pitch_scale = 1.94
 [node name="Hurt" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(52, -31)
 stream = ExtResource("6_eclac")
+volume_db = 8.0
 pitch_scale = 1.2
 
 [node name="Punch" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(13, -66)
 stream = ExtResource("7_a7jn5")
+volume_db = 8.0
 
 [node name="Hit" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(13, -66)
@@ -1647,6 +1665,17 @@ stream = ExtResource("8_348el")
 [node name="HitFloor" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(13, -66)
 stream = ExtResource("8_7hfog")
+volume_db = 4.0
+
+[node name="Dead" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(13, -66)
+stream = ExtResource("10_leo1g")
+volume_db = 16.0
+
+[node name="TakeIt" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(13, -66)
+stream = ExtResource("11_gny64")
+volume_db = 8.0
 
 [connection signal="body_entered" from="Visible/Skin/Body/LeftHand/LeftAttackArea" to="." method="_on_left_attack_area_body_entered"]
 [connection signal="body_entered" from="Visible/Skin/Body/RightHand/RightAttackArea" to="." method="_on_right_attack_area_body_entered"]
