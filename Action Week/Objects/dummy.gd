@@ -91,18 +91,14 @@ func _ready(): #Start()
 	pass
 
 func reset_player():
+	global_position = start_position
+	$AnimationPlayer.play("RESET")
 	hp = max_hp
 	hp_update.emit(hp)
 	guard_stamina = max_guard_stamina
 	guard_stamina_update.emit(guard_stamina)
-	set_state(State.IDLE)
-	$CollisionShape2D.set_deferred("disabled", true)
-	await get_tree().create_timer(0.01).timeout
-	global_position = start_position
-	await get_tree().create_timer(0.01).timeout
-	$CollisionShape2D.set_deferred("disabled", false)
-	$AnimationPlayer.play("RESET")
 	is_dead = false
+	set_state(State.IDLE)
 	pass
 
 func _process(delta): #Update()

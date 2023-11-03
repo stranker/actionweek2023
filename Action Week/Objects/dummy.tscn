@@ -235,14 +235,14 @@ tracks/14/keys = {
 tracks/15/type = "value"
 tracks/15/imported = false
 tracks/15/enabled = true
-tracks/15/path = NodePath("Visible/Skin/GrabArea/CollisionShape2D:disabled")
+tracks/15/path = NodePath("CollisionShape2D:disabled")
 tracks/15/interp = 1
 tracks/15/loop_wrap = true
 tracks/15/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [true]
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_10vaa"]
@@ -1260,6 +1260,18 @@ tracks/13/keys = {
 "update": 0,
 "values": [Vector2(1, 1)]
 }
+tracks/14/type = "value"
+tracks/14/imported = false
+tracks/14/enabled = true
+tracks/14/path = NodePath("CollisionShape2D:rotation")
+tracks/14/interp = 1
+tracks/14/loop_wrap = true
+tracks/14/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
 
 [sub_resource type="Animation" id="Animation_wbda6"]
 resource_name = "jump"
@@ -1487,6 +1499,8 @@ shadow_color = Color(0, 0, 0, 1)
 [node name="Dummy" type="CharacterBody2D" node_paths=PackedStringArray("attack_collision", "right_attack_area", "left_attack_area", "grab_area") groups=["Player"]]
 collision_layer = 0
 collision_mask = 2
+floor_stop_on_slope = false
+floor_max_angle = 0.0
 script = ExtResource("1_3prxl")
 SPEED = 800.0
 JUMP_VELOCITY = -1000.0
@@ -1594,6 +1608,7 @@ script = SubResource("GDScript_h42q1")
 player = NodePath("../..")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+z_index = 5
 position = Vector2(5, -21)
 shape = SubResource("CapsuleShape2D_gkrhc")
 
