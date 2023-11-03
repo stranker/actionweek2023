@@ -413,17 +413,17 @@ func attack_player(player : Dummy, pos : Vector2):
 	var sucess_hit = player.hit(damage_per_combo * attack_combo, pos)
 	if sucess_hit:
 		$Hit.play()
-		if not $AttackComboTimer.is_stopped():
-			attack_combo += 1
-			if attack_combo > 3:
-				attack_combo = 1
-		$AttackComboTimer.start()
-		add_connected_hit()
 		if attack_combo == 3:
 			big_impact.emit()
 			await get_tree().create_timer(0.05).timeout
 			$TakeIt.pitch_scale = randf_range(1.1, 1.4)
 			$TakeIt.play()
+		else:
+			attack_combo += 1
+			if attack_combo > 3:
+				attack_combo = 0
+			$AttackComboTimer.start()
+		add_connected_hit()
 	pass
 
 func add_connected_hit():

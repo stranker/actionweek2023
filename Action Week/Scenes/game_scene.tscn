@@ -34,12 +34,15 @@ var players : Array
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	players = get_tree().get_nodes_in_group(\"Player\")
+	set_process(enabled)
 	pass # Replace with function body.
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+	if not enabled: return
 	var middle_x = abs(players[0].global_position.x + players[1].global_position.x) * 0.5
+	#offset.x = 4
 	global_position.x = lerp(global_position.x, middle_x, delta * 5)
 	global_position.x = clamp(global_position.x, start_x - max_x, start_x + max_x)
 	pass
@@ -84,6 +87,7 @@ texture = ExtResource("5_oiqdb")
 centered = false
 
 [node name="UI" type="CanvasLayer" parent="."]
+layer = 0
 script = ExtResource("3_2llna")
 
 [node name="BigImpactRect" type="ColorRect" parent="UI"]
@@ -185,6 +189,7 @@ autoplay = true
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(480, 328)
 offset = Vector2(100, 0)
+enabled = false
 script = SubResource("GDScript_udbk3")
 
 [node name="Floor2" type="StaticBody2D" parent="Camera2D"]

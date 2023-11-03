@@ -13,7 +13,7 @@ script/source = "extends Control
 @export var hits_control : Control
 @export var hits_text : Label
 @export var player : Dummy
-@export var hits_text_offset : float = 600
+@export var hits_text_offset : float = 400
 
 var showing_hits : bool = false
 var hits_control_initial_pos : Vector2
@@ -54,14 +54,12 @@ func set_health(health : int):
 	var tween : Tween = create_tween()
 	tween.tween_property(health_bar, \"value\", health, 0.2).set_ease(Tween.EASE_IN)
 	tween.play()
-	#health_bar.value = health
 	pass
 
 func set_stamina(stamina : int):
 	var tween : Tween = create_tween()
 	tween.tween_property(stamina_bar, \"value\", stamina, 0.2).set_ease(Tween.EASE_IN)
 	tween.play()
-	#stamina_bar.value = stamina
 	pass
 
 func set_ulti_text(special_name : String):
@@ -317,7 +315,6 @@ ulti_text = NodePath("UltiText")
 anim = NodePath("Anim")
 hits_control = NodePath("Hits")
 hits_text = NodePath("Hits/Amount")
-hits_text_offset = 400.0
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 layout_mode = 1
