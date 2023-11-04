@@ -4,6 +4,7 @@ class_name Special
 
 @export var damage : int = 10
 @export var special_name : String = "Placeholder"
+@export var special_anim_name : String = "Placeholder"
 
 signal start(name)
 signal finish()

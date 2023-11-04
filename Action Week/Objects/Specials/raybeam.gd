@@ -9,6 +9,11 @@ func init(player : Dummy, pos : Vector2, facing_direction : Vector2, attack_laye
 	set_collision_layer_value(attack_layer, true)
 	set_collision_mask_value(enemy_layer, true)
 	ref_player = player
+	GameManager.start_special.connect(_on_start_special)
+	pass
+
+func _on_start_special():
+	$AnimationPlayer.play("start")
 	pass
 
 func _on_body_entered(body):

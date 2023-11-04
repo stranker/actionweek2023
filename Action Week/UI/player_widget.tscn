@@ -22,6 +22,8 @@ var hits_control_initial_pos : Vector2
 
 var hits_tween : Tween
 
+signal throw_special()
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	if player:
@@ -31,6 +33,7 @@ func _ready():
 		player.special_end.connect(hide_ulti)
 		player.connect_hit.connect(set_hits_text)
 		player.end_connect_hit.connect(hide_connect_hit)
+	throw_special.connect(GameManager.init_special)
 	ulti_text.hide()
 	hits_control.hide()
 	update_flipped()
@@ -65,6 +68,7 @@ func set_stamina(stamina : int):
 func set_ulti_text(special_name : String):
 	ulti_text.text = \"[rainbow freq=2.0 sat=0.8 val=0.8][wave amp=50.0 freq=5.0 connected=1][shake rate=30.0 level=20 connected=1]\" + special_name + \"[/shake][/wave][/rainbow]\"
 	ulti_text.show()
+	anim.play(\"special\")
 	pass
 
 func hide_ulti():
@@ -93,6 +97,11 @@ func hide_connect_hit():
 	hits_control.hide()
 	hits_control.position.x = hits_control_initial_pos.x
 	pass
+
+func _on_anim_animation_finished(anim_name):
+	if anim_name == \"special\":
+		throw_special.emit()
+	pass # Replace with function body.
 "
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dce8l"]
@@ -202,7 +211,7 @@ length = 0.7
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerWidget/Ulti:position")
+tracks/0/path = NodePath("Ulti:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -214,7 +223,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("PlayerWidget/Ulti:visible")
+tracks/1/path = NodePath("Ulti:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -226,7 +235,7 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("PlayerWidget/Ulti:modulate")
+tracks/2/path = NodePath("Ulti:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
@@ -340,14 +349,16 @@ value = 50.0
 show_percentage = false
 
 [node name="Ulti" type="Control" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -301.5
-offset_right = 361.0
-offset_bottom = 301.5
+offset_left = -800.0
+offset_top = -293.5
+offset_right = -439.0
+offset_bottom = 309.5
 grow_vertical = 2
 
 [node name="Panel" type="Panel" parent="Ulti"]
@@ -442,3 +453,5 @@ grow_vertical = 2
 text = "HIT"
 label_settings = SubResource("LabelSettings_61udi")
 vertical_alignment = 1
+
+[connection signal="animation_finished" from="Anim" to="." method="_on_anim_animation_finished"]

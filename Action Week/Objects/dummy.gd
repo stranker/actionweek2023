@@ -243,6 +243,7 @@ func _special_state():
 	special.finish.connect(on_special_finish)
 	get_tree().root.add_child(special)
 	special.init(self, global_position, facing_direction, attack_layer, enemy_layer)
+	$AnimationPlayer.play(special.special_anim_name)
 	pass
 
 func on_special_start(special_name : String):

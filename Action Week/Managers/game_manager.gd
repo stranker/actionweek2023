@@ -7,6 +7,7 @@ var players_victories : Dictionary = {
 
 signal victories_update(players)
 signal reset_game()
+signal start_special()
 
 var players : Array
 
@@ -31,4 +32,8 @@ func check_round_timer_winner():
 
 func reset_game_state():
 	reset_game.emit()
+	pass
+
+func init_special():
+	start_special.emit()
 	pass
