@@ -87,6 +87,7 @@ func _ready(): #Start()
 	grab_area.set_collision_mask_value(enemy_layer, true)
 	$Debug.visible = debug_enabled
 	set_state(State.IDLE)
+	_set_facing()
 	initialized.emit(self)
 	pass
 
@@ -290,18 +291,30 @@ func _grabbed_state():
 	$AnimationPlayer.play("grabbed")
 	pass
 
-func _physics_process(delta): #FixedUpdate()
+func _check_facing():
 	if can_attack and not is_dead:
-		if enemy_player.global_position.x < global_position.x:
-			facing_direction = Vector2.LEFT
-		else:
-			facing_direction = Vector2.RIGHT
+		_set_facing()
+	pass
+
+func _set_facing():
+	if enemy_player.global_position.x < global_position.x:
+		facing_direction = Vector2.LEFT
+	else:
+		facing_direction = Vector2.RIGHT
+	pass
+
+func _check_guard(delta):
 	if can_recover_guard:
 		guard_stamina += delta * 10
 		if guard_stamina >= 50:
 			guard_stamina = 50
 			can_recover_guard = false
 		guard_stamina_update.emit(guard_stamina)
+	pass
+
+func _physics_process(delta): #FixedUpdate()
+	_check_facing()
+	_check_guard(delta)
 	# Add the gravity.
 	if not is_on_floor():
 		velocity.y += gravity * delta
