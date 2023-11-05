@@ -1,7 +1,9 @@
 [gd_scene load_steps=19 format=3 uid="uid://cvttj0867drlk"]
 
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="1_so0nr"]
+[ext_resource type="Texture2D" uid="uid://d15yexeu6p0os" path="res://UI/white_square.jpg" id="2_doxsc"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="2_rv2cw"]
+[ext_resource type="Texture2D" uid="uid://sinmr7gnhf58" path="res://UI/bacgkround_effect2.jpg" id="4_1qyyr"]
 
 [sub_resource type="GDScript" id="GDScript_yljfq"]
 resource_name = "player_widget"
@@ -154,6 +156,22 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
+[sub_resource type="LabelSettings" id="LabelSettings_bduew"]
+font = ExtResource("2_rv2cw")
+font_size = 86
+font_color = Color(1, 0.835294, 0.313726, 1)
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_61udi"]
+font = ExtResource("2_rv2cw")
+font_size = 56
+font_color = Color(1, 0.835294, 0.313726, 1)
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="RichTextEffect" id="RichTextEffect_2kpfw"]
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nucmr"]
 bg_color = Color(0.231373, 0.231373, 0.231373, 1)
 border_width_left = 20
@@ -188,42 +206,74 @@ tracks/0/keys = {
 "update": 1,
 "values": [false]
 }
-
-[sub_resource type="Animation" id="Animation_sajip"]
-resource_name = "hit_continue"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("PlayerWidget/Hits:scale")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1),
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Ulti/Panel:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
+"values": [Vector2(0, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Ulti/UltiEffect:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [ExtResource("2_doxsc")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Ulti/UltiEffect:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Ulti/UltiEffect:flip_h")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
 }
 
 [sub_resource type="Animation" id="Animation_vhbis"]
 resource_name = "special"
-length = 0.7
+length = 1.2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Ulti:position")
+tracks/0/path = NodePath("Ulti/Panel:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2, 0.3, 0.4),
 "transitions": PackedFloat32Array(0.5, 1, 1, 1),
 "update": 0,
-"values": [Vector2(-800, 22.5), Vector2(0, 22.5), Vector2(50, 22.5), Vector2(0, 22.5)]
+"values": [Vector2(-800, 0), Vector2(0, 0), Vector2(50, 0), Vector2(0, 0)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Ulti:visible")
+tracks/1/path = NodePath("Ulti/Panel:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -235,86 +285,63 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Ulti:modulate")
+tracks/2/path = NodePath("Ulti/Panel:modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3, 0.5, 0.7),
+"times": PackedFloat32Array(0, 0.1, 0.4, 0.6, 1),
 "transitions": PackedFloat32Array(1, 1, 1, 2, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
-
-[sub_resource type="Animation" id="Animation_7ubju"]
-resource_name = "start_hit"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Hits/Amount:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 1),
-"update": 0,
-"values": [Vector2(-200, 144), Vector2(320, 144)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("Hits/Amount:modulate")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2),
-"transitions": PackedFloat32Array(0.5, 0.840896),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Hits/Amount:visible")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Ulti/UltiEffect:texture")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 1,
-"values": [true]
+"values": [ExtResource("2_doxsc"), ExtResource("4_1qyyr"), ExtResource("2_doxsc")]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Ulti/UltiEffect:self_modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.8, 1.2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Ulti/UltiEffect:flip_h")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rj1ji"]
 _data = {
 "RESET": SubResource("Animation_u7576"),
-"hit_continue": SubResource("Animation_sajip"),
-"special": SubResource("Animation_vhbis"),
-"start_hit": SubResource("Animation_7ubju")
+"special": SubResource("Animation_vhbis")
 }
-
-[sub_resource type="RichTextEffect" id="RichTextEffect_2kpfw"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_bduew"]
-font = ExtResource("2_rv2cw")
-font_size = 86
-font_color = Color(1, 0.835294, 0.313726, 1)
-outline_size = 20
-outline_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_61udi"]
-font = ExtResource("2_rv2cw")
-font_size = 56
-font_color = Color(1, 0.835294, 0.313726, 1)
-outline_size = 20
-outline_color = Color(0, 0, 0, 1)
 
 [node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "ulti_text", "anim", "hits_control", "hits_text")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = 16.0
 grow_horizontal = 2
 grow_vertical = 2
 script = SubResource("GDScript_yljfq")
@@ -328,9 +355,9 @@ hits_text = NodePath("Hits/Amount")
 [node name="HealthBar" type="ProgressBar" parent="."]
 layout_mode = 1
 offset_left = 32.0
-offset_top = 23.0
+offset_top = 32.0
 offset_right = 408.0
-offset_bottom = 56.0
+offset_bottom = 65.0
 theme_override_styles/background = SubResource("StyleBoxFlat_dce8l")
 theme_override_styles/fill = SubResource("StyleBoxFlat_88kwp")
 value = 100.0
@@ -339,85 +366,14 @@ show_percentage = false
 [node name="GuardStaminaBar" type="ProgressBar" parent="."]
 layout_mode = 1
 offset_left = 64.0
-offset_top = 66.0
+offset_top = 75.0
 offset_right = 268.0
-offset_bottom = 83.0
+offset_bottom = 92.0
 theme_override_styles/background = SubResource("StyleBoxFlat_ufru0")
 theme_override_styles/fill = SubResource("StyleBoxFlat_7c088")
 max_value = 50.0
 value = 50.0
 show_percentage = false
-
-[node name="Ulti" type="Control" parent="."]
-visible = false
-modulate = Color(1, 1, 1, 0)
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = -800.0
-offset_top = -293.5
-offset_right = -439.0
-offset_bottom = 309.5
-grow_vertical = 2
-
-[node name="Panel" type="Panel" parent="Ulti"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_nucmr")
-
-[node name="TextureRect" type="TextureRect" parent="Ulti/Panel"]
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -180.5
-offset_top = -229.0
-offset_right = 58.5
-offset_bottom = 133.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = SubResource("AtlasTexture_ssqsg")
-stretch_mode = 5
-
-[node name="Label" type="Label" parent="Ulti/Panel"]
-layout_mode = 0
-offset_left = 29.0
-offset_top = 361.5
-offset_right = 217.0
-offset_bottom = 428.5
-text = "COMELA"
-label_settings = SubResource("LabelSettings_aqwfg")
-
-[node name="Anim" type="AnimationPlayer" parent="."]
-libraries = {
-"": SubResource("AnimationLibrary_rj1ji")
-}
-
-[node name="UltiText" type="RichTextLabel" parent="."]
-visible = false
-clip_contents = false
-layout_mode = 1
-offset_left = 40.0
-offset_top = 128.0
-offset_right = 512.0
-offset_bottom = 192.0
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 30
-theme_override_fonts/normal_font = ExtResource("2_rv2cw")
-theme_override_font_sizes/normal_font_size = 56
-bbcode_enabled = true
-text = "Ray Beam"
-fit_content = true
-scroll_active = false
-custom_effects = [SubResource("RichTextEffect_2kpfw")]
-deselect_on_focus_loss_enabled = false
 
 [node name="Hits" type="Control" parent="."]
 layout_mode = 1
@@ -429,10 +385,13 @@ offset_bottom = 337.0
 
 [node name="Amount" type="Label" parent="Hits"]
 layout_mode = 1
-offset_left = 4.0
-offset_top = 34.0
-offset_right = 72.0
-offset_bottom = 138.0
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -52.0
+offset_right = 68.0
+offset_bottom = 52.0
+grow_vertical = 2
 text = "6"
 label_settings = SubResource("LabelSettings_bduew")
 vertical_alignment = 1
@@ -453,5 +412,96 @@ grow_vertical = 2
 text = "HIT"
 label_settings = SubResource("LabelSettings_61udi")
 vertical_alignment = 1
+
+[node name="UltiText" type="RichTextLabel" parent="."]
+visible = false
+clip_contents = false
+layout_mode = 1
+offset_left = 40.0
+offset_top = 128.0
+offset_right = 512.0
+offset_bottom = 192.0
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 30
+theme_override_fonts/normal_font = ExtResource("2_rv2cw")
+theme_override_font_sizes/normal_font_size = 56
+bbcode_enabled = true
+text = "Ray Beam"
+fit_content = true
+scroll_active = false
+custom_effects = [SubResource("RichTextEffect_2kpfw")]
+deselect_on_focus_loss_enabled = false
+
+[node name="Ulti" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="Ulti"]
+visible = false
+modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_nucmr")
+
+[node name="TextureRect" type="TextureRect" parent="Ulti/Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -269.0
+offset_top = -362.0
+offset_right = 148.0
+offset_bottom = 270.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_ssqsg")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Ulti/Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -292.0
+offset_top = 165.0
+offset_right = 92.0
+offset_bottom = 232.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "COMELA"
+label_settings = SubResource("LabelSettings_aqwfg")
+horizontal_alignment = 1
+
+[node name="UltiEffect" type="TextureRect" parent="Ulti"]
+self_modulate = Color(1, 1, 1, 0)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_doxsc")
+expand_mode = 1
+
+[node name="Anim" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rj1ji")
+}
 
 [connection signal="animation_finished" from="Anim" to="." method="_on_anim_animation_finished"]

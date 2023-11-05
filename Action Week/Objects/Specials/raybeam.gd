@@ -14,6 +14,7 @@ func init(player : Dummy, pos : Vector2, facing_direction : Vector2, attack_laye
 
 func _on_start_special():
 	$AnimationPlayer.play("start")
+	$Sfx.play()
 	pass
 
 func _on_body_entered(body):

@@ -244,6 +244,7 @@ func _special_state():
 	get_tree().root.add_child(special)
 	special.init(self, global_position, facing_direction, attack_layer, enemy_layer)
 	$AnimationPlayer.play(special.special_anim_name)
+	$SpecialStart.play()
 	pass
 
 func on_special_start(special_name : String):
@@ -355,7 +356,7 @@ func take_damage(damage : int, damage_pos : Vector2):
 	hp -= damage
 	hp_update.emit(hp)
 	velocity.x = -facing_direction.x * 300
-	$Hurt.pitch_scale = randf_range(0.9, 1.1)
+	$Hurt.pitch_scale = randf_range(0.95, 1)
 	$Hurt.play()
 	set_state(State.HIT)
 	_add_hurt_particles(damage_pos)
