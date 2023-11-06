@@ -33,7 +33,7 @@ enum PlayerControllerID {
 }
 
 signal player_selected(id, data)
-signal start_game()
+signal start_loading()
 
 func _ready():
 	for data in GameManager.players_data:
@@ -46,7 +46,7 @@ func _ready():
 	_hover_player(player1_idx, PlayerControllerID.ONE)
 	_hover_player(player2_idx, PlayerControllerID.TWO)
 	player_selected.connect(GameManager.on_player_selected)
-	start_game.connect(GameManager.on_start_game)
+	start_loading.connect(GameManager.on_start_loading)
 	pass
 
 func on_hover_player(controller_id, data : PlayerData):
@@ -62,7 +62,7 @@ func on_hover_player(controller_id, data : PlayerData):
 func on_select_player(controller_id, data : PlayerData):
 	player_selected.emit(controller_id, data)
 	if players_selected.size() == 2:
-		start_game.emit()
+		start_loading.emit()
 	pass
 
 func _input(event):

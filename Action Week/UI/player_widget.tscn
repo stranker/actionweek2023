@@ -204,6 +204,7 @@ expand_margin_left = 5.0
 expand_margin_top = 5.0
 expand_margin_right = 5.0
 expand_margin_bottom = 5.0
+shadow_color = Color(1, 1, 1, 0.862745)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rs5cg"]
 bg_color = Color(0.85098, 0.552941, 0.227451, 1)

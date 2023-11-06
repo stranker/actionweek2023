@@ -6,6 +6,7 @@ var players_victories : Dictionary = {
 }
 
 var players_data : Array[PlayerData]
+
 var current_players_data : Dictionary
 
 signal victories_update(players)
@@ -55,4 +56,9 @@ func on_player_selected(controller_id, data: PlayerData):
 func on_start_game():
 	await get_tree().create_timer(2.0).timeout
 	get_tree().change_scene_to_file("res://Scenes/game_scene.tscn")
+	pass
+
+func on_start_loading():
+	await get_tree().create_timer(2.0).timeout
+	get_tree().change_scene_to_file("res://Scenes/loading_scene.tscn")
 	pass
