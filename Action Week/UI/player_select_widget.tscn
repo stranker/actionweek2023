@@ -12,7 +12,8 @@ script/source = "extends Control
 @export var p1_label : Label
 @export var p2_label : Label
 @export var player_texture : TextureRect
-@export var hovereed : bool = false
+@export var hovered : bool = false
+@export var selected : bool = false
 
 var control_colors : Array = [ Color.RED, Color.BLUE ]
 
@@ -21,6 +22,7 @@ var players_inside : Array
 var ref_data : PlayerData = null
 
 signal hover_player(id, data)
+signal select_player(id, data)
 
 func set_data(data : PlayerData):
 	if not data: return
@@ -30,16 +32,18 @@ func set_data(data : PlayerData):
 
 func select(controller_id : int):
 	anim.play(\"select\")
+	select_player.emit(controller_id, ref_data)
+	selected = true
 	pass
 
 func hover(controller_id : int):
 	if not players_inside.has(controller_id):
 		players_inside.append(controller_id)
-	hovereed = true
+	hovered = true
 	var final_color : Color = control_colors[controller_id - 1]
 	if players_inside.size() > 1:
 		final_color = control_colors[0].lerp(control_colors[1], 0.5)
-	select_panel.self_modulate = final_color
+	select_panel.modulate = final_color
 	if controller_id == 1:
 		p1_label.show()
 	if controller_id == 2:
@@ -50,7 +54,8 @@ func hover(controller_id : int):
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	hovereed = false
+	hovered = false
+	selected = false
 	anim.play(\"RESET\")
 	pass # Replace with function body.
 
@@ -61,7 +66,7 @@ func deselect(controller_id):
 	if controller_id == 2:
 		p2_label.hide()
 	if players_inside.is_empty():
-		hovereed = false
+		hovered = false
 		anim.play(\"RESET\")
 	else:
 		hover(players_inside[0])
@@ -99,12 +104,12 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Container/SelectPanel/Panel/P1:self_modulate")
+tracks/1/path = NodePath("Container/Panel/P1:self_modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -116,10 +121,22 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Container/SelectPanel/Panel/P2:self_modulate")
+tracks/2/path = NodePath("Container/Panel/P2:self_modulate")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Container/SelectPanel:modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
@@ -133,7 +150,7 @@ loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Container/SelectPanel/Panel/P1:self_modulate")
+tracks/0/path = NodePath("Container/Panel/P1:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -145,7 +162,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Container/SelectPanel/Panel/P2:self_modulate")
+tracks/1/path = NodePath("Container/Panel/P2:self_modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -161,14 +178,14 @@ length = 0.9
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("SelectPanel:self_modulate")
+tracks/0/path = NodePath("Container/SelectPanel:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0qm23"]
@@ -191,9 +208,9 @@ grow_vertical = 2
 script = SubResource("GDScript_hem5y")
 select_panel = NodePath("Container/SelectPanel")
 anim = NodePath("Container/AnimationPlayer")
-p1_label = NodePath("Container/SelectPanel/Panel/P1")
-p2_label = NodePath("Container/SelectPanel/Panel/P2")
-player_texture = NodePath("Container/SelectPanel/Panel/TextureRect")
+p1_label = NodePath("Container/Panel/P1")
+p2_label = NodePath("Container/Panel/P2")
+player_texture = NodePath("Container/Panel/TextureRect")
 
 [node name="Container" type="Control" parent="."]
 layout_mode = 1
@@ -204,7 +221,6 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="SelectPanel" type="Panel" parent="Container"]
-self_modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -214,7 +230,7 @@ grow_vertical = 2
 pivot_offset = Vector2(112, 80)
 theme_override_styles/panel = SubResource("StyleBoxFlat_i2x2d")
 
-[node name="Panel" type="Panel" parent="Container/SelectPanel"]
+[node name="Panel" type="Panel" parent="Container"]
 clip_contents = true
 layout_mode = 1
 anchors_preset = 15
@@ -228,7 +244,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fjoel")
 
-[node name="TextureRect" type="TextureRect" parent="Container/SelectPanel/Panel"]
+[node name="TextureRect" type="TextureRect" parent="Container/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -239,7 +255,7 @@ texture = SubResource("AtlasTexture_a1jdx")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="P1" type="Label" parent="Container/SelectPanel/Panel"]
+[node name="P1" type="Label" parent="Container/Panel"]
 visible = false
 layout_mode = 1
 offset_left = 3.0
@@ -251,7 +267,7 @@ text = "P1
 label_settings = SubResource("LabelSettings_j3j18")
 vertical_alignment = 1
 
-[node name="P2" type="Label" parent="Container/SelectPanel/Panel"]
+[node name="P2" type="Label" parent="Container/Panel"]
 visible = false
 layout_mode = 1
 anchors_preset = 1

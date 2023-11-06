@@ -76,10 +76,13 @@ var connected_hit = 0
 
 @export var super_meter : float = 0
 
+var player_data : PlayerData
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
 func _ready(): #Start()
+	_get_player_data()
 	GameManager.reset_game.connect(reset_player)
 	initialized.connect(GameManager.add_player)
 	dead.connect(GameManager.add_victory)
@@ -94,8 +97,12 @@ func _ready(): #Start()
 	$Debug.visible = debug_enabled
 	set_state(State.IDLE)
 	_set_facing()
-	$Visible/Skin/Body/Head.texture = head_texture
 	initialized.emit(self)
+	pass
+
+func _get_player_data():
+	player_data = GameManager.current_players_data[str(id)]
+	$Visible/Skin/Body/Head.texture = player_data.player_in_game_texture
 	pass
 
 func reset_player():

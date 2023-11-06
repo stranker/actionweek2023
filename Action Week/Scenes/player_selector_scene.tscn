@@ -20,10 +20,20 @@ script/source = "extends Control
 @export var player1_name : Label
 @export var player2_name : Label
 
+var players_selected : Array = []
+
 var player1_idx = 0
 var player2_idx = 0
 var prev_player1_idx = 0
 var prev_player2_idx = 0
+
+enum PlayerControllerID {
+	ONE = 1,
+	TWO
+}
+
+signal player_selected(id, data)
+signal start_game()
 
 func _ready():
 	for data in GameManager.players_data:
@@ -31,45 +41,62 @@ func _ready():
 		players.add_child(player_select_widget)
 		player_select_widget.set_data(data)
 		player_select_widget.hover_player.connect(on_hover_player)
+		player_select_widget.select_player.connect(on_select_player)
 	players_to_pick_count = players.get_child_count()
-	_hover_widget(player1_idx, 1)
-	_hover_widget(player2_idx, 2)
+	_hover_player(player1_idx, PlayerControllerID.ONE)
+	_hover_player(player2_idx, PlayerControllerID.TWO)
+	player_selected.connect(GameManager.on_player_selected)
+	start_game.connect(GameManager.on_start_game)
 	pass
 
 func on_hover_player(controller_id, data : PlayerData):
 	if not data: return
-	if controller_id == 1:
+	if controller_id == PlayerControllerID.ONE:
 		player1_texture.texture = data.player_portrait_texture
 		player1_name.text = data.player_name
-	if controller_id == 2:
+	if controller_id == PlayerControllerID.TWO:
 		player2_texture.texture = data.player_portrait_texture
 		player2_name.text = data.player_name
 	pass
 
-func _input(event):
-	if players_to_pick_count == 0: return
-	player1_idx = _get_controller_input(event, 1, player1_idx)
-	player2_idx = _get_controller_input(event, 2, player2_idx)
-	if player1_idx != prev_player1_idx:
-		players.get_child(prev_player1_idx).deselect(1)
-		prev_player1_idx = player1_idx
-		_hover_widget(player1_idx, 1)
-	if player2_idx != prev_player2_idx:
-		players.get_child(prev_player2_idx).deselect(2)
-		prev_player2_idx = player2_idx
-		_hover_widget(player2_idx, 2)
+func on_select_player(controller_id, data : PlayerData):
+	player_selected.emit(controller_id, data)
+	if players_selected.size() == 2:
+		start_game.emit()
 	pass
 
-func _hover_widget(idx, controller):
+func _input(event):
+	if players_to_pick_count == 0: return
+	player1_idx = _get_controller_input(event, PlayerControllerID.ONE, player1_idx)
+	player2_idx = _get_controller_input(event, PlayerControllerID.TWO, player2_idx)
+	if not players_selected.has(PlayerControllerID.ONE) and player1_idx != prev_player1_idx:
+		players.get_child(prev_player1_idx).deselect(PlayerControllerID.ONE)
+		prev_player1_idx = player1_idx
+		_hover_player(player1_idx, PlayerControllerID.ONE)
+	if not players_selected.has(PlayerControllerID.TWO) and player2_idx != prev_player2_idx:
+		players.get_child(prev_player2_idx).deselect(PlayerControllerID.TWO)
+		prev_player2_idx = player2_idx
+		_hover_player(player2_idx, PlayerControllerID.TWO)
+	pass
+
+func _hover_player(idx, controller):
 	players.get_child(idx).hover(controller)
 	pass
 
+func _select_player(player_idx, controller):
+	players_selected.append(controller)
+	players.get_child(player_idx).select(controller)
+	pass
+
 func _get_controller_input(event : InputEvent, controller_id, player_idx):
+	if players_selected.has(controller_id): return
 	if event.is_action(\"move_left\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
 		player_idx -= 1
 	if event.is_action(\"move_right\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
 		player_idx += 1
 	player_idx = clamp(player_idx, 0, players_to_pick_count - 1)
+	if event.is_action(\"attack\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
+		_select_player(player_idx, controller_id)
 	return player_idx
 "
 
