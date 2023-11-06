@@ -73,7 +73,6 @@ texture = ExtResource("5_oiqdb")
 centered = false
 
 [node name="UI" type="CanvasLayer" parent="."]
-layer = 0
 script = ExtResource("3_2llna")
 
 [node name="BigImpactRect" type="ColorRect" parent="UI"]

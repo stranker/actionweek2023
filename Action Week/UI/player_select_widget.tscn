@@ -1,7 +1,9 @@
-[gd_scene load_steps=13 format=3 uid="uid://cmywqdysf10rc"]
+[gd_scene load_steps=15 format=3 uid="uid://cmywqdysf10rc"]
 
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="1_27ens"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="2_qe3gp"]
+[ext_resource type="AudioStream" uid="uid://bv37m2csrjy51" path="res://Audio/SFx/button_hover.wav" id="3_bhajk"]
+[ext_resource type="AudioStream" uid="uid://drrdup5ap67iy" path="res://Audio/SFx/button_select.wav" id="4_yw51p"]
 
 [sub_resource type="GDScript" id="GDScript_hem5y"]
 resource_name = "player_select_widget"
@@ -34,6 +36,7 @@ func select(controller_id : int):
 	anim.play(\"select\")
 	select_player.emit(controller_id, ref_data)
 	selected = true
+	$Select.play()
 	pass
 
 func hover(controller_id : int):
@@ -50,6 +53,7 @@ func hover(controller_id : int):
 		p2_label.show()
 	hover_player.emit(controller_id, ref_data)
 	anim.play(\"hover\")
+	$Hover.play()
 	pass
 
 # Called when the node enters the scene tree for the first time.
@@ -288,3 +292,9 @@ root_node = NodePath("../..")
 libraries = {
 "": SubResource("AnimationLibrary_0qm23")
 }
+
+[node name="Hover" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_bhajk")
+
+[node name="Select" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_yw51p")

@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://dsm8hjf1wghb" path="res://UI/selection_background.png" id="3_8pp4q"]
 [ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="3_80k5r"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="4_0kjve"]
-[ext_resource type="AudioStream" uid="uid://x5ibcqp7kwf5" path="res://Audio/Music/BattleTheme.mp3" id="7_u2qr6"]
+[ext_resource type="AudioStream" uid="uid://dhysl3q4sfle8" path="res://Audio/Music/select_soundtrack.mp3" id="7_f04vv"]
 
 [sub_resource type="GDScript" id="GDScript_ybyqa"]
 resource_name = "player_selector_scene"
@@ -325,6 +325,6 @@ libraries = {
 }
 
 [node name="Music" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("7_u2qr6")
+stream = ExtResource("7_f04vv")
 volume_db = -20.0
 autoplay = true

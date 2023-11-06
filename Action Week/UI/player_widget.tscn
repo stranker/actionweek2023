@@ -19,6 +19,9 @@ script/source = "extends Control
 @export var player : Dummy
 @export var hits_text_offset : float = 400
 @export var player_name : Label
+@export var ulti_portrait : TextureRect
+@export var ulti_outline : Panel
+@export var ulti_player_label : Label
 
 var showing_hits : bool = false
 var hits_control_initial_pos : Vector2
@@ -48,6 +51,8 @@ func _ready():
 
 func on_player_init(player_info : Dummy):
 	player_name.text = player_info.player_data.player_name
+	ulti_portrait.texture = player_info.player_data.player_portrait_texture
+	ulti_outline.self_modulate = Color.RED if player_info.id == 1 else Color.BLUE
 	pass
 
 func update_flipped():
@@ -55,6 +60,8 @@ func update_flipped():
 	update_flip_element(ulti_text, flipped, true)
 	update_flip_element(hits_control, flipped, true)
 	update_flip_element(player_name, flipped, true)
+	update_flip_element(player_name, flipped, true)
+	update_flip_element(ulti_player_label, flipped, true)
 	hits_control_initial_pos = hits_control.position
 	ulti_text.text_direction = Control.TEXT_DIRECTION_LTR if not flipped else TEXT_DIRECTION_RTL
 	pass
@@ -223,12 +230,12 @@ outline_size = 20
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nucmr"]
-bg_color = Color(0.231373, 0.231373, 0.231373, 1)
+bg_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
 border_width_left = 20
 border_width_top = 20
 border_width_right = 20
 border_width_bottom = 20
-border_color = Color(0.803922, 0.25098, 0.14902, 1)
+border_color = Color(1, 1, 1, 1)
 corner_radius_top_right = 500
 corner_radius_bottom_right = 500
 corner_detail = 1
@@ -387,7 +394,7 @@ _data = {
 "special": SubResource("Animation_vhbis")
 }
 
-[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "super_meter_bar", "ulti_text", "anim", "hits_control", "hits_text", "player_name")]
+[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "super_meter_bar", "ulti_text", "anim", "hits_control", "hits_text", "player_name", "ulti_portrait", "ulti_outline", "ulti_player_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -402,7 +409,11 @@ ulti_text = NodePath("UltiText")
 anim = NodePath("Anim")
 hits_control = NodePath("Hits")
 hits_text = NodePath("Hits/Amount")
+hits_text_offset = 200.0
 player_name = NodePath("HealthBar/Name")
+ulti_portrait = NodePath("Ulti/Panel/TextureRect")
+ulti_outline = NodePath("Ulti/Panel")
+ulti_player_label = NodePath("Ulti/Panel/Label")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 layout_mode = 1
@@ -467,6 +478,7 @@ custom_effects = [SubResource("RichTextEffect_2kpfw")]
 deselect_on_focus_loss_enabled = false
 
 [node name="Hits" type="Control" parent="."]
+z_index = -20
 layout_mode = 1
 anchors_preset = 0
 offset_left = -260.0
@@ -513,8 +525,8 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="Panel" parent="Ulti"]
-visible = false
 modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 0, 0, 1)
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -542,7 +554,6 @@ texture = SubResource("AtlasTexture_ssqsg")
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="Ulti/Panel"]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
