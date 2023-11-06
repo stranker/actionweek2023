@@ -23,6 +23,7 @@ var ref_data : PlayerData = null
 signal hover_player(id, data)
 
 func set_data(data : PlayerData):
+	if not data: return
 	player_texture.texture = data.player_portrait_texture
 	ref_data = data
 	pass

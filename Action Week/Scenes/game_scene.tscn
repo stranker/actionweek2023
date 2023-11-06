@@ -8,9 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://rmo2fj6q20xl" path="res://Scenes/Background.jpg" id="5_oiqdb"]
 [ext_resource type="Texture2D" uid="uid://c3u1bu2a80fyo" path="res://UI/Clock.png" id="7_p3568"]
 [ext_resource type="FontFile" uid="uid://ble18gxjisbqk" path="res://Fonts/ds_digital/DS-DIGII.TTF" id="8_qs4ge"]
-[ext_resource type="Texture2D" uid="uid://bb6dm3ynskkeq" path="res://Objects/Players/santi face.png" id="9_3fpxo"]
+[ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="9_3fpxo"]
 [ext_resource type="AudioStream" uid="uid://x5ibcqp7kwf5" path="res://Audio/Music/BattleTheme.mp3" id="9_lqsog"]
-[ext_resource type="Texture2D" uid="uid://by4jv6a0xg5ym" path="res://Objects/Players/dani face.png" id="10_qubhm"]
+[ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="10_qubhm"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pmhbl"]
 size = Vector2(2400, 128)

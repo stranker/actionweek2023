@@ -1,12 +1,12 @@
 [gd_scene load_steps=15 format=3 uid="uid://15d5oep18nq8"]
 
 [ext_resource type="PackedScene" uid="uid://cmywqdysf10rc" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
-[ext_resource type="Texture2D" uid="uid://bb6dm3ynskkeq" path="res://Objects/Players/santi face.png" id="2_gubrf"]
+[ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_gubrf"]
 [ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="2_wcd2t"]
 [ext_resource type="Texture2D" uid="uid://dsm8hjf1wghb" path="res://UI/selection_background.png" id="3_8pp4q"]
-[ext_resource type="Texture2D" uid="uid://by4jv6a0xg5ym" path="res://Objects/Players/dani face.png" id="3_80k5r"]
+[ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="3_80k5r"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="4_0kjve"]
-[ext_resource type="AudioStream" uid="uid://bao7pd11le1go" path="res://Audio/Music/SelectionSoundtrack.mp3" id="7_u2qr6"]
+[ext_resource type="AudioStream" uid="uid://x5ibcqp7kwf5" path="res://Audio/Music/BattleTheme.mp3" id="7_u2qr6"]
 
 [sub_resource type="GDScript" id="GDScript_ybyqa"]
 resource_name = "player_selector_scene"
@@ -37,6 +37,7 @@ func _ready():
 	pass
 
 func on_hover_player(controller_id, data : PlayerData):
+	if not data: return
 	if controller_id == 1:
 		player1_texture.texture = data.player_portrait_texture
 		player1_name.text = data.player_name

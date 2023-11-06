@@ -1,10 +1,10 @@
 [gd_resource type="Resource" script_class="PlayerData" load_steps=3 format=3 uid="uid://c4e5fyplivbwu"]
 
-[ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="1_5k4qy"]
-[ext_resource type="Script" path="res://PlayersData.gd" id="1_xg4bm"]
+[ext_resource type="Script" path="res://Objects/Players/PlayerData.gd" id="1_c78w6"]
+[ext_resource type="Texture2D" uid="uid://dlt4kdukxtngs" path="res://Objects/Players/Emi face.png" id="1_ks8gd"]
 
 [resource]
-script = ExtResource("1_xg4bm")
-player_name = "D. Natarelli"
-player_in_game_texture = ExtResource("1_5k4qy")
-player_portrait_texture = ExtResource("1_5k4qy")
+script = ExtResource("1_c78w6")
+player_name = "E. Papasidero"
+player_in_game_texture = ExtResource("1_ks8gd")
+player_portrait_texture = ExtResource("1_ks8gd")
