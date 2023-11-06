@@ -1,6 +1,6 @@
-[gd_scene load_steps=22 format=3 uid="uid://cvttj0867drlk"]
+[gd_scene load_steps=25 format=3 uid="uid://cvttj0867drlk"]
 
-[ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="1_so0nr"]
+[ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_4mth6"]
 [ext_resource type="Texture2D" uid="uid://d15yexeu6p0os" path="res://UI/white_square.jpg" id="2_doxsc"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="2_rv2cw"]
 [ext_resource type="Texture2D" uid="uid://sinmr7gnhf58" path="res://UI/bacgkround_effect2.jpg" id="4_1qyyr"]
@@ -22,6 +22,7 @@ script/source = "extends Control
 @export var ulti_portrait : TextureRect
 @export var ulti_outline : Panel
 @export var ulti_player_label : Label
+@export var super_meter_label : Label
 
 var showing_hits : bool = false
 var hits_control_initial_pos : Vector2
@@ -47,6 +48,8 @@ func _ready():
 	ulti_text.hide()
 	hits_control.hide()
 	update_flipped()
+	var background : StyleBoxFlat = super_meter_bar.get_theme_stylebox(\"background\").duplicate()
+	super_meter_bar.add_theme_stylebox_override(\"background\", background)
 	pass # Replace with function body.
 
 func on_player_init(player_info : Dummy):
@@ -61,6 +64,7 @@ func update_flipped():
 	update_flip_element(hits_control, flipped, true)
 	update_flip_element(player_name, flipped, true)
 	update_flip_element(ulti_player_label, flipped, true)
+	update_flip_element(super_meter_label, flipped, true)
 	hits_control_initial_pos = hits_control.position
 	ulti_text.text_direction = Control.TEXT_DIRECTION_LTR if not flipped else TEXT_DIRECTION_RTL
 	player_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT if flipped else HORIZONTAL_ALIGNMENT_LEFT
@@ -88,6 +92,10 @@ func set_super_meter(super_meter : int):
 	var tween : Tween = create_tween()
 	tween.tween_property(super_meter_bar, \"value\", super_meter, 0.2).set_ease(Tween.EASE_IN)
 	tween.play()
+	if super_meter >= super_meter_bar.max_value:
+		anim.queue(\"super_complete\")
+	elif super_meter <= 0:
+		anim.queue(\"super_depleted\")
 	pass
 
 func set_ulti_text(special_name : String):
@@ -126,6 +134,8 @@ func hide_connect_hit():
 func _on_anim_animation_finished(anim_name):
 	if anim_name == \"special\":
 		throw_special.emit()
+	if anim_name == \"super_complete\":
+		anim.queue(\"super_complete_idle\")
 	pass # Replace with function body.
 "
 
@@ -188,7 +198,7 @@ corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jdtbe"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_16wq2"]
 bg_color = Color(0.117647, 0.117647, 0.117647, 0.556863)
 skew = Vector2(-0.76, 0)
 border_width_left = 4
@@ -204,15 +214,20 @@ expand_margin_left = 5.0
 expand_margin_top = 5.0
 expand_margin_right = 5.0
 expand_margin_bottom = 5.0
-shadow_color = Color(1, 1, 1, 0.862745)
+shadow_color = Color(1, 0.968627, 0.709804, 0.941176)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rs5cg"]
-bg_color = Color(0.85098, 0.552941, 0.227451, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrwp5"]
+bg_color = Color(0.85098, 0.72549, 0.227451, 1)
 skew = Vector2(-0.76, 0)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
+
+[sub_resource type="LabelSettings" id="LabelSettings_smkcq"]
+font = ExtResource("2_rv2cw")
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="RichTextEffect" id="RichTextEffect_2kpfw"]
 
@@ -231,7 +246,7 @@ outline_size = 20
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_nucmr"]
-bg_color = Color(0.0627451, 0.0627451, 0.0627451, 1)
+bg_color = Color(0.196078, 0.196078, 0.196078, 0.65098)
 border_width_left = 20
 border_width_top = 20
 border_width_right = 20
@@ -241,14 +256,14 @@ corner_radius_top_right = 500
 corner_radius_bottom_right = 500
 corner_detail = 1
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_ssqsg"]
-atlas = ExtResource("1_so0nr")
-region = Rect2(-3.10782, -4.84078, 69.9761, 75.4894)
-
 [sub_resource type="LabelSettings" id="LabelSettings_aqwfg"]
+font = ExtResource("2_rv2cw")
 font_size = 46
-outline_size = 32
-outline_color = Color(0.803922, 0.25098, 0.14902, 1)
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 10
+shadow_color = Color(1, 1, 1, 1)
+shadow_offset = Vector2(1, 8)
 
 [sub_resource type="Animation" id="Animation_u7576"]
 length = 0.001
@@ -311,6 +326,18 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("SuperBar:theme_override_styles/background:shadow_size")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_vhbis"]
@@ -389,13 +416,65 @@ tracks/5/keys = {
 "values": [false, true, false, true, false, true, false, true]
 }
 
+[sub_resource type="Animation" id="Animation_vl2x2"]
+resource_name = "super_complete"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SuperBar:theme_override_styles/background:shadow_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [0, 16, 0]
+}
+
+[sub_resource type="Animation" id="Animation_f7yda"]
+resource_name = "super_complete_idle"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SuperBar:theme_override_styles/background:shadow_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [6, 16]
+}
+
+[sub_resource type="Animation" id="Animation_whcuc"]
+resource_name = "super_depleted"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SuperBar:theme_override_styles/background:shadow_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.202195, 0.3),
+"transitions": PackedFloat32Array(0.5, 2, 2, 1),
+"update": 0,
+"values": [0, 20, 20, 0]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rj1ji"]
 _data = {
 "RESET": SubResource("Animation_u7576"),
-"special": SubResource("Animation_vhbis")
+"special": SubResource("Animation_vhbis"),
+"super_complete": SubResource("Animation_vl2x2"),
+"super_complete_idle": SubResource("Animation_f7yda"),
+"super_depleted": SubResource("Animation_whcuc")
 }
 
-[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "super_meter_bar", "ulti_text", "anim", "hits_control", "hits_text", "player_name", "ulti_portrait", "ulti_outline", "ulti_player_label")]
+[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "super_meter_bar", "ulti_text", "anim", "hits_control", "hits_text", "player_name", "ulti_portrait", "ulti_outline", "ulti_player_label", "super_meter_label")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -415,6 +494,7 @@ player_name = NodePath("HealthBar/Name")
 ulti_portrait = NodePath("Ulti/Panel/TextureRect")
 ulti_outline = NodePath("Ulti/Panel")
 ulti_player_label = NodePath("Ulti/Panel/Label")
+super_meter_label = NodePath("SuperBar/Label")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 layout_mode = 1
@@ -451,13 +531,26 @@ show_percentage = false
 [node name="SuperBar" type="ProgressBar" parent="."]
 layout_mode = 0
 offset_left = 70.0
-offset_top = 606.0
-offset_right = 274.0
+offset_top = 600.0
+offset_right = 320.0
 offset_bottom = 623.0
-theme_override_styles/background = SubResource("StyleBoxFlat_jdtbe")
-theme_override_styles/fill = SubResource("StyleBoxFlat_rs5cg")
+theme_override_styles/background = SubResource("StyleBoxFlat_16wq2")
+theme_override_styles/fill = SubResource("StyleBoxFlat_wrwp5")
 max_value = 50.0
 show_percentage = false
+
+[node name="Label" type="Label" parent="SuperBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "SUPER"
+label_settings = SubResource("LabelSettings_smkcq")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="UltiText" type="RichTextLabel" parent="."]
 visible = false
@@ -528,6 +621,7 @@ grow_vertical = 2
 [node name="Panel" type="Panel" parent="Ulti"]
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(1, 0, 0, 1)
+clip_contents = true
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -544,26 +638,27 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -269.0
-offset_top = -362.0
-offset_right = 148.0
-offset_bottom = 270.0
+offset_left = -264.0
+offset_top = -268.0
+offset_right = 75.0
+offset_bottom = 246.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = SubResource("AtlasTexture_ssqsg")
+texture = ExtResource("2_4mth6")
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="Ulti/Panel"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -292.0
-offset_top = 165.0
-offset_right = 92.0
-offset_bottom = 232.0
+offset_left = -264.0
+offset_top = 188.0
+offset_right = 32.0
+offset_bottom = 255.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "COMELA"

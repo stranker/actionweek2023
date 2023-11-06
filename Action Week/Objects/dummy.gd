@@ -58,6 +58,7 @@ var can_recover_guard : bool = false
 var grab_success : bool = false
 var can_be_attacked : bool = true
 var super_attack_available : bool = false
+@export var only_move : bool = false
 
 @export var player_layer : int
 @export var attack_layer : int
@@ -83,6 +84,7 @@ var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 func _ready(): #Start()
 	_get_player_data()
 	GameManager.reset_game.connect(reset_player)
+	GameManager.start_round.connect(on_start_round)
 	initialized.connect(GameManager.add_player)
 	dead.connect(GameManager.add_victory)
 	set_collision_layer_value(player_layer, true )
@@ -105,6 +107,10 @@ func _get_player_data():
 	$Visible/Skin/Body/Head.texture = player_data.player_in_game_texture
 	pass
 
+func on_start_round():
+	only_move = false
+	pass
+
 func reset_player():
 	global_position = start_position
 	$AnimationPlayer.play("RESET")
@@ -116,6 +122,7 @@ func reset_player():
 	super_meter_update.emit(super_meter)
 	check_super_meter()
 	is_dead = false
+	only_move = true
 	set_state(State.IDLE)
 	pass
 
@@ -245,6 +252,7 @@ func _run_state():
 	pass
 
 func _attack_state():
+	if only_move: return set_state(State.IDLE)
 	attack()
 	pass
 

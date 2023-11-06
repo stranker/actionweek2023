@@ -12,8 +12,11 @@ var current_players_data : Dictionary
 signal victories_update(players)
 signal reset_game()
 signal start_special()
+signal start_round()
 
 var players : Array
+
+var round_count : int = 0
 
 func _ready():
 	players_data.append(load("res://Objects/Players/FedeData.tres"))
@@ -61,4 +64,12 @@ func on_start_game():
 func on_start_loading():
 	await get_tree().create_timer(2.0).timeout
 	get_tree().change_scene_to_file("res://Scenes/loading_scene.tscn")
+	pass
+
+func set_round_count(count : int):
+	round_count = count
+	pass
+
+func start_round_game():
+	start_round.emit()
 	pass

@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://15d5oep18nq8"]
+[gd_scene load_steps=24 format=3 uid="uid://15d5oep18nq8"]
 
 [ext_resource type="PackedScene" uid="uid://cmywqdysf10rc" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
 [ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_gubrf"]
@@ -12,13 +12,17 @@
 resource_name = "player_selector_scene"
 script/source = "extends Control
 
-@onready var players_to_pick_count : int = $Panel/Players.get_child_count()
+@onready var players_to_pick_count : int = $PlayersPanel/Players.get_child_count()
 @export var players : GridContainer
 @export var player_select_widget_scene : PackedScene
 @export var player1_texture : TextureRect
 @export var player2_texture : TextureRect
 @export var player1_name : Label
 @export var player2_name : Label
+@export var players_panel : Panel
+@export var rounds_panel : Panel
+@export var round_label : Label
+@export var round_anim : AnimationPlayer
 
 var players_selected : Array = []
 
@@ -31,6 +35,23 @@ enum PlayerControllerID {
 	ONE = 1,
 	TWO
 }
+
+enum RoundCount {
+	ONE = 1,
+	TWO = 2,
+	THREE = 3,
+	FOUR = 4,
+	FIVE = 5
+}
+
+enum SelectionState {
+	PLAYER,
+	ROUND,
+	END
+}
+
+var current_selection_state = SelectionState.PLAYER
+var current_round_count = RoundCount.ONE
 
 signal player_selected(id, data)
 signal start_loading()
@@ -47,6 +68,8 @@ func _ready():
 	_hover_player(player2_idx, PlayerControllerID.TWO)
 	player_selected.connect(GameManager.on_player_selected)
 	start_loading.connect(GameManager.on_start_loading)
+	players_panel.show()
+	rounds_panel.hide()
 	pass
 
 func on_hover_player(controller_id, data : PlayerData):
@@ -62,21 +85,38 @@ func on_hover_player(controller_id, data : PlayerData):
 func on_select_player(controller_id, data : PlayerData):
 	player_selected.emit(controller_id, data)
 	if players_selected.size() == 2:
-		start_loading.emit()
+		current_selection_state = SelectionState.ROUND
+		players_panel.hide()
+		rounds_panel.show()
 	pass
 
 func _input(event):
 	if players_to_pick_count == 0: return
-	player1_idx = _get_controller_input(event, PlayerControllerID.ONE, player1_idx)
-	player2_idx = _get_controller_input(event, PlayerControllerID.TWO, player2_idx)
-	if not players_selected.has(PlayerControllerID.ONE) and player1_idx != prev_player1_idx:
-		players.get_child(prev_player1_idx).deselect(PlayerControllerID.ONE)
-		prev_player1_idx = player1_idx
-		_hover_player(player1_idx, PlayerControllerID.ONE)
-	if not players_selected.has(PlayerControllerID.TWO) and player2_idx != prev_player2_idx:
-		players.get_child(prev_player2_idx).deselect(PlayerControllerID.TWO)
-		prev_player2_idx = player2_idx
-		_hover_player(player2_idx, PlayerControllerID.TWO)
+	if current_selection_state == SelectionState.PLAYER:
+		player1_idx = _get_controller_input(event, PlayerControllerID.ONE, player1_idx)
+		player2_idx = _get_controller_input(event, PlayerControllerID.TWO, player2_idx)
+		if not players_selected.has(PlayerControllerID.ONE) and player1_idx != prev_player1_idx:
+			players.get_child(prev_player1_idx).deselect(PlayerControllerID.ONE)
+			prev_player1_idx = player1_idx
+			_hover_player(player1_idx, PlayerControllerID.ONE)
+		if not players_selected.has(PlayerControllerID.TWO) and player2_idx != prev_player2_idx:
+			players.get_child(prev_player2_idx).deselect(PlayerControllerID.TWO)
+			prev_player2_idx = player2_idx
+			_hover_player(player2_idx, PlayerControllerID.TWO)
+	elif current_selection_state == SelectionState.ROUND:
+		if event.is_action(\"move_left1\") and event.is_pressed() and not event.is_echo():
+			current_round_count -= 1
+			round_anim.play(\"left_arrow\")
+		if event.is_action(\"move_right1\") and event.is_pressed() and not event.is_echo():
+			current_round_count += 1
+			round_anim.play(\"right_arrow\")
+		current_round_count = clamp(current_round_count, 1, RoundCount.size())
+		if event.is_action(\"attack1\") and event.is_pressed() and not event.is_echo():
+			round_anim.play(\"select\")
+			start_loading.emit()
+			current_selection_state = SelectionState.END
+			GameManager.set_round_count(current_round_count)
+		round_label.text = str(current_round_count) + \" ROUNDS\"
 	pass
 
 func _hover_player(idx, controller):
@@ -98,6 +138,12 @@ func _get_controller_input(event : InputEvent, controller_id, player_idx):
 	if event.is_action(\"attack\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
 		_select_player(player_idx, controller_id)
 	return player_idx
+
+
+func _on_animation_player_animation_finished(anim_name):
+	if anim_name == \"left_arrow\" or anim_name == \"right_arrow\":
+		round_anim.play(\"idle\")
+	pass # Replace with function body.
 "
 
 [sub_resource type="LabelSettings" id="LabelSettings_jnkje"]
@@ -109,24 +155,299 @@ shadow_size = 10
 shadow_color = Color(1, 1, 1, 1)
 shadow_offset = Vector2(1, 10)
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_veoms"]
-bg_color = Color(0, 0.0392157, 0.290196, 1)
-border_width_left = 8
-border_width_top = 8
-border_width_right = 8
-border_width_bottom = 8
-border_color = Color(0, 0.00392157, 0.0470588, 1)
-expand_margin_left = 8.0
-expand_margin_top = 8.0
-expand_margin_right = 8.0
-expand_margin_bottom = 8.0
-
 [sub_resource type="LabelSettings" id="LabelSettings_7opnj"]
 font = ExtResource("4_0kjve")
 font_size = 46
 font_color = Color(1, 0.8, 0, 1)
 outline_size = 20
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_n16p2"]
+bg_color = Color(0.113725, 0.113725, 0.113725, 0.862745)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yo43e"]
+bg_color = Color(0.113725, 0.113725, 0.113725, 0.862745)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0, 0, 1)
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_thoam"]
+font = ExtResource("4_0kjve")
+font_size = 32
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 10
+shadow_color = Color(1, 1, 1, 0.890196)
+shadow_offset = Vector2(1, 6)
+
+[sub_resource type="LabelSettings" id="LabelSettings_6xnfe"]
+font = ExtResource("4_0kjve")
+font_size = 64
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 10
+shadow_color = Color(1, 1, 1, 0.890196)
+shadow_offset = Vector2(1, 6)
+
+[sub_resource type="Animation" id="Animation_pw1k2"]
+resource_name = "idle"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftArrow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightArrow:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.392157), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_pkphy"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftArrow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightArrow:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LeftArrow:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("LeftArrow:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(8, 12)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("RightArrow:scale")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("RightArrow:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(264, 12)]
+}
+
+[sub_resource type="Animation" id="Animation_x8b54"]
+resource_name = "left_arrow"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftArrow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("LeftArrow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LeftArrow:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [Vector2(8, 12), Vector2(0, 12), Vector2(8, 12)]
+}
+
+[sub_resource type="Animation" id="Animation_y334d"]
+resource_name = "right_arrow"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("RightArrow:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightArrow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.2, 1.2), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("RightArrow:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [Vector2(264, 12), Vector2(274, 12), Vector2(264, 12)]
+}
+
+[sub_resource type="Animation" id="Animation_g53m0"]
+resource_name = "select"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("LeftArrow:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.5, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.4, 1.4), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("RightArrow:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.5, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.4, 1.4), Vector2(1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("LeftArrow:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("RightArrow:self_modulate")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ivxka"]
+_data = {
+"RESET": SubResource("Animation_pkphy"),
+"idle": SubResource("Animation_pw1k2"),
+"left_arrow": SubResource("Animation_x8b54"),
+"right_arrow": SubResource("Animation_y334d"),
+"select": SubResource("Animation_g53m0")
+}
 
 [sub_resource type="Animation" id="Animation_u2rpr"]
 length = 0.001
@@ -166,7 +487,7 @@ _data = {
 "idle": SubResource("Animation_7etko")
 }
 
-[node name="PlayerSelectorScene" type="Control" node_paths=PackedStringArray("players", "player1_texture", "player2_texture", "player1_name", "player2_name")]
+[node name="PlayerSelectorScene" type="Control" node_paths=PackedStringArray("players", "player1_texture", "player2_texture", "player1_name", "player2_name", "players_panel", "rounds_panel", "round_label", "round_anim")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -174,12 +495,16 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = SubResource("GDScript_ybyqa")
-players = NodePath("Panel/Players")
+players = NodePath("PlayersPanel/Players")
 player_select_widget_scene = ExtResource("1_1oh1v")
 player1_texture = NodePath("Player1")
 player2_texture = NodePath("Player2")
 player1_name = NodePath("Player1/Label")
 player2_name = NodePath("Player2/Label")
+players_panel = NodePath("PlayersPanel")
+rounds_panel = NodePath("RoundPanel")
+round_label = NodePath("RoundPanel/Round")
+round_anim = NodePath("RoundPanel/AnimationPlayer")
 
 [node name="BackgroundStars" type="TextureRect" parent="."]
 layout_mode = 1
@@ -274,32 +599,6 @@ label_settings = SubResource("LabelSettings_jnkje")
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="Panel" type="Panel" parent="."]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -328.0
-offset_top = -136.0
-offset_right = 312.0
-offset_bottom = -32.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_veoms")
-
-[node name="Players" type="GridContainer" parent="Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-theme_override_constants/h_separation = 0
-theme_override_constants/v_separation = 0
-columns = 4
-
 [node name="Select" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -318,6 +617,100 @@ label_settings = SubResource("LabelSettings_7opnj")
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="PlayersPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -328.0
+offset_top = -136.0
+offset_right = 312.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_n16p2")
+
+[node name="Players" type="GridContainer" parent="PlayersPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="RoundPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -152.0
+offset_top = -136.0
+offset_right = 152.0
+offset_bottom = -40.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_yo43e")
+
+[node name="Round" type="Label" parent="RoundPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "3 ROUNDS"
+label_settings = SubResource("LabelSettings_thoam")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LeftArrow" type="Label" parent="RoundPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 8.0
+offset_top = -36.0
+offset_right = 44.0
+offset_bottom = 32.0
+grow_vertical = 2
+pivot_offset = Vector2(16, 36)
+text = "<"
+label_settings = SubResource("LabelSettings_6xnfe")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RightArrow" type="Label" parent="RoundPanel"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -40.0
+offset_top = -36.0
+offset_right = -4.0
+offset_bottom = 32.0
+grow_horizontal = 0
+grow_vertical = 2
+pivot_offset = Vector2(16, 36)
+text = ">"
+label_settings = SubResource("LabelSettings_6xnfe")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="RoundPanel"]
+autoplay = "idle"
+libraries = {
+"": SubResource("AnimationLibrary_ivxka")
+}
+
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 autoplay = "idle"
 libraries = {
@@ -328,3 +721,5 @@ libraries = {
 stream = ExtResource("7_f04vv")
 volume_db = -20.0
 autoplay = true
+
+[connection signal="animation_finished" from="RoundPanel/AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
