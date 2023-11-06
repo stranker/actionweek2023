@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PlayerData" load_steps=3 format=3 uid="uid://br26d2xy6ga2g"]
+
+[ext_resource type="Texture2D" path="res://Objects/Players/santi face.png" id="1_f7ara"]
+[ext_resource type="Script" path="res://PlayersData.gd" id="2_igy6j"]
+
+[resource]
+script = ExtResource("2_igy6j")
+player_name = "S. Marchione"
+player_in_game_texture = ExtResource("1_f7ara")
+player_portrait_texture = ExtResource("1_f7ara")
