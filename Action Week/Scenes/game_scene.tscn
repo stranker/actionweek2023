@@ -166,18 +166,30 @@ vertical_alignment = 1
 [node name="Dummy" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
 position = Vector2(96, 311)
 id = 1
+max_hp = null
 enemy_player = NodePath("../Dummy2")
+debug_enabled = null
+current_state = null
 player_layer = 1
 attack_layer = 3
 enemy_layer = 4
+damage_per_combo = null
+max_guard_stamina = null
+min_super_meter = null
 
 [node name="Dummy2" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
 position = Vector2(1024, 280)
 id = 2
+max_hp = null
 enemy_player = NodePath("../Dummy")
+debug_enabled = null
+current_state = null
 player_layer = 4
 attack_layer = 5
 enemy_layer = 1
+damage_per_combo = null
+max_guard_stamina = null
+min_super_meter = null
 
 [node name="RoundTimer" type="Timer" parent="."]
 

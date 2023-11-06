@@ -17,6 +17,7 @@ var guard_particles_scene = preload("res://Objects/Particles/guard_particles.tsc
 
 signal hp_update(hp)
 signal guard_stamina_update(stamina)
+signal super_meter_update(super_meter)
 signal dead(id)
 signal special_start(special_name)
 signal special_end()
@@ -70,6 +71,8 @@ var attack_combo : int = 1
 var connected_hit = 0
 @onready var start_position = global_position
 
+@export var min_super_meter : float = 0
+
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
 
@@ -98,6 +101,8 @@ func reset_player():
 	hp_update.emit(hp)
 	guard_stamina = max_guard_stamina
 	guard_stamina_update.emit(guard_stamina)
+	super_meter = min_super_meter
+	super_meter_update.emit(super_meter)
 	is_dead = false
 	set_state(State.IDLE)
 	pass
@@ -368,6 +373,8 @@ func take_damage(damage : int, damage_pos : Vector2):
 	if is_dead: return
 	hp -= damage
 	hp_update.emit(hp)
+	super_meter += damage * 0.25
+	super_meter_update.emit(super_meter)
 	velocity.x = -facing_direction.x * 300
 	$Hurt.pitch_scale = randf_range(0.95, 1)
 	$Hurt.play()
