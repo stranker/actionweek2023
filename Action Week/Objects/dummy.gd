@@ -56,6 +56,7 @@ var is_dead : bool = false
 var can_recover_guard : bool = false
 var grab_success : bool = false
 var can_be_attacked : bool = true
+var super_attack_available : bool = false
 
 @export var player_layer : int
 @export var attack_layer : int
@@ -71,7 +72,7 @@ var attack_combo : int = 1
 var connected_hit = 0
 @onready var start_position = global_position
 
-@export var min_super_meter : float = 0
+@export var super_meter : float = 0
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -101,8 +102,9 @@ func reset_player():
 	hp_update.emit(hp)
 	guard_stamina = max_guard_stamina
 	guard_stamina_update.emit(guard_stamina)
-	super_meter = min_super_meter
+	super_meter = 0
 	super_meter_update.emit(super_meter)
+	check_super_meter()
 	is_dead = false
 	set_state(State.IDLE)
 	pass
@@ -183,7 +185,11 @@ func check_grab_input():
 	pass
 
 func check_special_input():
-	if Input.is_action_just_pressed("special" + str(id)):
+	if Input.is_action_just_pressed("special" + str(id)) and super_attack_available:
+		super_attack_available = false
+		super_meter = 0
+		super_meter_update.emit(super_meter)
+		check_super_meter()
 		set_state(State.SPECIAL)
 	pass
 
@@ -373,8 +379,9 @@ func take_damage(damage : int, damage_pos : Vector2):
 	if is_dead: return
 	hp -= damage
 	hp_update.emit(hp)
-	super_meter += damage * 0.25
+	super_meter += damage
 	super_meter_update.emit(super_meter)
+	check_super_meter()
 	velocity.x = -facing_direction.x * 300
 	$Hurt.pitch_scale = randf_range(0.95, 1)
 	$Hurt.play()
@@ -407,11 +414,21 @@ func hit(damage : int, damage_pos : Vector2):
 		guard_stamina -= damage
 		guard_stamina = clamp(guard_stamina, 0, 50)
 		guard_stamina_update.emit(guard_stamina)
+		super_meter += damage * 0.25
+		super_meter_update.emit(super_meter)
+		check_super_meter()
 		_add_guard_particles(damage_pos)
 		return false
 	else:
 		take_damage(damage, damage_pos)
 		return true
+	pass
+
+func check_super_meter():
+	if super_meter >= 50:
+		super_attack_available = true
+	else:
+		super_attack_available = false
 	pass
 
 func reset_attack():
@@ -434,6 +451,9 @@ func attack_player(player : Dummy, pos : Vector2):
 	if player.is_dead: return
 	var sucess_hit = player.hit(damage_per_combo * attack_combo, pos)
 	if sucess_hit:
+		super_meter += damage_per_combo * attack_combo * 0.25
+		super_meter_update.emit(super_meter)
+		check_super_meter()
 		$Hit.play()
 		if attack_combo == 3:
 			big_impact.emit()

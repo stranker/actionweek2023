@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cvttj0867drlk"]
+[gd_scene load_steps=21 format=3 uid="uid://cvttj0867drlk"]
 
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="1_so0nr"]
 [ext_resource type="Texture2D" uid="uid://d15yexeu6p0os" path="res://UI/white_square.jpg" id="2_doxsc"]
@@ -158,6 +158,31 @@ expand_margin_bottom = 5.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7c088"]
 bg_color = Color(0.254902, 0.670588, 0.909804, 1)
+skew = Vector2(-0.76, 0)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jdtbe"]
+bg_color = Color(0.117647, 0.117647, 0.117647, 0.556863)
+skew = Vector2(-0.76, 0)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+expand_margin_left = 5.0
+expand_margin_top = 5.0
+expand_margin_right = 5.0
+expand_margin_bottom = 5.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rs5cg"]
+bg_color = Color(0.85098, 0.552941, 0.227451, 1)
 skew = Vector2(-0.76, 0)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
@@ -345,7 +370,7 @@ _data = {
 "special": SubResource("Animation_vhbis")
 }
 
-[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "ulti_text", "anim", "hits_control", "hits_text")]
+[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "super_meter_bar", "ulti_text", "anim", "hits_control", "hits_text")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -355,6 +380,7 @@ grow_vertical = 2
 script = SubResource("GDScript_yljfq")
 health_bar = NodePath("HealthBar")
 stamina_bar = NodePath("GuardStaminaBar")
+super_meter_bar = NodePath("SuperBar")
 ulti_text = NodePath("Hits/UltiText")
 anim = NodePath("Anim")
 hits_control = NodePath("Hits")
@@ -384,12 +410,13 @@ value = 50.0
 show_percentage = false
 
 [node name="SuperBar" type="ProgressBar" parent="."]
+layout_mode = 0
 offset_left = 70.0
 offset_top = 606.0
 offset_right = 274.0
 offset_bottom = 623.0
-theme_override_styles/background = SubResource("StyleBoxFlat_ufru0")
-theme_override_styles/fill = SubResource("StyleBoxFlat_7c088")
+theme_override_styles/background = SubResource("StyleBoxFlat_jdtbe")
+theme_override_styles/fill = SubResource("StyleBoxFlat_rs5cg")
 max_value = 50.0
 show_percentage = false
 
@@ -465,9 +492,8 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -324.0
 offset_right = 576.0
-offset_bottom = 324.0
+offset_bottom = 648.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nucmr")
 
