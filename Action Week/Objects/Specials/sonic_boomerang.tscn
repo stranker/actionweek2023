@@ -1,0 +1,159 @@
+[gd_scene load_steps=13 format=3 uid="uid://b66qvy0fvkdc0"]
+
+[ext_resource type="Script" path="res://Objects/Specials/sonic_boomerang.gd" id="1_ksg6b"]
+[ext_resource type="Texture2D" uid="uid://bortr1suofvbq" path="res://Objects/Specials/SonicBoomerang.png" id="2_sjqrj"]
+[ext_resource type="Texture2D" uid="uid://bucme7b1vh8pn" path="res://Objects/Specials/CircleParticle.png" id="3_gkgp5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oa0m3"]
+size = Vector2(160, 100)
+
+[sub_resource type="Gradient" id="Gradient_qg7b5"]
+offsets = PackedFloat32Array(0, 0.226351, 0.844595, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_840i7"]
+gradient = SubResource("Gradient_qg7b5")
+
+[sub_resource type="Curve" id="Curve_igmys"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.23737, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_8kiwo"]
+curve = SubResource("Curve_igmys")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_oaecx"]
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+orbit_velocity_min = -2.0
+orbit_velocity_max = -2.0
+scale_min = 0.05
+scale_max = 0.2
+scale_curve = SubResource("CurveTexture_8kiwo")
+color = Color(1, 1, 0.835294, 1)
+color_ramp = SubResource("GradientTexture1D_840i7")
+hue_variation_min = 0.02
+hue_variation_max = 0.28
+
+[sub_resource type="Animation" id="Animation_888jq"]
+resource_name = "throw"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape2D/Sprite:flip_h")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.4, 0.6, 0.7, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D/Sprite:flip_v")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3, 0.4, 0.6, 0.7, 0.9, 1),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [false, true, false, true, false, true, false, true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(0.5, 2, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(512, 0), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_xdstl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CollisionShape2D/Sprite:flip_h")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D/Sprite:flip_v")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("CollisionShape2D:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1t3ky"]
+_data = {
+"RESET": SubResource("Animation_xdstl"),
+"throw": SubResource("Animation_888jq")
+}
+
+[node name="SonicBoomerang" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+script = ExtResource("1_ksg6b")
+damage = 20
+special_name = "Sonic Boomerang"
+special_anim_name = "sonic_boomerang"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_oa0m3")
+
+[node name="Sprite" type="Sprite2D" parent="CollisionShape2D"]
+scale = Vector2(5, 5)
+texture = ExtResource("2_sjqrj")
+
+[node name="Sprite2" type="Sprite2D" parent="CollisionShape2D/Sprite"]
+self_modulate = Color(1, 1, 1, 0.168627)
+show_behind_parent = true
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("2_sjqrj")
+flip_h = true
+flip_v = true
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="CollisionShape2D/Sprite"]
+process_material = SubResource("ParticleProcessMaterial_oaecx")
+texture = ExtResource("3_gkgp5")
+local_coords = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1t3ky")
+}
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

@@ -11,7 +11,6 @@ class_name Dummy
 @export var max_super_meter : int = 20
 @export var enemy_player : Dummy
 @export var debug_enabled : bool = false
-@export var head_texture : Texture
 
 var hurt_particles_scene = preload("res://Objects/Particles/hurt_particles.tscn")
 var dust_particles_scene = preload("res://Objects/Particles/dust_particles.tscn")
@@ -76,7 +75,7 @@ var connected_hit = 0
 
 @export var super_meter : float = 0
 
-var player_data : PlayerData
+@export var player_data : PlayerData
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -101,7 +100,8 @@ func _ready(): #Start()
 	pass
 
 func _get_player_data():
-	player_data = GameManager.current_players_data[str(id)]
+	if not GameManager.current_players_data.is_empty():
+		player_data = GameManager.current_players_data[str(id)]
 	$Visible/Skin/Body/Head.texture = player_data.player_in_game_texture
 	pass
 

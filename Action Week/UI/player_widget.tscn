@@ -60,10 +60,10 @@ func update_flipped():
 	update_flip_element(ulti_text, flipped, true)
 	update_flip_element(hits_control, flipped, true)
 	update_flip_element(player_name, flipped, true)
-	update_flip_element(player_name, flipped, true)
 	update_flip_element(ulti_player_label, flipped, true)
 	hits_control_initial_pos = hits_control.position
 	ulti_text.text_direction = Control.TEXT_DIRECTION_LTR if not flipped else TEXT_DIRECTION_RTL
+	player_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT if flipped else HORIZONTAL_ALIGNMENT_LEFT
 	pass
 
 func update_flip_element(element : Control, flipped : bool, update_position : bool):
@@ -430,7 +430,7 @@ show_percentage = false
 layout_mode = 0
 offset_left = -8.0
 offset_top = -16.0
-offset_right = 182.0
+offset_right = 416.0
 offset_bottom = 12.0
 text = "Placeholder"
 label_settings = SubResource("LabelSettings_00c8r")
@@ -531,9 +531,8 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -324.0
 offset_right = 576.0
-offset_bottom = 324.0
+offset_bottom = 648.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nucmr")
 

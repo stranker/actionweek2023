@@ -8,9 +8,9 @@
 [ext_resource type="Texture2D" uid="uid://rmo2fj6q20xl" path="res://Scenes/Background.jpg" id="5_oiqdb"]
 [ext_resource type="Texture2D" uid="uid://c3u1bu2a80fyo" path="res://UI/Clock.png" id="7_p3568"]
 [ext_resource type="FontFile" uid="uid://ble18gxjisbqk" path="res://Fonts/ds_digital/DS-DIGII.TTF" id="8_qs4ge"]
-[ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="9_3fpxo"]
 [ext_resource type="AudioStream" uid="uid://x5ibcqp7kwf5" path="res://Audio/Music/BattleTheme.mp3" id="9_lqsog"]
-[ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="10_qubhm"]
+[ext_resource type="Resource" uid="uid://c4e5fyplivbwu" path="res://Objects/Players/DaniData.tres" id="9_shc8l"]
+[ext_resource type="Resource" uid="uid://jag78ohh312i" path="res://Objects/Players/SantiData.tres" id="10_o7v0s"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pmhbl"]
 size = Vector2(2400, 128)
@@ -168,19 +168,19 @@ vertical_alignment = 1
 position = Vector2(96, 311)
 id = 1
 enemy_player = NodePath("../Dummy2")
-head_texture = ExtResource("9_3fpxo")
 player_layer = 1
 attack_layer = 3
 enemy_layer = 4
+player_data = ExtResource("9_shc8l")
 
 [node name="Dummy2" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
 position = Vector2(1024, 280)
 id = 2
 enemy_player = NodePath("../Dummy")
-head_texture = ExtResource("10_qubhm")
 player_layer = 4
 attack_layer = 5
 enemy_layer = 1
+player_data = ExtResource("10_o7v0s")
 
 [node name="RoundTimer" type="Timer" parent="."]
 
