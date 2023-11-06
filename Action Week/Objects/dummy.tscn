@@ -1,9 +1,10 @@
-[gd_scene load_steps=33 format=3 uid="uid://b1c8msk3p2gkp"]
+[gd_scene load_steps=34 format=3 uid="uid://b1c8msk3p2gkp"]
 
 [ext_resource type="Script" path="res://Objects/dummy.gd" id="1_3prxl"]
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_0j6c5"]
 [ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="2_3i6w4"]
 [ext_resource type="AudioStream" uid="uid://dpq8mimucscnt" path="res://Audio/SFx/jump.wav" id="4_61bu2"]
+[ext_resource type="Texture2D" uid="uid://bb6dm3ynskkeq" path="res://Objects/Players/santi face.png" id="4_ffspw"]
 [ext_resource type="Texture2D" uid="uid://bucme7b1vh8pn" path="res://Objects/Specials/CircleParticle.png" id="5_y0rpl"]
 [ext_resource type="AudioStream" uid="uid://ceg2ep21cn43w" path="res://Audio/SFx/hurt.wav" id="6_eclac"]
 [ext_resource type="AudioStream" uid="uid://w4xxc2eec6ug" path="res://Audio/SFx/punch1.wav" id="7_a7jn5"]
@@ -1604,10 +1605,11 @@ region_rect = Rect2(67.3519, 42.8136, 58.651, 37.8239)
 [node name="Head" type="Sprite2D" parent="Visible/Skin/Body"]
 z_index = 1
 texture_filter = 1
-position = Vector2(3, -18)
-texture = ExtResource("2_0j6c5")
-offset = Vector2(-1, -25)
-region_enabled = true
+position = Vector2(3.5, -25.5)
+scale = Vector2(0.254981, 0.254981)
+texture = ExtResource("4_ffspw")
+offset = Vector2(-3.92186, -78.4372)
+flip_h = true
 region_rect = Rect2(4.42368, 7.33629, 60.3268, 57.6935)
 
 [node name="LeftHand" type="Sprite2D" parent="Visible/Skin/Body"]

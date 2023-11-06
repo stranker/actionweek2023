@@ -8,8 +8,10 @@ class_name Dummy
 @export var id : int = 0
 @export var max_hp : int = 100
 @onready var hp = max_hp
+@export var max_super_meter : int = 20
 @export var enemy_player : Dummy
 @export var debug_enabled : bool = false
+@export var head_texture : Texture
 
 var hurt_particles_scene = preload("res://Objects/Particles/hurt_particles.tscn")
 var dust_particles_scene = preload("res://Objects/Particles/dust_particles.tscn")
@@ -92,6 +94,7 @@ func _ready(): #Start()
 	$Debug.visible = debug_enabled
 	set_state(State.IDLE)
 	_set_facing()
+	$Visible/Skin/Body/Head.texture = head_texture
 	initialized.emit(self)
 	pass
 

@@ -1,0 +1,273 @@
+[gd_scene load_steps=13 format=3 uid="uid://cmywqdysf10rc"]
+
+[ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="1_27ens"]
+[ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="2_qe3gp"]
+
+[sub_resource type="GDScript" id="GDScript_hem5y"]
+resource_name = "player_select_widget"
+script/source = "extends Control
+
+@export var select_panel : Panel
+@export var anim : AnimationPlayer
+@export var p1_label : Label
+@export var p2_label : Label
+@export var player_texture : TextureRect
+@export var hovereed : bool = false
+
+var control_colors : Array = [ Color.RED, Color.BLUE ]
+
+var players_inside : Array
+
+var ref_data : PlayerData = null
+
+signal hover_player(id, data)
+
+func set_data(data : PlayerData):
+	player_texture.texture = data.player_portrait_texture
+	ref_data = data
+	pass
+
+func select(controller_id : int):
+	anim.play(\"select\")
+	pass
+
+func hover(controller_id : int):
+	if not players_inside.has(controller_id):
+		players_inside.append(controller_id)
+	hovereed = true
+	var final_color : Color = control_colors[controller_id - 1]
+	if players_inside.size() > 1:
+		final_color = control_colors[0].lerp(control_colors[1], 0.5)
+	select_panel.self_modulate = final_color
+	if controller_id == 1:
+		p1_label.show()
+	if controller_id == 2:
+		p2_label.show()
+	hover_player.emit(controller_id, ref_data)
+	anim.play(\"hover\")
+	pass
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	hovereed = false
+	anim.play(\"RESET\")
+	pass # Replace with function body.
+
+func deselect(controller_id):
+	players_inside.erase(controller_id)
+	if controller_id == 1:
+		p1_label.hide()
+	if controller_id == 2:
+		p2_label.hide()
+	if players_inside.is_empty():
+		hovereed = false
+		anim.play(\"RESET\")
+	else:
+		hover(players_inside[0])
+	pass
+"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i2x2d"]
+bg_color = Color(1, 1, 1, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fjoel"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a1jdx"]
+atlas = ExtResource("1_27ens")
+region = Rect2(0.275879, 0.181709, 65.3193, 69.7801)
+
+[sub_resource type="LabelSettings" id="LabelSettings_j3j18"]
+font = ExtResource("2_qe3gp")
+font_size = 26
+font_color = Color(1, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_p74t2"]
+font = ExtResource("2_qe3gp")
+font_size = 26
+font_color = Color(0, 0, 1, 1)
+
+[sub_resource type="Animation" id="Animation_gj7s4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Container/SelectPanel:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Container/SelectPanel/Panel/P1:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Container/SelectPanel/Panel/P2:self_modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_m3p8g"]
+resource_name = "hover"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Container/SelectPanel/Panel/P1:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.364706), Color(1, 1, 1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Container/SelectPanel/Panel/P2:self_modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.364706), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_q5ori"]
+resource_name = "select"
+length = 0.9
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("SelectPanel:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_0qm23"]
+_data = {
+"RESET": SubResource("Animation_gj7s4"),
+"hover": SubResource("Animation_m3p8g"),
+"select": SubResource("Animation_q5ori")
+}
+
+[node name="PlayerSelectWidget" type="Control" node_paths=PackedStringArray("select_panel", "anim", "p1_label", "p2_label", "player_texture")]
+custom_minimum_size = Vector2(160, 104)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -976.0
+offset_bottom = -528.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_hem5y")
+select_panel = NodePath("Container/SelectPanel")
+anim = NodePath("Container/AnimationPlayer")
+p1_label = NodePath("Container/SelectPanel/Panel/P1")
+p2_label = NodePath("Container/SelectPanel/Panel/P2")
+player_texture = NodePath("Container/SelectPanel/Panel/TextureRect")
+
+[node name="Container" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SelectPanel" type="Panel" parent="Container"]
+self_modulate = Color(1, 1, 1, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(112, 80)
+theme_override_styles/panel = SubResource("StyleBoxFlat_i2x2d")
+
+[node name="Panel" type="Panel" parent="Container/SelectPanel"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_fjoel")
+
+[node name="TextureRect" type="TextureRect" parent="Container/SelectPanel/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_a1jdx")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="P1" type="Label" parent="Container/SelectPanel/Panel"]
+visible = false
+layout_mode = 1
+offset_left = 3.0
+offset_top = 3.0
+offset_right = 43.0
+offset_bottom = 33.0
+text = "P1
+"
+label_settings = SubResource("LabelSettings_j3j18")
+vertical_alignment = 1
+
+[node name="P2" type="Label" parent="Container/SelectPanel/Panel"]
+visible = false
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -43.0
+offset_top = 3.0
+offset_right = -3.0
+offset_bottom = 33.0
+grow_horizontal = 0
+text = "P2"
+label_settings = SubResource("LabelSettings_p74t2")
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Container"]
+root_node = NodePath("../..")
+libraries = {
+"": SubResource("AnimationLibrary_0qm23")
+}

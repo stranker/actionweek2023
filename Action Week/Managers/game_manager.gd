@@ -5,11 +5,20 @@ var players_victories : Dictionary = {
 	"2":0
 }
 
+var players_data : Array[PlayerData]
+
 signal victories_update(players)
 signal reset_game()
 signal start_special()
 
 var players : Array
+
+func _ready():
+	players_data.append(load("res://Objects/Players/FedeData.tres"))
+	players_data.append(load("res://Objects/Players/SantiData.tres"))
+	players_data.append(load("res://Objects/Players/DaniData.tres"))
+	players_data.append(load("res://Objects/Players/EmiData.tres"))
+	pass
 
 func add_victory(player_defeated_id : int):
 	var win_player_id = 1 if player_defeated_id == 2 else 2

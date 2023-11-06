@@ -8,6 +8,7 @@
 [sub_resource type="GDScript" id="GDScript_yljfq"]
 resource_name = "player_widget"
 script/source = "extends Control
+
 @export var health_bar : ProgressBar
 @export var stamina_bar : ProgressBar
 @export var super_meter_bar : ProgressBar

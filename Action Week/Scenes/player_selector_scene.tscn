@@ -1,0 +1,302 @@
+[gd_scene load_steps=15 format=3 uid="uid://15d5oep18nq8"]
+
+[ext_resource type="PackedScene" uid="uid://cmywqdysf10rc" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
+[ext_resource type="Texture2D" uid="uid://bb6dm3ynskkeq" path="res://Objects/Players/santi face.png" id="2_gubrf"]
+[ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="2_wcd2t"]
+[ext_resource type="Texture2D" uid="uid://dsm8hjf1wghb" path="res://UI/selection_background.png" id="3_8pp4q"]
+[ext_resource type="Texture2D" uid="uid://by4jv6a0xg5ym" path="res://Objects/Players/dani face.png" id="3_80k5r"]
+[ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="4_0kjve"]
+[ext_resource type="AudioStream" uid="uid://bao7pd11le1go" path="res://Audio/Music/SelectionSoundtrack.mp3" id="7_u2qr6"]
+
+[sub_resource type="GDScript" id="GDScript_ybyqa"]
+resource_name = "player_selector_scene"
+script/source = "extends Control
+
+@onready var players_to_pick_count : int = $Panel/Players.get_child_count()
+@export var players : GridContainer
+@export var player_select_widget_scene : PackedScene
+@export var player1_texture : TextureRect
+@export var player2_texture : TextureRect
+@export var player1_name : Label
+@export var player2_name : Label
+
+var player1_idx = 0
+var player2_idx = 0
+var prev_player1_idx = 0
+var prev_player2_idx = 0
+
+func _ready():
+	for data in GameManager.players_data:
+		var player_select_widget = player_select_widget_scene.instantiate()
+		players.add_child(player_select_widget)
+		player_select_widget.set_data(data)
+		player_select_widget.hover_player.connect(on_hover_player)
+	players_to_pick_count = players.get_child_count()
+	_hover_widget(player1_idx, 1)
+	_hover_widget(player2_idx, 2)
+	pass
+
+func on_hover_player(controller_id, data : PlayerData):
+	if controller_id == 1:
+		player1_texture.texture = data.player_portrait_texture
+		player1_name.text = data.player_name
+	if controller_id == 2:
+		player2_texture.texture = data.player_portrait_texture
+		player2_name.text = data.player_name
+	pass
+
+func _input(event):
+	if players_to_pick_count == 0: return
+	player1_idx = _get_controller_input(event, 1, player1_idx)
+	player2_idx = _get_controller_input(event, 2, player2_idx)
+	if player1_idx != prev_player1_idx:
+		players.get_child(prev_player1_idx).deselect(1)
+		prev_player1_idx = player1_idx
+		_hover_widget(player1_idx, 1)
+	if player2_idx != prev_player2_idx:
+		players.get_child(prev_player2_idx).deselect(2)
+		prev_player2_idx = player2_idx
+		_hover_widget(player2_idx, 2)
+	pass
+
+func _hover_widget(idx, controller):
+	players.get_child(idx).hover(controller)
+	pass
+
+func _get_controller_input(event : InputEvent, controller_id, player_idx):
+	if event.is_action(\"move_left\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
+		player_idx -= 1
+	if event.is_action(\"move_right\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
+		player_idx += 1
+	player_idx = clamp(player_idx, 0, players_to_pick_count - 1)
+	return player_idx
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_jnkje"]
+font = ExtResource("4_0kjve")
+font_size = 48
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 10
+shadow_color = Color(1, 1, 1, 1)
+shadow_offset = Vector2(1, 10)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_veoms"]
+bg_color = Color(0, 0.0392157, 0.290196, 1)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(0, 0.00392157, 0.0470588, 1)
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
+
+[sub_resource type="LabelSettings" id="LabelSettings_7opnj"]
+font = ExtResource("4_0kjve")
+font_size = 46
+font_color = Color(1, 0.8, 0, 1)
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Animation" id="Animation_u2rpr"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BackgroundStars:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_7etko"]
+resource_name = "idle"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("BackgroundStars:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_luskv"]
+_data = {
+"RESET": SubResource("Animation_u2rpr"),
+"idle": SubResource("Animation_7etko")
+}
+
+[node name="PlayerSelectorScene" type="Control" node_paths=PackedStringArray("players", "player1_texture", "player2_texture", "player1_name", "player2_name")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_ybyqa")
+players = NodePath("Panel/Players")
+player_select_widget_scene = ExtResource("1_1oh1v")
+player1_texture = NodePath("Player1")
+player2_texture = NodePath("Player2")
+player1_name = NodePath("Player1/Label")
+player2_name = NodePath("Player2/Label")
+
+[node name="BackgroundStars" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_wcd2t")
+expand_mode = 1
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -376.0
+offset_top = -376.0
+offset_right = 376.0
+offset_bottom = 376.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_8pp4q")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Player1" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = -292.0
+offset_right = 448.0
+offset_bottom = 124.0
+grow_vertical = 2
+texture = ExtResource("2_gubrf")
+stretch_mode = 5
+
+[node name="Label" type="Label" parent="Player1"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -232.0
+offset_top = -24.0
+offset_right = 240.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "S. Marchione"
+label_settings = SubResource("LabelSettings_jnkje")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player2" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -448.0
+offset_top = -292.0
+offset_right = -64.0
+offset_bottom = 124.0
+grow_horizontal = 0
+grow_vertical = 2
+texture = ExtResource("3_80k5r")
+stretch_mode = 5
+flip_h = true
+
+[node name="Label" type="Label" parent="Player2"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -224.0
+offset_top = -24.0
+offset_right = 248.0
+offset_bottom = 32.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "D. Natarelli"
+label_settings = SubResource("LabelSettings_jnkje")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -328.0
+offset_top = -136.0
+offset_right = 312.0
+offset_bottom = -32.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_veoms")
+
+[node name="Players" type="GridContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 0
+theme_override_constants/v_separation = 0
+columns = 4
+
+[node name="Select" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -104.0
+offset_top = 124.0
+offset_right = 106.0
+offset_bottom = 174.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "SELECT"
+label_settings = SubResource("LabelSettings_7opnj")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "idle"
+libraries = {
+"": SubResource("AnimationLibrary_luskv")
+}
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("7_u2qr6")
+volume_db = -20.0
+autoplay = true
