@@ -169,10 +169,7 @@ vertical_alignment = 1
 position = Vector2(96, 311)
 id = 1
 enemy_player = NodePath("../Dummy2")
-<<<<<<< Updated upstream
-=======
 head_texture = ExtResource("9_3fpxo")
->>>>>>> Stashed changes
 player_layer = 1
 attack_layer = 3
 enemy_layer = 4
@@ -181,10 +178,7 @@ enemy_layer = 4
 position = Vector2(1024, 280)
 id = 2
 enemy_player = NodePath("../Dummy")
-<<<<<<< Updated upstream
-=======
 head_texture = ExtResource("10_qubhm")
->>>>>>> Stashed changes
 player_layer = 4
 attack_layer = 5
 enemy_layer = 1
