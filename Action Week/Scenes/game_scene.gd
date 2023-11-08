@@ -8,12 +8,16 @@ signal end_round(player_id)
 signal time_left(time)
 signal round_timer_end()
 signal reset_game_state()
+signal end_game()
+
+var rounds : int = 1
 
 func _ready():
 	$RoundTimer.wait_time = round_time
 	GameManager.victories_update.connect(_end_round)
 	round_timer_end.connect(GameManager.check_round_timer_winner)
 	reset_game_state.connect(GameManager.reset_game_state)
+	end_game.connect(GameManager.on_end_game)
 	intro_animation.play("init")
 	pass
 
@@ -29,8 +33,12 @@ func _end_round(players_victories : Dictionary):
 	tween.tween_property(Engine, "time_scale", 1, 2).set_trans(Tween.TRANS_EXPO)
 	tween.play()
 	await tween.finished
-	reset_game_state.emit()
-	intro_animation.play("init")
+	if rounds == GameManager.round_count:
+		end_game.emit()
+		$RoundTimer.stop()
+	else:
+		reset_game_state.emit()
+		intro_animation.play("init")
 	pass
 
 func _on_round_timer_timeout():

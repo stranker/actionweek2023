@@ -1,10 +1,12 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=3 format=3 uid="uid://jag78ohh312i"]
+[gd_resource type="Resource" script_class="PlayerData" load_steps=4 format=3 uid="uid://jag78ohh312i"]
 
 [ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="1_41nxh"]
 [ext_resource type="Script" path="res://Objects/Players/PlayerData.gd" id="2_gk4l2"]
+[ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="2_grwea"]
 
 [resource]
 script = ExtResource("2_gk4l2")
 player_name = "S. Marchione"
 player_in_game_texture = ExtResource("1_41nxh")
 player_portrait_texture = ExtResource("1_41nxh")
+player_special = ExtResource("2_grwea")

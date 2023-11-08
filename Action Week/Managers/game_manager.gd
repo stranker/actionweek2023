@@ -13,6 +13,7 @@ signal victories_update(players)
 signal reset_game()
 signal start_special()
 signal start_round()
+signal end_game(winner)
 
 var players : Array
 
@@ -44,6 +45,19 @@ func check_round_timer_winner():
 		add_victory(players[1].id)
 	pass
 
+func on_end_game():
+	var winner : PlayerData = players[0].player_data
+	if players[0].is_dead:
+		winner = players[1].player_data
+	end_game.emit(winner)
+	await get_tree().create_timer(5).timeout
+	round_count = 0
+	players_victories["1"] = 0
+	players_victories["2"] = 0
+	players.clear()
+	get_tree().change_scene_to_file("res://Scenes/player_selector_scene.tscn")
+	pass
+
 func reset_game_state():
 	reset_game.emit()
 	pass
@@ -64,6 +78,10 @@ func on_start_game():
 func on_start_loading():
 	await get_tree().create_timer(2.0).timeout
 	get_tree().change_scene_to_file("res://Scenes/loading_scene.tscn")
+	pass
+
+func on_special_selected(controller_id, special):
+	current_players_data[str(controller_id)].player_special = special
 	pass
 
 func set_round_count(count : int):

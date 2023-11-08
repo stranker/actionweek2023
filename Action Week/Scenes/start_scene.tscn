@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://e4kjk82jux3o"]
+[gd_scene load_steps=13 format=3 uid="uid://e4kjk82jux3o"]
 
 [ext_resource type="Texture2D" uid="uid://sinmr7gnhf58" path="res://UI/bacgkround_effect2.jpg" id="1_12y1y"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="1_ru6oh"]
 [ext_resource type="Texture2D" uid="uid://d15yexeu6p0os" path="res://UI/white_square.jpg" id="3_f5dux"]
+[ext_resource type="AudioStream" uid="uid://c32pleet78pva" path="res://Audio/Music/start_scene.mp3" id="4_tuem2"]
 
 [sub_resource type="GDScript" id="GDScript_poh5s"]
 resource_name = "start_scene"
@@ -136,6 +137,7 @@ tracks/1/keys = {
 
 [sub_resource type="Animation" id="Animation_2x5w2"]
 resource_name = "start"
+length = 1.5
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -144,7 +146,7 @@ tracks/0/path = NodePath("StartGame:self_modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.6, 1),
+"times": PackedFloat32Array(0, 1.1, 1.5),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -156,10 +158,10 @@ tracks/1/path = NodePath("UpTitle:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.3, 0.35, 0.4, 0.45),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.4, 0.6, 0.7, 0.75, 0.8, 0.85),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(0, -240), Vector2(0, 96), Vector2(0, 80), Vector2(-8, 80), Vector2(-8, 96), Vector2(0, 80)]
+"values": [Vector2(0, -240), Vector2(0, -240), Vector2(0, 96), Vector2(0, 80), Vector2(-8, 80), Vector2(-8, 96), Vector2(0, 80)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -168,10 +170,10 @@ tracks/2/path = NodePath("DownTitle:position")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.3, 0.35, 0.4, 0.45),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.4, 0.6, 0.7, 0.75, 0.8, 0.85),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(0, 664), Vector2(0, 280), Vector2(0, 296), Vector2(8, 296), Vector2(0, 304), Vector2(0, 296)]
+"values": [Vector2(0, 664), Vector2(0, 664), Vector2(0, 280), Vector2(0, 296), Vector2(8, 296), Vector2(0, 304), Vector2(0, 296)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
@@ -180,10 +182,10 @@ tracks/3/path = NodePath("Background:flip_h")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [false, true, false, true, false, true, false, true, false, true, false]
+"values": [false, true, false, true, false, true, false, true, false, true, false, true]
 }
 
 [sub_resource type="Animation" id="Animation_du4x1"]
@@ -299,5 +301,10 @@ autoplay = "start"
 libraries = {
 "": SubResource("AnimationLibrary_yk2fd")
 }
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_tuem2")
+volume_db = -8.0
+autoplay = true
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

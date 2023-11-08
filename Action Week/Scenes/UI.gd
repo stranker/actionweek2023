@@ -6,6 +6,7 @@ func _ready():
 	for player in players:
 		player.big_impact.connect(_show_big_impact)
 	GameManager.victories_update.connect(_on_victories_updated)
+	GameManager.end_game.connect(_on_end_game)
 	pass
 
 func _on_victories_updated(players_victories : Dictionary):
@@ -27,6 +28,7 @@ func _on_game_scene_time_left(time):
 	$Main/Clock/Time.text = str(int(time))
 	pass # Replace with function body.
 
-
-func _on_game_scene_end_round(player_id):
-	pass # Replace with function body.
+func _on_end_game(winner: PlayerData):
+	$Main/Intro/Player.text = winner.player_name
+	$Main/AnimationPlayer.play("victory")
+	pass

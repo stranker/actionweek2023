@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=3 uid="uid://dew8rdjqh7og2"]
+[gd_scene load_steps=25 format=3 uid="uid://dew8rdjqh7og2"]
 
 [ext_resource type="Script" path="res://Scenes/game_scene.gd" id="1_7qcci"]
 [ext_resource type="PackedScene" uid="uid://b1c8msk3p2gkp" path="res://Objects/dummy.tscn" id="1_w4v2a"]
@@ -9,9 +9,9 @@
 [ext_resource type="Texture2D" uid="uid://c3u1bu2a80fyo" path="res://UI/Clock.png" id="7_p3568"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="8_23eya"]
 [ext_resource type="FontFile" uid="uid://ble18gxjisbqk" path="res://Fonts/ds_digital/DS-DIGII.TTF" id="8_qs4ge"]
-[ext_resource type="AudioStream" uid="uid://x5ibcqp7kwf5" path="res://Audio/Music/BattleTheme.mp3" id="9_lqsog"]
 [ext_resource type="Resource" uid="uid://c4e5fyplivbwu" path="res://Objects/Players/DaniData.tres" id="9_shc8l"]
 [ext_resource type="Resource" uid="uid://jag78ohh312i" path="res://Objects/Players/SantiData.tres" id="10_o7v0s"]
+[ext_resource type="AudioStream" uid="uid://d4brasaptdv0c" path="res://Audio/Music/battle_theme.mp3" id="12_51lcq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pmhbl"]
 size = Vector2(2400, 128)
@@ -45,6 +45,113 @@ outline_color = Color(0, 0, 0, 1)
 shadow_size = 20
 shadow_color = Color(1, 1, 1, 0.815686)
 shadow_offset = Vector2(1, 10)
+
+[sub_resource type="LabelSettings" id="LabelSettings_eq4ul"]
+font = ExtResource("8_23eya")
+font_size = 80
+font_color = Color(1, 0.788235, 0, 1)
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 20
+shadow_color = Color(1, 1, 1, 0.815686)
+shadow_offset = Vector2(1, 10)
+
+[sub_resource type="LabelSettings" id="LabelSettings_6k8vy"]
+font = ExtResource("8_23eya")
+font_size = 160
+font_color = Color(1, 0.788235, 0, 1)
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 20
+shadow_color = Color(1, 1, 1, 0.815686)
+shadow_offset = Vector2(1, 10)
+
+[sub_resource type="Animation" id="Animation_agg2i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Intro/Ready:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(192, 208)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Intro/Fight:visible")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Intro/Fight:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Intro/Fight:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(163, 212)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Intro/Ready:visible")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Intro/Player:visible")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Intro/Win:visible")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
 
 [sub_resource type="Animation" id="Animation_oc3u7"]
 resource_name = "init"
@@ -124,73 +231,38 @@ tracks/5/keys = {
 }]
 }
 
-[sub_resource type="Animation" id="Animation_agg2i"]
-length = 0.001
+[sub_resource type="Animation" id="Animation_h8swr"]
+resource_name = "victory"
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Intro/Ready:position")
+tracks/0/path = NodePath("Intro/Player:visible")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(192, 208)]
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Intro/Fight:visible")
+tracks/1/path = NodePath("Intro/Win:visible")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
+"times": PackedFloat32Array(0, 0.7),
+"transitions": PackedFloat32Array(1, 1),
 "update": 1,
-"values": [true]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("Intro/Fight:scale")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("Intro/Fight:position")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(163, 212)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("Intro/Ready:visible")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [true]
+"values": [false, true]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_te3qn"]
 _data = {
 "RESET": SubResource("Animation_agg2i"),
-"init": SubResource("Animation_oc3u7")
+"init": SubResource("Animation_oc3u7"),
+"victory": SubResource("Animation_h8swr")
 }
 
 [sub_resource type="GDScript" id="GDScript_udbk3"]
@@ -364,15 +436,17 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -384.0
-offset_top = -116.0
-offset_right = 384.001
-offset_bottom = 7.0
+offset_left = 192.0
+offset_top = 208.0
+offset_right = 960.001
+offset_bottom = 331.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Get ready
 "
 label_settings = SubResource("LabelSettings_y6sfi")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="Fight" type="Label" parent="UI/Main/Intro"]
 layout_mode = 1
@@ -381,15 +455,57 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -413.0
-offset_top = -112.0
-offset_right = 413.0
-offset_bottom = 112.0
+offset_left = 163.0
+offset_top = 212.0
+offset_right = 989.0
+offset_bottom = 436.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(413, 112)
 text = "FIGHT!"
 label_settings = SubResource("LabelSettings_t4w5o")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player" type="Label" parent="UI/Main/Intro"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -453.0
+offset_top = -232.0
+offset_right = 468.0
+offset_bottom = -8.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(413, 112)
+text = "D. NATARELLI"
+label_settings = SubResource("LabelSettings_eq4ul")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Win" type="Label" parent="UI/Main/Intro"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -405.5
+offset_top = -72.0
+offset_right = 420.5
+offset_bottom = 152.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(413, 112)
+text = "WIN"
+label_settings = SubResource("LabelSettings_6k8vy")
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="UI/Main"]
 libraries = {
@@ -420,8 +536,8 @@ player_data = ExtResource("10_o7v0s")
 one_shot = true
 
 [node name="BattleTheme" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("9_lqsog")
-volume_db = -8.0
+stream = ExtResource("12_51lcq")
+volume_db = -12.0
 autoplay = true
 
 [node name="Camera2D" type="Camera2D" parent="."]

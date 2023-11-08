@@ -64,9 +64,6 @@ var super_attack_available : bool = false
 @export var attack_layer : int
 @export var enemy_layer : int
 
-@export var special_scene : PackedScene
-@export var attack_distance : float = 200
-
 var attack_combo : int = 1
 @export var damage_per_combo : = 5
 @export var max_guard_stamina : float = 50
@@ -85,6 +82,7 @@ func _ready(): #Start()
 	_get_player_data()
 	GameManager.reset_game.connect(reset_player)
 	GameManager.start_round.connect(on_start_round)
+	GameManager.end_game.connect(on_end_game)
 	initialized.connect(GameManager.add_player)
 	dead.connect(GameManager.add_victory)
 	set_collision_layer_value(player_layer, true )
@@ -268,13 +266,17 @@ func _fall_state():
 	pass
 
 func _special_state():
-	var special : Special = special_scene.instantiate() as Special
+	_create_special()
+	$SpecialStart.play()
+	pass
+
+func _create_special():
+	var special : Special = player_data.player_special.instantiate() as Special
 	special.start.connect(on_special_start)
 	special.finish.connect(on_special_finish)
 	get_tree().root.add_child(special)
 	special.init(self, global_position, facing_direction, attack_layer, enemy_layer)
 	$AnimationPlayer.play(special.special_anim_name)
-	$SpecialStart.play()
 	pass
 
 func on_special_start(special_name : String):
@@ -429,11 +431,13 @@ func _add_guard_particles(pos : Vector2):
 func hit(damage : int, damage_pos : Vector2):
 	if not can_be_attacked: return false
 	if current_state == State.GUARD:
+		can_recover_guard = false
 		guard_stamina -= damage
 		guard_stamina = clamp(guard_stamina, 0, 50)
 		guard_stamina_update.emit(guard_stamina)
 		super_meter += damage * 0.25
 		super_meter_update.emit(super_meter)
+		$RecoverGuardTimer.stop()
 		check_super_meter()
 		_add_guard_particles(damage_pos)
 		return false
@@ -546,3 +550,10 @@ func _on_connected_hits_timer_timeout():
 func _on_can_be_attacked_timer_timeout():
 	can_be_attacked = true
 	pass # Replace with function body.
+
+func on_end_game(winner):
+	if is_dead: return
+	$AnimationPlayer.play("victory")
+	set_process(false)
+	set_physics_process(false)
+	pass

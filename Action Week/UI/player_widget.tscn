@@ -1,6 +1,7 @@
-[gd_scene load_steps=25 format=3 uid="uid://cvttj0867drlk"]
+[gd_scene load_steps=32 format=3 uid="uid://cvttj0867drlk"]
 
 [ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_4mth6"]
+[ext_resource type="Texture2D" uid="uid://bucme7b1vh8pn" path="res://Objects/Specials/CircleParticle.png" id="2_athj6"]
 [ext_resource type="Texture2D" uid="uid://d15yexeu6p0os" path="res://UI/white_square.jpg" id="2_doxsc"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="2_rv2cw"]
 [ext_resource type="Texture2D" uid="uid://sinmr7gnhf58" path="res://UI/bacgkround_effect2.jpg" id="4_1qyyr"]
@@ -23,6 +24,9 @@ script/source = "extends Control
 @export var ulti_outline : Panel
 @export var ulti_player_label : Label
 @export var super_meter_label : Label
+@export var super_meter_anim : AnimationPlayer
+@export var victories : Control
+@onready var victories_elements : Array = $Victories/Count.get_children()
 
 var showing_hits : bool = false
 var hits_control_initial_pos : Vector2
@@ -44,6 +48,8 @@ func _ready():
 		player.connect_hit.connect(set_hits_text)
 		player.end_connect_hit.connect(hide_connect_hit)
 		player.initialized.connect(on_player_init)
+	for i in range(GameManager.round_count):
+		victories_elements[i].visible = true
 	throw_special.connect(GameManager.init_special)
 	ulti_text.hide()
 	hits_control.hide()
@@ -65,6 +71,7 @@ func update_flipped():
 	update_flip_element(player_name, flipped, true)
 	update_flip_element(ulti_player_label, flipped, true)
 	update_flip_element(super_meter_label, flipped, true)
+	update_flip_element(victories, flipped, true)
 	hits_control_initial_pos = hits_control.position
 	ulti_text.text_direction = Control.TEXT_DIRECTION_LTR if not flipped else TEXT_DIRECTION_RTL
 	player_name.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT if flipped else HORIZONTAL_ALIGNMENT_LEFT
@@ -93,9 +100,10 @@ func set_super_meter(super_meter : int):
 	tween.tween_property(super_meter_bar, \"value\", super_meter, 0.2).set_ease(Tween.EASE_IN)
 	tween.play()
 	if super_meter >= super_meter_bar.max_value:
-		anim.queue(\"super_complete\")
+		super_meter_anim.play(\"complete\")
+		super_meter_anim.queue(\"idle\")
 	elif super_meter <= 0:
-		anim.queue(\"super_depleted\")
+		super_meter_anim.play_backwards(\"complete\")
 	pass
 
 func set_ulti_text(special_name : String):
@@ -134,8 +142,6 @@ func hide_connect_hit():
 func _on_anim_animation_finished(anim_name):
 	if anim_name == \"special\":
 		throw_special.emit()
-	if anim_name == \"super_complete\":
-		anim.queue(\"super_complete_idle\")
 	pass # Replace with function body.
 "
 
@@ -214,7 +220,7 @@ expand_margin_left = 5.0
 expand_margin_top = 5.0
 expand_margin_right = 5.0
 expand_margin_bottom = 5.0
-shadow_color = Color(1, 0.968627, 0.709804, 0.941176)
+shadow_color = Color(1, 0.968627, 0, 0.941176)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrwp5"]
 bg_color = Color(0.85098, 0.72549, 0.227451, 1)
@@ -223,11 +229,124 @@ corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
+shadow_size = 10
 
 [sub_resource type="LabelSettings" id="LabelSettings_smkcq"]
 font = ExtResource("2_rv2cw")
 outline_size = 8
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Gradient" id="Gradient_6osu8"]
+offsets = PackedFloat32Array(0, 0.196581, 0.786325, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_m285x"]
+gradient = SubResource("Gradient_6osu8")
+
+[sub_resource type="Curve" id="Curve_3j08u"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -1.70468, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_cypcp"]
+curve = SubResource("Curve_3j08u")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_0v55s"]
+emission_shape = 3
+emission_box_extents = Vector3(150, 10, 1)
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+spread = 180.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = 50.0
+initial_velocity_max = 100.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_min = 0.01
+scale_max = 0.5
+scale_curve = SubResource("CurveTexture_cypcp")
+color = Color(1, 1, 0, 1)
+color_ramp = SubResource("GradientTexture1D_m285x")
+turbulence_noise_strength = 6.0
+turbulence_noise_scale = 2.2
+
+[sub_resource type="Animation" id="Animation_33ikd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/background:shadow_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GPUParticles2D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_ekgkf"]
+resource_name = "complete"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/background:shadow_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2),
+"transitions": PackedFloat32Array(0.5, 1, 1),
+"update": 0,
+"values": [0, 30, 0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("GPUParticles2D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [false, true]
+}
+
+[sub_resource type="Animation" id="Animation_52gfr"]
+resource_name = "idle"
+length = 0.4
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:theme_override_styles/background:shadow_size")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [10, 30, 10]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_c0fog"]
+_data = {
+"RESET": SubResource("Animation_33ikd"),
+"complete": SubResource("Animation_ekgkf"),
+"idle": SubResource("Animation_52gfr")
+}
 
 [sub_resource type="RichTextEffect" id="RichTextEffect_2kpfw"]
 
@@ -289,7 +408,7 @@ tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(0, 0)]
+"values": [Vector2(-800, 0)]
 }
 tracks/2/type = "value"
 tracks/2/imported = false
@@ -326,18 +445,6 @@ tracks/4/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 1,
 "values": [false]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("SuperBar:theme_override_styles/background:shadow_size")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
 }
 
 [sub_resource type="Animation" id="Animation_vhbis"]
@@ -416,65 +523,13 @@ tracks/5/keys = {
 "values": [false, true, false, true, false, true, false, true]
 }
 
-[sub_resource type="Animation" id="Animation_vl2x2"]
-resource_name = "super_complete"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SuperBar:theme_override_styles/background:shadow_size")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.3),
-"transitions": PackedFloat32Array(0.5, 2, 1),
-"update": 0,
-"values": [0, 16, 0]
-}
-
-[sub_resource type="Animation" id="Animation_f7yda"]
-resource_name = "super_complete_idle"
-length = 0.6
-loop_mode = 1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SuperBar:theme_override_styles/background:shadow_size")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [6, 16]
-}
-
-[sub_resource type="Animation" id="Animation_whcuc"]
-resource_name = "super_depleted"
-length = 0.3
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("SuperBar:theme_override_styles/background:shadow_size")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.202195, 0.3),
-"transitions": PackedFloat32Array(0.5, 2, 2, 1),
-"update": 0,
-"values": [0, 20, 20, 0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_rj1ji"]
 _data = {
 "RESET": SubResource("Animation_u7576"),
-"special": SubResource("Animation_vhbis"),
-"super_complete": SubResource("Animation_vl2x2"),
-"super_complete_idle": SubResource("Animation_f7yda"),
-"super_depleted": SubResource("Animation_whcuc")
+"special": SubResource("Animation_vhbis")
 }
 
-[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "super_meter_bar", "ulti_text", "anim", "hits_control", "hits_text", "player_name", "ulti_portrait", "ulti_outline", "ulti_player_label", "super_meter_label")]
+[node name="PlayerWidget" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar", "super_meter_bar", "ulti_text", "anim", "hits_control", "hits_text", "player_name", "ulti_portrait", "ulti_outline", "ulti_player_label", "super_meter_label", "super_meter_anim", "victories")]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -495,6 +550,8 @@ ulti_portrait = NodePath("Ulti/Panel/TextureRect")
 ulti_outline = NodePath("Ulti/Panel")
 ulti_player_label = NodePath("Ulti/Panel/Label")
 super_meter_label = NodePath("SuperBar/Label")
+super_meter_anim = NodePath("SuperBar/Anim")
+victories = NodePath("Victories")
 
 [node name="HealthBar" type="ProgressBar" parent="."]
 layout_mode = 1
@@ -551,6 +608,20 @@ text = "SUPER"
 label_settings = SubResource("LabelSettings_smkcq")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="GPUParticles2D" type="GPUParticles2D" parent="SuperBar"]
+show_behind_parent = true
+position = Vector2(122, 8)
+emitting = false
+amount = 40
+process_material = SubResource("ParticleProcessMaterial_0v55s")
+texture = ExtResource("2_athj6")
+lifetime = 0.5
+
+[node name="Anim" type="AnimationPlayer" parent="SuperBar"]
+libraries = {
+"": SubResource("AnimationLibrary_c0fog")
+}
 
 [node name="UltiText" type="RichTextLabel" parent="."]
 visible = false
@@ -619,6 +690,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Panel" type="Panel" parent="Ulti"]
+visible = false
 modulate = Color(1, 1, 1, 0)
 self_modulate = Color(1, 0, 0, 1)
 clip_contents = true
@@ -626,7 +698,8 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_right = 576.0
+offset_left = -800.0
+offset_right = -224.0
 offset_bottom = 648.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nucmr")
@@ -681,5 +754,186 @@ expand_mode = 1
 libraries = {
 "": SubResource("AnimationLibrary_rj1ji")
 }
+
+[node name="Victories" type="Control" parent="."]
+anchors_preset = 0
+offset_left = 288.0
+offset_top = 72.0
+offset_right = 424.0
+offset_bottom = 96.0
+
+[node name="Count" type="HBoxContainer" parent="Victories"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 10
+
+[node name="Victory" type="Control" parent="Victories/Count"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Victories/Count/Victory"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="Victories/Count/Victory/TextureRect"]
+modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 4.0
+offset_right = 1.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Victory2" type="Control" parent="Victories/Count"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Victories/Count/Victory2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="Victories/Count/Victory2/TextureRect"]
+modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 4.0
+offset_right = 1.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Victory3" type="Control" parent="Victories/Count"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Victories/Count/Victory3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="Victories/Count/Victory3/TextureRect"]
+modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 4.0
+offset_right = 1.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Victory4" type="Control" parent="Victories/Count"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Victories/Count/Victory4"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="Victories/Count/Victory4/TextureRect"]
+modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 4.0
+offset_right = 1.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Victory5" type="Control" parent="Victories/Count"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TextureRect" type="TextureRect" parent="Victories/Count/Victory5"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="TextureRect2" type="TextureRect" parent="Victories/Count/Victory5/TextureRect"]
+modulate = Color(0, 0, 0, 1)
+show_behind_parent = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 1.0
+offset_top = 4.0
+offset_right = 1.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_athj6")
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="animation_finished" from="Anim" to="." method="_on_anim_animation_finished"]
