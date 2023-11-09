@@ -73,7 +73,7 @@ enum SelectionState {
 var current_selection_state = SelectionState.PLAYER
 var current_round_count = 0
 
-signal player_selected(id, data)
+signal player_selected(id, idx)
 signal start_loading()
 signal special_selected(id, special)
 
@@ -110,16 +110,8 @@ func on_hover_player(controller_id, data : PlayerData):
 	pass
 
 func on_select_player(controller_id, data : PlayerData):
-	player_selected.emit(controller_id, data)
-	if players_selected.size() == 2:
-		current_selection_state = SelectionState.SPECIAL
-		player1_idx = 0
-		player2_idx = 0
-		players_panel.hide()
-		rounds_panel.hide()
-		players_selected.clear()
-		p1_special.show()
-		p2_special.show()
+	if players_selected.has(controller_id): return
+
 	pass
 
 func _input(event):
@@ -173,9 +165,19 @@ func _select_special(controller, idx):
 
 func _select_player(controller, player_idx):
 	if players_selected.has(controller): return
+	player_selected.emit(controller, player_idx)
 	players_selected.append(controller)
 	players.get_child(player_idx).select(controller)
 	$ButtonSelect.play()
+	if players_selected.size() == 2:
+		current_selection_state = SelectionState.SPECIAL
+		players_panel.hide()
+		rounds_panel.hide()
+		players_selected.clear()
+		p1_special.show()
+		p2_special.show()
+		player1_idx = 0
+		player2_idx = 0
 	pass
 
 func _select_round(controller, player_idx):

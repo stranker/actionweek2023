@@ -66,8 +66,9 @@ func init_special():
 	start_special.emit()
 	pass
 
-func on_player_selected(controller_id, data: PlayerData):
-	current_players_data[str(controller_id)] = data
+func on_player_selected(controller_id : int, idx : int):
+	print_debug(controller_id, idx)
+	current_players_data[str(controller_id)] = players_data[idx]
 	pass
 
 func on_start_game():
