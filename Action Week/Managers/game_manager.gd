@@ -19,6 +19,8 @@ var players : Array
 
 var round_count : int = 0
 
+var winner : PlayerData 
+
 func _ready():
 	players_data.append(load("res://Objects/Players/FedeData.tres"))
 	players_data.append(load("res://Objects/Players/SantiData.tres"))
@@ -51,7 +53,7 @@ func check_round_timer_winner():
 	pass
 
 func on_end_game():
-	var winner : PlayerData = players[0].player_data
+	winner = players[0].player_data
 	if players[0].is_dead:
 		winner = players[1].player_data
 	end_game.emit(winner)
@@ -60,6 +62,10 @@ func on_end_game():
 	players_victories["1"] = 0
 	players_victories["2"] = 0
 	players.clear()
+	get_tree().change_scene_to_file("res://Scenes/victory_screen.tscn")
+	pass
+
+func on_back_to_select():
 	get_tree().change_scene_to_file("res://Scenes/player_selector_scene.tscn")
 	pass
 
@@ -76,6 +82,7 @@ func on_player_selected(controller_id : int, idx : int):
 	pass
 
 func on_start_game():
+	winner = null
 	await get_tree().create_timer(2.0).timeout
 	get_tree().change_scene_to_file("res://Scenes/game_scene.tscn")
 	pass

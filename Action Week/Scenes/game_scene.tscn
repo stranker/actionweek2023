@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://dew8rdjqh7og2"]
+[gd_scene load_steps=22 format=3 uid="uid://dew8rdjqh7og2"]
 
 [ext_resource type="Script" path="res://Scenes/game_scene.gd" id="1_7qcci"]
 [ext_resource type="PackedScene" uid="uid://b1c8msk3p2gkp" path="res://Objects/dummy.tscn" id="1_w4v2a"]
@@ -8,8 +8,6 @@
 [ext_resource type="Texture2D" uid="uid://rmo2fj6q20xl" path="res://Scenes/Background.jpg" id="5_oiqdb"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="8_23eya"]
 [ext_resource type="FontFile" uid="uid://ble18gxjisbqk" path="res://Fonts/ds_digital/DS-DIGII.TTF" id="8_qs4ge"]
-[ext_resource type="Resource" uid="uid://c4e5fyplivbwu" path="res://Objects/Players/DaniData.tres" id="9_shc8l"]
-[ext_resource type="Resource" uid="uid://jag78ohh312i" path="res://Objects/Players/SantiData.tres" id="10_o7v0s"]
 [ext_resource type="AudioStream" uid="uid://d4brasaptdv0c" path="res://Audio/Music/battle_theme.mp3" id="12_51lcq"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pmhbl"]
@@ -490,21 +488,17 @@ libraries = {
 position = Vector2(96, 311)
 id = 1
 enemy_player = NodePath("../Dummy2")
-only_move = true
 player_layer = 1
 attack_layer = 3
 enemy_layer = 4
-player_data = ExtResource("9_shc8l")
 
 [node name="Dummy2" parent="." node_paths=PackedStringArray("enemy_player") instance=ExtResource("1_w4v2a")]
 position = Vector2(1024, 280)
 id = 2
 enemy_player = NodePath("../Dummy")
-only_move = true
 player_layer = 4
 attack_layer = 5
 enemy_layer = 1
-player_data = ExtResource("10_o7v0s")
 
 [node name="RoundTimer" type="Timer" parent="."]
 one_shot = true
