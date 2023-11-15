@@ -2,8 +2,8 @@ extends CharacterBody2D
 
 class_name Dummy
 
-@export var SPEED : float = 300.0
-@export var JUMP_VELOCITY = -400.0
+@export var SPEED : float = 800.0
+@export var JUMP_VELOCITY = -1200.0
 
 @export var id : int = 0
 @export var max_hp : int = 100
@@ -49,6 +49,7 @@ var facing_direction : Vector2 = Vector2.RIGHT
 @export var attack_collision : CollisionShape2D
 @export var right_attack_area : Area2D
 @export var left_attack_area : Area2D
+@export var foot_attack_area : Area2D
 @export var grab_area : Area2D
 
 var can_attack : bool = false
@@ -64,6 +65,7 @@ var super_attack_available : bool = false
 @export var attack_layer : int
 @export var enemy_layer : int
 
+@export var hook_damage = 15
 var attack_combo : int = 1
 @export var damage_per_combo : = 5
 @export var max_guard_stamina : float = 50
@@ -74,6 +76,8 @@ var connected_hit = 0
 @export var super_meter : float = 0
 
 @export var player_data : PlayerData
+
+var is_hook_attack = false
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/2d/default_gravity")
@@ -93,6 +97,8 @@ func _ready(): #Start()
 	left_attack_area.set_collision_mask_value(enemy_layer, true)
 	grab_area.set_collision_layer_value(attack_layer, true)
 	grab_area.set_collision_mask_value(enemy_layer, true)
+	foot_attack_area.set_collision_layer_value(attack_layer, true)
+	foot_attack_area.set_collision_mask_value(enemy_layer, true)
 	$Debug.visible = debug_enabled
 	set_state(State.IDLE)
 	_set_facing()
@@ -389,20 +395,29 @@ func _movement_grabbed(delta):
 func attack():
 	if not can_attack: return
 	can_attack = false
-	$AnimationPlayer.play("attack" + str(attack_combo))
+	if Input.is_action_pressed("move_up" + str(id)):
+		is_hook_attack = true
+		$AnimationPlayer.play("hook_attack")
+	elif Input.is_action_pressed("move_down" + str(id)):
+		$AnimationPlayer.play("low_kick")
+	else:
+		$AnimationPlayer.play("attack" + str(attack_combo))
 	$Punch.pitch_scale = randf_range(1, 1.2)
 	$Punch.play()
 	pass
 
-func take_damage(damage : int, damage_pos : Vector2):
+func take_damage(damage : int, damage_pos : Vector2, is_hook : bool = false):
 	if not can_be_attacked: return
 	if is_dead: return
+	Input.start_joy_vibration(id - 1, 0.5, 0.8, 0.3)
 	hp -= damage
 	hp_update.emit(hp)
 	super_meter += damage
 	super_meter_update.emit(super_meter)
 	check_super_meter()
 	velocity.x = -facing_direction.x * 300
+	if is_hook:
+		velocity.y = JUMP_VELOCITY * 0.5
 	$Hurt.pitch_scale = randf_range(0.95, 1)
 	$Hurt.play()
 	set_state(State.HIT)
@@ -428,7 +443,7 @@ func _add_guard_particles(pos : Vector2):
 	guard_particles.init(facing_direction, global_position)
 	pass
 
-func hit(damage : int, damage_pos : Vector2):
+func hit(damage : int, damage_pos : Vector2, is_hook : bool = false):
 	if not can_be_attacked: return false
 	if current_state == State.GUARD:
 		can_recover_guard = false
@@ -440,9 +455,10 @@ func hit(damage : int, damage_pos : Vector2):
 		$RecoverGuardTimer.stop()
 		check_super_meter()
 		_add_guard_particles(damage_pos)
+		Input.start_joy_vibration(id - 1, 0.1, 0.3, 0.2)
 		return false
 	else:
-		take_damage(damage, damage_pos)
+		take_damage(damage, damage_pos, is_hook)
 		return true
 	pass
 
@@ -471,7 +487,10 @@ func _on_left_attack_area_body_entered(body):
 
 func attack_player(player : Dummy, pos : Vector2):
 	if player.is_dead: return
-	var sucess_hit = player.hit(damage_per_combo * attack_combo, pos)
+	var damage = damage_per_combo * attack_combo
+	if is_hook_attack:
+		damage = hook_damage
+	var sucess_hit = player.hit(damage, pos, is_hook_attack)
 	if sucess_hit:
 		super_meter += damage_per_combo * attack_combo * 0.25
 		super_meter_update.emit(super_meter)
@@ -488,6 +507,7 @@ func attack_player(player : Dummy, pos : Vector2):
 			attack_combo = 0
 		$AttackComboTimer.start()
 	add_connected_hit()
+	is_hook_attack = false
 	pass
 
 func add_connected_hit():
@@ -557,3 +577,8 @@ func on_end_game(winner):
 	set_process(false)
 	set_physics_process(false)
 	pass
+
+func _on_foot_attack_area_body_entered(body):
+	var dummy : Dummy = body as Dummy
+	attack_player(dummy, $Visible/Skin/Body/RightFoot.global_position)
+	pass # Replace with function body.

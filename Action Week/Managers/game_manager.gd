@@ -13,6 +13,7 @@ signal victories_update(players)
 signal reset_game()
 signal start_special()
 signal start_round()
+signal end_round(round_winner)
 signal end_game(winner)
 
 var players : Array
@@ -34,6 +35,7 @@ func resolve_victory(defeat_id : int):
 func add_victory(winner_id : String):
 	players_victories[winner_id] += 1
 	victories_update.emit(players_victories)
+	end_round.emit(players[1] if winner_id == str(players[1].id) else players[0])
 	pass
 
 func add_player(player):
@@ -69,6 +71,7 @@ func reset_game_state():
 
 func init_special():
 	start_special.emit()
+	Engine.time_scale = 0
 	pass
 
 func on_player_selected(controller_id : int, idx : int):

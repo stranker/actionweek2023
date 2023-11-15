@@ -286,12 +286,13 @@ var players : Array
 @export var max_x : float = 60
 @onready var start_x : float = global_position.x
 @export var offset_y : float = 100
+var last_position : Vector2
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	players = get_tree().get_nodes_in_group(\"Player\")
 	set_process(enabled)
-	GameManager.victories_update.connect(on_victory)
+	GameManager.end_round.connect(on_end_round)
 	pass # Replace with function body.
 
 
@@ -303,18 +304,20 @@ func _process(delta):
 	global_position.x = clamp(global_position.x, start_x - max_x, start_x + max_x)
 	pass
 
-func on_victory(_victories):
-	zoom_to(players[0].global_position)
+func on_end_round(winner : Dummy):
+	set_process(false)
+	last_position = global_position
+	zoom_to(winner.global_position)
 	pass
 
 func zoom_to(pos : Vector2):
 	var tween : Tween = create_tween()
 	tween.set_parallel(true)
-	tween.tween_property(self, \"global_position\", pos, 0.5).set_trans(Tween.TRANS_EXPO)
-	tween.parallel().tween_property(self, \"zoom\", Vector2.ONE * 2, 0.5).set_trans(Tween.TRANS_EXPO)
-	tween.parallel().tween_property(self, \"zoom\", Vector2.ONE, 1).set_delay(0.2).set_trans(Tween.TRANS_LINEAR)
+	tween.parallel().tween_property(self, \"global_position\", pos, 1).set_trans(Tween.TRANS_EXPO)
+	tween.parallel().tween_property(self, \"zoom\", Vector2.ONE * 3, 1).set_trans(Tween.TRANS_EXPO)
+	tween.parallel().tween_property(self, \"zoom\", Vector2.ONE, 2).set_delay(1).set_trans(Tween.TRANS_EXPO)
+	tween.parallel().tween_property(self, \"global_position\", last_position, 1).set_delay(1).set_trans(Tween.TRANS_EXPO)
 	tween.play()
-	set_process(false)
 	await get_tree().create_timer(1, true, false, true).timeout
 	set_process(true)
 	pass

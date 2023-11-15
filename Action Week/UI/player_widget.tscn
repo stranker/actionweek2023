@@ -151,6 +151,7 @@ func hide_connect_hit():
 func _on_anim_animation_finished(anim_name):
 	if anim_name == \"special\":
 		throw_special.emit()
+		Engine.time_scale = 1
 	pass # Replace with function body.
 "
 
@@ -817,6 +818,7 @@ texture = ExtResource("2_doxsc")
 expand_mode = 1
 
 [node name="Anim" type="AnimationPlayer" parent="."]
+process_mode = 3
 libraries = {
 "": SubResource("AnimationLibrary_rj1ji")
 }

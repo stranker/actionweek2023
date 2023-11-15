@@ -1,11 +1,11 @@
 [gd_scene load_steps=27 format=3 uid="uid://15d5oep18nq8"]
 
 [ext_resource type="PackedScene" uid="uid://cmywqdysf10rc" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
-[ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_gubrf"]
 [ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="2_wcd2t"]
 [ext_resource type="Texture2D" uid="uid://dsm8hjf1wghb" path="res://UI/selection_background.png" id="3_8pp4q"]
 [ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="3_80k5r"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="4_0kjve"]
+[ext_resource type="Texture2D" uid="uid://vd5yefw3waaw" path="res://Objects/Players/In Game - Alex.png" id="4_1k682"]
 [ext_resource type="AudioStream" uid="uid://dhysl3q4sfle8" path="res://Audio/Music/select_soundtrack.mp3" id="7_f04vv"]
 [ext_resource type="AudioStream" uid="uid://bv37m2csrjy51" path="res://Audio/SFx/button_hover.wav" id="8_181c8"]
 [ext_resource type="AudioStream" uid="uid://drrdup5ap67iy" path="res://Audio/SFx/button_select.wav" id="9_1xu41"]
@@ -191,13 +191,19 @@ func _get_controller_input(event : InputEvent, controller_id, idx, callback : Ca
 			anim.play(\"left_arrow\")
 			anim.queue(\"RESET\")
 			anim.queue(\"idle\")
-	if event.is_action(\"move_right\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
+	elif event.is_action(\"move_right\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
 		idx += 1
 		$ButtonHover.play()
 		if anim:
 			anim.play(\"right_arrow\")
 			anim.queue(\"RESET\")
 			anim.queue(\"idle\")
+	elif event.is_action(\"move_down\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
+		idx += players.columns
+		$ButtonHover.play()
+	elif event.is_action(\"move_up\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
+		idx -= players.columns
+		$ButtonHover.play()
 	if event.is_action(\"jump\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
 		callback.call(controller_id, idx)
 		if anim:
@@ -207,7 +213,7 @@ func _get_controller_input(event : InputEvent, controller_id, idx, callback : Ca
 
 [sub_resource type="LabelSettings" id="LabelSettings_jnkje"]
 font = ExtResource("4_0kjve")
-font_size = 48
+font_size = 32
 outline_size = 20
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 10
@@ -587,6 +593,7 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("2_wcd2t")
 expand_mode = 1
+metadata/_edit_lock_ = true
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -604,18 +611,19 @@ grow_vertical = 2
 texture = ExtResource("3_8pp4q")
 expand_mode = 1
 stretch_mode = 5
+metadata/_edit_lock_ = true
 
 [node name="Player1" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 64.0
-offset_top = -292.0
-offset_right = 448.0
-offset_bottom = 124.0
+offset_left = 16.0
+offset_top = -260.0
+offset_right = 368.0
+offset_bottom = 116.0
 grow_vertical = 2
-texture = ExtResource("2_gubrf")
+texture = ExtResource("4_1k682")
 stretch_mode = 5
 
 [node name="Label" type="Label" parent="Player1"]
@@ -643,9 +651,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -448.0
-offset_top = -292.0
-offset_right = -64.0
+offset_left = -384.0
+offset_top = -260.0
+offset_right = -16.0
 offset_bottom = 124.0
 grow_horizontal = 0
 grow_vertical = 2
@@ -678,10 +686,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -104.0
-offset_top = 124.0
-offset_right = 106.0
-offset_bottom = 174.0
+offset_left = -108.0
+offset_top = -292.0
+offset_right = 102.0
+offset_bottom = -242.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "SELECT"
@@ -691,20 +699,21 @@ vertical_alignment = 1
 
 [node name="PlayersPanel" type="Panel" parent="."]
 layout_mode = 1
-anchors_preset = 7
+anchors_preset = 8
 anchor_left = 0.5
-anchor_top = 1.0
+anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -328.0
-offset_top = -136.0
-offset_right = 312.0
-offset_bottom = -32.0
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = -220.0
+offset_right = 184.0
+offset_bottom = 276.0
 grow_horizontal = 2
-grow_vertical = 0
+grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_n16p2")
 
 [node name="Players" type="GridContainer" parent="PlayersPanel"]
+layout_direction = 1
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -713,9 +722,10 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
-columns = 4
+columns = 3
 
 [node name="RoundPanel" type="Panel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -747,9 +757,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 8.0
-offset_top = 12.0
+offset_top = -36.0
 offset_right = 44.0
-offset_bottom = 80.0
+offset_bottom = 32.0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
 text = "<"
@@ -764,10 +774,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 264.0
-offset_top = 12.0
-offset_right = 300.0
-offset_bottom = 80.0
+offset_left = -40.0
+offset_top = -36.0
+offset_right = -4.0
+offset_bottom = 32.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
@@ -783,6 +793,7 @@ libraries = {
 }
 
 [node name="SpecialP1" type="Panel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -812,9 +823,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 8.0
-offset_top = 12.0
+offset_top = -36.0
 offset_right = 44.0
-offset_bottom = 80.0
+offset_bottom = 32.0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
 text = "<"
@@ -829,10 +840,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 264.0
-offset_top = 12.0
-offset_right = 300.0
-offset_bottom = 80.0
+offset_left = -40.0
+offset_top = -36.0
+offset_right = -4.0
+offset_bottom = 32.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
@@ -848,6 +859,7 @@ libraries = {
 }
 
 [node name="SpecialP2" type="Panel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -880,9 +892,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 8.0
-offset_top = 12.0
+offset_top = -36.0
 offset_right = 44.0
-offset_bottom = 80.0
+offset_bottom = 32.0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
 text = "<"
@@ -897,10 +909,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = 264.0
-offset_top = 12.0
-offset_right = 300.0
-offset_bottom = 80.0
+offset_left = -40.0
+offset_top = -36.0
+offset_right = -4.0
+offset_bottom = 32.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)

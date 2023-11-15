@@ -200,7 +200,6 @@ _data = {
 }
 
 [node name="PlayerSelectWidget" type="Control" node_paths=PackedStringArray("select_panel", "anim", "p1_label", "p2_label", "player_texture")]
-custom_minimum_size = Vector2(160, 104)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -209,6 +208,8 @@ offset_right = -976.0
 offset_bottom = -528.0
 grow_horizontal = 2
 grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
 script = SubResource("GDScript_hem5y")
 select_panel = NodePath("Container/SelectPanel")
 anim = NodePath("Container/AnimationPlayer")
