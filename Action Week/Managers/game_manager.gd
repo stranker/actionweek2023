@@ -26,8 +26,13 @@ func _ready():
 	players_data.append(load("res://Objects/Players/EmiData.tres"))
 	pass
 
-func add_victory(winner_id : int):
-	players_victories[str(winner_id)] += 1
+func resolve_victory(defeat_id : int):
+	var winner_id = "1" if defeat_id == 2 else "2"
+	add_victory(winner_id)
+	pass
+
+func add_victory(winner_id : String):
+	players_victories[winner_id] += 1
 	victories_update.emit(players_victories)
 	pass
 
@@ -39,10 +44,10 @@ func check_round_timer_winner():
 	var winner : Dummy = players[0]
 	if players[0].hp < players[1].hp:
 		winner = players[1]
-		add_victory(winner.id)
+		add_victory(str(winner.id))
 	elif players[0].hp == players[1].hp:
-		add_victory(players[0].id)
-		add_victory(players[1].id)
+		add_victory(str(players[0].id))
+		add_victory(str(players[1].id))
 	pass
 
 func on_end_game():
@@ -67,7 +72,6 @@ func init_special():
 	pass
 
 func on_player_selected(controller_id : int, idx : int):
-	print_debug(controller_id, idx)
 	current_players_data[str(controller_id)] = players_data[idx]
 	pass
 

@@ -83,7 +83,6 @@ func _ready():
 		players.add_child(player_select_widget)
 		player_select_widget.set_data(data)
 		player_select_widget.hover_player.connect(on_hover_player)
-		player_select_widget.select_player.connect(on_select_player)
 	players_to_pick_count = players.get_child_count()
 	_hover_player(player1_idx, PlayerControllerID.ONE)
 	_hover_player(player2_idx, PlayerControllerID.TWO)
@@ -100,6 +99,7 @@ func _ready():
 	pass
 
 func on_hover_player(controller_id, data : PlayerData):
+	if current_selection_state != SelectionState.PLAYER: return
 	if not data: return
 	if controller_id == PlayerControllerID.ONE:
 		player1_texture.texture = data.player_portrait_texture
@@ -107,11 +107,6 @@ func on_hover_player(controller_id, data : PlayerData):
 	if controller_id == PlayerControllerID.TWO:
 		player2_texture.texture = data.player_portrait_texture
 		player2_name.text = data.player_name
-	pass
-
-func on_select_player(controller_id, data : PlayerData):
-	if players_selected.has(controller_id): return
-
 	pass
 
 func _input(event):
