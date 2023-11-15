@@ -477,17 +477,17 @@ func attack_player(player : Dummy, pos : Vector2):
 		super_meter_update.emit(super_meter)
 		check_super_meter()
 		$Hit.play()
-		if attack_combo == 3:
-			big_impact.emit()
-			await get_tree().create_timer(0.05).timeout
-			$TakeIt.pitch_scale = randf_range(1.1, 1.4)
-			$TakeIt.play()
-		else:
-			attack_combo += 1
-			if attack_combo > 3:
-				attack_combo = 0
-			$AttackComboTimer.start()
-		add_connected_hit()
+	if attack_combo == 3:
+		big_impact.emit()
+		await get_tree().create_timer(0.05).timeout
+		$TakeIt.pitch_scale = randf_range(1.1, 1.4)
+		$TakeIt.play()
+	else:
+		attack_combo += 1
+		if attack_combo > 3:
+			attack_combo = 0
+		$AttackComboTimer.start()
+	add_connected_hit()
 	pass
 
 func add_connected_hit():

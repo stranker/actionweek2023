@@ -33,10 +33,12 @@ func _end_round(players_victories : Dictionary):
 	tween.tween_property(Engine, "time_scale", 1, 2).set_trans(Tween.TRANS_EXPO)
 	tween.play()
 	await tween.finished
+	print_debug("Rounds:",rounds, " - GM.RoundCount", GameManager.round_count)
 	if rounds == GameManager.round_count:
 		end_game.emit()
 		$RoundTimer.stop()
 	else:
+		rounds += 1
 		reset_game_state.emit()
 		intro_animation.play("init")
 	pass
