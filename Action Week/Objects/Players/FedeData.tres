@@ -10,3 +10,4 @@ player_name = "F. Giangarra"
 player_in_game_texture = ExtResource("1_fd1td")
 player_portrait_texture = ExtResource("1_fd1td")
 player_special = ExtResource("2_av00r")
+player_winner_speech = "Tuki"

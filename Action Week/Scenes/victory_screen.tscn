@@ -1,0 +1,167 @@
+[gd_scene load_steps=11 format=3 uid="uid://vjagegjkfuip"]
+
+[ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="1_fef04"]
+[ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_7n557"]
+[ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="3_ayg21"]
+[ext_resource type="Texture2D" uid="uid://d15yexeu6p0os" path="res://UI/white_square.jpg" id="4_e2mx8"]
+
+[sub_resource type="GDScript" id="GDScript_mgwl4"]
+script/source = "extends Control
+
+@export var winner_image : TextureRect
+@export var winner_speech : Label
+
+var can_advance : bool = false
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	var winner : PlayerData = GameManager.winner
+	winner_image.texture = winner.player_portrait_texture
+	winner_speech.text = winner.player_winner_speech
+	pass # Replace with function body.
+
+func _input(event):
+	if Input.is_anything_pressed() and can_advance:
+		$VictoryAnimationPlayer.play(\"fade_out\")
+	pass
+
+func _on_victory_animation_player_animation_finished(anim_name):
+	if anim_name == \"fade_in\":
+		can_advance = true
+	if anim_name == \"fade_out\":
+		get_tree().change_scene_to_file(\"res://Scenes/player_selector_scene.tscn\")
+	pass # Replace with function body.
+"
+
+[sub_resource type="LabelSettings" id="LabelSettings_bfuc3"]
+font = ExtResource("3_ayg21")
+font_size = 48
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 10
+shadow_color = Color(1, 1, 1, 1)
+shadow_offset = Vector2(1, 10)
+
+[sub_resource type="Animation" id="Animation_fjdws"]
+resource_name = "fade_out"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Transition:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_vh7gl"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Transition:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_7p5d8"]
+resource_name = "fade_in"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Transition:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_hxvm7"]
+_data = {
+"RESET": SubResource("Animation_vh7gl"),
+"fade_in": SubResource("Animation_7p5d8"),
+"fade_out": SubResource("Animation_fjdws")
+}
+
+[node name="victory_screen" type="Control" node_paths=PackedStringArray("winner_image", "winner_speech")]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = SubResource("GDScript_mgwl4")
+winner_image = NodePath("Winner_Image")
+winner_speech = NodePath("Winner_Image/Winner_Speech")
+
+[node name="BackgroundStars" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("1_fef04")
+expand_mode = 1
+
+[node name="Winner_Image" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 376.0
+offset_top = -286.0
+offset_right = 760.0
+offset_bottom = 130.0
+grow_vertical = 2
+texture = ExtResource("2_7n557")
+stretch_mode = 5
+
+[node name="Winner_Speech" type="Label" parent="Winner_Image"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -227.0
+offset_top = 59.0
+offset_right = 245.0
+offset_bottom = 115.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "S. Marchione"
+label_settings = SubResource("LabelSettings_bfuc3")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Transition" type="TextureRect" parent="."]
+self_modulate = Color(0, 0, 0, 0)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_e2mx8")
+
+[node name="VictoryAnimationPlayer" type="AnimationPlayer" parent="."]
+autoplay = "fade_in"
+libraries = {
+"": SubResource("AnimationLibrary_hxvm7")
+}
+
+[connection signal="animation_finished" from="VictoryAnimationPlayer" to="." method="_on_victory_animation_player_animation_finished"]

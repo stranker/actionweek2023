@@ -1,6 +1,7 @@
 [gd_scene load_steps=27 format=3 uid="uid://15d5oep18nq8"]
 
-[ext_resource type="PackedScene" uid="uid://cmywqdysf10rc" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
+[ext_resource type="PackedScene" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
+[ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_gubrf"]
 [ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="2_wcd2t"]
 [ext_resource type="Texture2D" uid="uid://dsm8hjf1wghb" path="res://UI/selection_background.png" id="3_8pp4q"]
 [ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="3_80k5r"]

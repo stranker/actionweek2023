@@ -10,3 +10,4 @@ player_name = "S. Marchione"
 player_in_game_texture = ExtResource("1_41nxh")
 player_portrait_texture = ExtResource("1_41nxh")
 player_special = ExtResource("2_grwea")
+player_winner_speech = "Como la mia"
