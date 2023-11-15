@@ -1,10 +1,10 @@
-[gd_scene load_steps=27 format=3 uid="uid://15d5oep18nq8"]
+[gd_scene load_steps=33 format=3 uid="uid://15d5oep18nq8"]
 
-[ext_resource type="PackedScene" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
-[ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_gubrf"]
+[ext_resource type="PackedScene" uid="uid://cmywqdysf10rc" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
 [ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="2_wcd2t"]
 [ext_resource type="Texture2D" uid="uid://dsm8hjf1wghb" path="res://UI/selection_background.png" id="3_8pp4q"]
 [ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="3_80k5r"]
+[ext_resource type="Texture2D" uid="uid://bdxstb6hfdyxx" path="res://Objects/Particles/StarParticle.png" id="3_i7g7n"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="4_0kjve"]
 [ext_resource type="Texture2D" uid="uid://vd5yefw3waaw" path="res://Objects/Players/In Game - Alex.png" id="4_1k682"]
 [ext_resource type="AudioStream" uid="uid://dhysl3q4sfle8" path="res://Audio/Music/select_soundtrack.mp3" id="7_f04vv"]
@@ -134,8 +134,8 @@ func _input(event):
 	elif current_selection_state == SelectionState.SPECIAL:
 		player1_idx = _get_controller_input(event, PlayerControllerID.ONE, player1_idx, _select_special, $SpecialP1/AnimationPlayer)
 		player2_idx = _get_controller_input(event, PlayerControllerID.TWO, player2_idx, _select_special, $SpecialP2/AnimationPlayer)
-		player1_idx = player1_idx % Specials.size()
-		player2_idx = player2_idx % Specials.size()
+		player1_idx = clamp(player1_idx, 0, Specials.size() -1)
+		player2_idx = clamp(player2_idx, 0, Specials.size() -1)
 		p1_special_label.text = specials_name[player1_idx]
 		p2_special_label.text = specials_name[player2_idx]
 	pass
@@ -167,13 +167,13 @@ func _select_player(controller, player_idx):
 	$ButtonSelect.play()
 	if players_selected.size() == 2:
 		current_selection_state = SelectionState.SPECIAL
+		player1_idx = 0
+		player2_idx = 0
 		players_panel.hide()
 		rounds_panel.hide()
 		players_selected.clear()
 		p1_special.show()
 		p2_special.show()
-		player1_idx = 0
-		player2_idx = 0
 	pass
 
 func _select_round(controller, player_idx):
@@ -185,6 +185,7 @@ func _select_round(controller, player_idx):
 	pass
 
 func _get_controller_input(event : InputEvent, controller_id, idx, callback : Callable, anim : AnimationPlayer = null):
+	if idx < 0: return 0
 	if event.is_action(\"move_left\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
 		idx -= 1
 		$ButtonHover.play()
@@ -211,6 +212,41 @@ func _get_controller_input(event : InputEvent, controller_id, idx, callback : Ca
 			anim.play(\"select\")
 	return idx
 "
+
+[sub_resource type="Gradient" id="Gradient_ccbfl"]
+offsets = PackedFloat32Array(0, 0.185304, 0.642173, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_dfn2l"]
+gradient = SubResource("Gradient_ccbfl")
+
+[sub_resource type="Curve" id="Curve_h1ge4"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.06147, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qsyrq"]
+curve = SubResource("Curve_h1ge4")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_2721w"]
+emission_shape = 3
+emission_box_extents = Vector3(100, 100, 1)
+particle_flag_align_y = true
+particle_flag_disable_z = true
+direction = Vector3(1, 0.5, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = -700.0
+initial_velocity_max = -200.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+angle_min = -720.0
+angle_max = 720.0
+scale_min = 0.5
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_qsyrq")
+color_ramp = SubResource("GradientTexture1D_dfn2l")
+turbulence_noise_scale = 10.0
+attractor_interaction_enabled = false
 
 [sub_resource type="LabelSettings" id="LabelSettings_jnkje"]
 font = ExtResource("4_0kjve")
@@ -596,6 +632,33 @@ texture = ExtResource("2_wcd2t")
 expand_mode = 1
 metadata/_edit_lock_ = true
 
+[node name="Stars" type="GPUParticles2D" parent="."]
+position = Vector2(1112, 624)
+process_material = SubResource("ParticleProcessMaterial_2721w")
+texture = ExtResource("3_i7g7n")
+visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
+
+[node name="Stars2" type="GPUParticles2D" parent="."]
+position = Vector2(8.00002, 608)
+rotation = 2.27564
+process_material = SubResource("ParticleProcessMaterial_2721w")
+texture = ExtResource("3_i7g7n")
+visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
+
+[node name="Stars3" type="GPUParticles2D" parent="."]
+position = Vector2(3.00002, 1.99994)
+rotation = 3.21694
+process_material = SubResource("ParticleProcessMaterial_2721w")
+texture = ExtResource("3_i7g7n")
+visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
+
+[node name="Stars4" type="GPUParticles2D" parent="."]
+position = Vector2(1151, 2)
+rotation = 5.21716
+process_material = SubResource("ParticleProcessMaterial_2721w")
+texture = ExtResource("3_i7g7n")
+visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
+
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
 anchors_preset = 8
@@ -758,9 +821,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 8.0
-offset_top = -36.0
+offset_top = 12.0
 offset_right = 44.0
-offset_bottom = 32.0
+offset_bottom = 80.0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
 text = "<"
@@ -775,10 +838,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -36.0
-offset_right = -4.0
-offset_bottom = 32.0
+offset_left = 264.0
+offset_top = 12.0
+offset_right = 300.0
+offset_bottom = 80.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
@@ -824,9 +887,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 8.0
-offset_top = -36.0
+offset_top = 12.0
 offset_right = 44.0
-offset_bottom = 32.0
+offset_bottom = 80.0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
 text = "<"
@@ -841,10 +904,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -36.0
-offset_right = -4.0
-offset_bottom = 32.0
+offset_left = 264.0
+offset_top = 12.0
+offset_right = 300.0
+offset_bottom = 80.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
@@ -893,9 +956,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 8.0
-offset_top = -36.0
+offset_top = 12.0
 offset_right = 44.0
-offset_bottom = 32.0
+offset_bottom = 80.0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)
 text = "<"
@@ -910,10 +973,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -40.0
-offset_top = -36.0
-offset_right = -4.0
-offset_bottom = 32.0
+offset_left = 264.0
+offset_top = 12.0
+offset_right = 300.0
+offset_bottom = 80.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(16, 36)

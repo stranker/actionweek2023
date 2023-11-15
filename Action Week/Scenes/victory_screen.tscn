@@ -1,7 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://vjagegjkfuip"]
+[gd_scene load_steps=17 format=3 uid="uid://vjagegjkfuip"]
 
 [ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="1_fef04"]
 [ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_7n557"]
+[ext_resource type="Texture2D" uid="uid://bdxstb6hfdyxx" path="res://Objects/Particles/StarParticle.png" id="2_sq5ob"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="3_ayg21"]
 [ext_resource type="Texture2D" uid="uid://d15yexeu6p0os" path="res://UI/white_square.jpg" id="4_e2mx8"]
 
@@ -33,6 +34,41 @@ func _on_victory_animation_player_animation_finished(anim_name):
 	pass # Replace with function body.
 "
 
+[sub_resource type="Gradient" id="Gradient_6o2gr"]
+offsets = PackedFloat32Array(0, 0.185304, 0.642173, 1)
+colors = PackedColorArray(1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_xvkoe"]
+gradient = SubResource("Gradient_6o2gr")
+
+[sub_resource type="Curve" id="Curve_h3gnm"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), -2.06147, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_qp5ej"]
+curve = SubResource("Curve_h3gnm")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_q30cs"]
+emission_shape = 3
+emission_box_extents = Vector3(100, 100, 1)
+particle_flag_align_y = true
+particle_flag_disable_z = true
+direction = Vector3(1, 0.5, 0)
+spread = 0.0
+gravity = Vector3(0, 0, 0)
+initial_velocity_min = -700.0
+initial_velocity_max = -200.0
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+angle_min = -720.0
+angle_max = 720.0
+scale_min = 0.5
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_qp5ej")
+color_ramp = SubResource("GradientTexture1D_xvkoe")
+turbulence_noise_scale = 10.0
+attractor_interaction_enabled = false
+
 [sub_resource type="LabelSettings" id="LabelSettings_bfuc3"]
 font = ExtResource("3_ayg21")
 font_size = 48
@@ -41,22 +77,6 @@ outline_color = Color(0, 0, 0, 1)
 shadow_size = 10
 shadow_color = Color(1, 1, 1, 1)
 shadow_offset = Vector2(1, 10)
-
-[sub_resource type="Animation" id="Animation_fjdws"]
-resource_name = "fade_out"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Transition:self_modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.5),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
-}
 
 [sub_resource type="Animation" id="Animation_vh7gl"]
 length = 0.001
@@ -89,6 +109,22 @@ tracks/0/keys = {
 "values": [Color(0, 0, 0, 1), Color(0, 0, 0, 0)]
 }
 
+[sub_resource type="Animation" id="Animation_fjdws"]
+resource_name = "fade_out"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Transition:self_modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_hxvm7"]
 _data = {
 "RESET": SubResource("Animation_vh7gl"),
@@ -116,6 +152,34 @@ grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource("1_fef04")
 expand_mode = 1
+
+[node name="Stars" type="GPUParticles2D" parent="."]
+position = Vector2(1112, 624)
+process_material = SubResource("ParticleProcessMaterial_q30cs")
+texture = ExtResource("2_sq5ob")
+visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
+
+[node name="Stars2" type="GPUParticles2D" parent="."]
+position = Vector2(8.00002, 608)
+rotation = 2.27564
+scale = Vector2(1, 1)
+process_material = SubResource("ParticleProcessMaterial_q30cs")
+texture = ExtResource("2_sq5ob")
+visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
+
+[node name="Stars3" type="GPUParticles2D" parent="."]
+position = Vector2(3.00002, 1.99994)
+rotation = -3.06624
+process_material = SubResource("ParticleProcessMaterial_q30cs")
+texture = ExtResource("2_sq5ob")
+visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
+
+[node name="Stars4" type="GPUParticles2D" parent="."]
+position = Vector2(1151, 2)
+rotation = -1.06602
+process_material = SubResource("ParticleProcessMaterial_q30cs")
+texture = ExtResource("2_sq5ob")
+visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
 
 [node name="Winner_Image" type="TextureRect" parent="."]
 layout_mode = 1

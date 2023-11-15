@@ -618,6 +618,7 @@ offset_bottom = 65.0
 theme_override_styles/background = SubResource("StyleBoxFlat_dce8l")
 theme_override_styles/fill = SubResource("StyleBoxFlat_88kwp")
 value = 100.0
+fill_mode = 1
 show_percentage = false
 
 [node name="Name" type="Label" parent="HealthBar"]
@@ -640,6 +641,7 @@ theme_override_styles/background = SubResource("StyleBoxFlat_ufru0")
 theme_override_styles/fill = SubResource("StyleBoxFlat_7c088")
 max_value = 50.0
 value = 50.0
+fill_mode = 1
 show_percentage = false
 
 [node name="SuperBar" type="ProgressBar" parent="."]
@@ -765,8 +767,9 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = -800.0
+offset_top = -324.0
 offset_right = -224.0
-offset_bottom = 648.0
+offset_bottom = 324.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nucmr")
 
