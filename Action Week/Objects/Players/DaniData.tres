@@ -12,4 +12,4 @@ player_in_game_texture = ExtResource("1_hqpnx")
 player_portrait_texture = ExtResource("1_hqpnx")
 player_special = ExtResource("2_doppb")
 player_skin = ExtResource("2_e4yra")
-player_winner_speech = "Mas fácil que codear en Godot"
+player_winner_speech = "Más facilito que Godot"

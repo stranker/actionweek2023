@@ -1,9 +1,10 @@
-[gd_scene load_steps=11 format=3 uid="uid://vjagegjkfuip"]
+[gd_scene load_steps=12 format=3 uid="uid://vjagegjkfuip"]
 
 [ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="1_fef04"]
 [ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_7n557"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="3_ayg21"]
 [ext_resource type="Texture2D" uid="uid://d15yexeu6p0os" path="res://UI/white_square.jpg" id="4_e2mx8"]
+[ext_resource type="AudioStream" uid="uid://c32pleet78pva" path="res://Audio/Music/start_scene.mp3" id="5_7fdal"]
 
 [sub_resource type="GDScript" id="GDScript_mgwl4"]
 script/source = "extends Control
@@ -163,5 +164,10 @@ autoplay = "fade_in"
 libraries = {
 "": SubResource("AnimationLibrary_hxvm7")
 }
+
+[node name="Music" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("5_7fdal")
+volume_db = -8.0
+autoplay = true
 
 [connection signal="animation_finished" from="VictoryAnimationPlayer" to="." method="_on_victory_animation_player_animation_finished"]
