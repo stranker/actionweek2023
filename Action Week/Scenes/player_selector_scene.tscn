@@ -203,7 +203,7 @@ func _get_controller_input(event : InputEvent, controller_id, idx, callback : Ca
 			anim.play(\"right_arrow\")
 			anim.queue(\"RESET\")
 			anim.queue(\"idle\")
-	if event.is_action(\"attack\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
+	if event.is_action(\"jump\" + str(controller_id)) and !event.is_echo() and event.is_pressed():
 		callback.call(controller_id, idx)
 		if anim:
 			anim.play(\"select\")
