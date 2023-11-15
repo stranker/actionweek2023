@@ -1,4 +1,4 @@
-[gd_scene load_steps=25 format=3 uid="uid://dew8rdjqh7og2"]
+[gd_scene load_steps=24 format=3 uid="uid://dew8rdjqh7og2"]
 
 [ext_resource type="Script" path="res://Scenes/game_scene.gd" id="1_7qcci"]
 [ext_resource type="PackedScene" uid="uid://b1c8msk3p2gkp" path="res://Objects/dummy.tscn" id="1_w4v2a"]
@@ -6,7 +6,6 @@
 [ext_resource type="Script" path="res://Scenes/UI.gd" id="3_2llna"]
 [ext_resource type="PackedScene" uid="uid://cvttj0867drlk" path="res://UI/player_widget.tscn" id="5_ewiew"]
 [ext_resource type="Texture2D" uid="uid://rmo2fj6q20xl" path="res://Scenes/Background.jpg" id="5_oiqdb"]
-[ext_resource type="Texture2D" uid="uid://c3u1bu2a80fyo" path="res://UI/Clock.png" id="7_p3568"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="8_23eya"]
 [ext_resource type="FontFile" uid="uid://ble18gxjisbqk" path="res://Fonts/ds_digital/DS-DIGII.TTF" id="8_qs4ge"]
 [ext_resource type="Resource" uid="uid://c4e5fyplivbwu" path="res://Objects/Players/DaniData.tres" id="9_shc8l"]
@@ -16,15 +15,29 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_pmhbl"]
 size = Vector2(2400, 128)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dkxt6"]
+bg_color = Color(0.835294, 0.745098, 0.113725, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.756863, 0.494118, 0, 1)
+corner_radius_top_left = 20
+corner_radius_top_right = 20
+corner_radius_bottom_right = 100
+corner_radius_bottom_left = 100
+corner_detail = 1
+shadow_color = Color(1, 1, 1, 1)
+shadow_size = 10
+
 [sub_resource type="LabelSettings" id="LabelSettings_uywa6"]
 font = ExtResource("8_qs4ge")
 font_size = 92
-font_color = Color(1, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_djhju"]
-font = ExtResource("8_qs4ge")
-font_size = 72
-font_color = Color(1, 0.819608, 0, 1)
+outline_size = 16
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 10
+shadow_color = Color(0, 0, 0, 0.835294)
+shadow_offset = Vector2(1, 6)
 
 [sub_resource type="LabelSettings" id="LabelSettings_y6sfi"]
 font = ExtResource("8_23eya")
@@ -357,67 +370,28 @@ layout_mode = 1
 player = NodePath("../../../Dummy2")
 flipped = true
 
-[node name="Clock" type="TextureRect" parent="UI/Main"]
+[node name="Clock" type="Panel" parent="UI/Main"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -128.0
-offset_top = 8.0
-offset_right = 136.0
-offset_bottom = 140.0
+offset_left = -96.0
+offset_right = 104.0
+offset_bottom = 144.0
 grow_horizontal = 2
-texture = ExtResource("7_p3568")
-stretch_mode = 5
+theme_override_styles/panel = SubResource("StyleBoxFlat_dkxt6")
 
 [node name="Time" type="Label" parent="UI/Main/Clock"]
 layout_mode = 1
-anchors_preset = 8
+anchors_preset = 5
 anchor_left = 0.5
-anchor_top = 0.5
 anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -52.0
-offset_top = -48.0
-offset_right = 52.0
-offset_bottom = 48.0
+offset_left = -45.0
+offset_right = 45.0
+offset_bottom = 96.0
 grow_horizontal = 2
-grow_vertical = 2
 text = "99"
 label_settings = SubResource("LabelSettings_uywa6")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Score1" type="Label" parent="UI/Main/Clock"]
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 12.0
-offset_top = -35.0
-offset_right = 47.0
-offset_bottom = 41.0
-grow_vertical = 2
-text = "0"
-label_settings = SubResource("LabelSettings_djhju")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Score2" type="Label" parent="UI/Main/Clock"]
-layout_mode = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -51.0
-offset_top = -35.0
-offset_right = -16.0
-offset_bottom = 41.0
-grow_horizontal = 0
-grow_vertical = 2
-text = "0"
-label_settings = SubResource("LabelSettings_djhju")
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -436,10 +410,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -384.0
-offset_top = -116.0
-offset_right = 384.001
-offset_bottom = 7.0
+offset_left = 192.0
+offset_top = 208.0
+offset_right = 960.001
+offset_bottom = 331.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "Get ready
@@ -455,10 +429,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -413.0
-offset_top = -112.0
-offset_right = 413.0
-offset_bottom = 112.0
+offset_left = 163.0
+offset_top = 212.0
+offset_right = 989.0
+offset_bottom = 436.0
 grow_horizontal = 2
 grow_vertical = 2
 pivot_offset = Vector2(413, 112)
