@@ -32,6 +32,7 @@ func _ready():
 	players_data.append(load("res://Objects/Players/RamaData.tres"))
 	players_data.append(load("res://Objects/Players/AleRuizData.tres"))
 	players_data.append(load("res://Objects/Players/IvanData.tres"))
+	players_data.append(load("res://Objects/Players/TommyData.tres"))
 	pass
 
 func resolve_victory(defeat_id : int):
