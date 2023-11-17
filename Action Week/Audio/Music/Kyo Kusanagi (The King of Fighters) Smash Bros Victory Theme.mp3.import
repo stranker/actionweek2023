@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bt0yuhnqy5ep"
+path="res://.godot/imported/Kyo Kusanagi (The King of Fighters) Smash Bros Victory Theme.mp3-1462f65c491965e4445139a997b0ee39.mp3str"
+
+[deps]
+
+source_file="res://Audio/Music/Kyo Kusanagi (The King of Fighters) Smash Bros Victory Theme.mp3"
+dest_files=["res://.godot/imported/Kyo Kusanagi (The King of Fighters) Smash Bros Victory Theme.mp3-1462f65c491965e4445139a997b0ee39.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
