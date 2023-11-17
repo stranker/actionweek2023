@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerData" load_steps=5 format=3 uid="uid://djoixgvg7qain"]
+
+[ext_resource type="Texture2D" uid="uid://vd5yefw3waaw" path="res://Objects/Players/In Game - Alex.png" id="1_w5xro"]
+[ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_o63kt"]
+[ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="3_eqo88"]
+[ext_resource type="Script" path="res://Objects/Players/PlayerData.gd" id="4_v4ero"]
+
+[resource]
+script = ExtResource("4_v4ero")
+player_name = "A. Ruiz"
+player_in_game_texture = ExtResource("1_w5xro")
+player_portrait_texture = ExtResource("1_w5xro")
+player_special = ExtResource("3_eqo88")
+player_skin = ExtResource("2_o63kt")
+player_winner_speech = "No puedo ser tan bueno en esto"

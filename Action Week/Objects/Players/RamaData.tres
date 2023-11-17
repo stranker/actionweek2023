@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerData" load_steps=5 format=3 uid="uid://baqn6wd2l73l6"]
+
+[ext_resource type="Texture2D" uid="uid://dyhtogjjhsafx" path="res://Objects/Players/Rama face.png" id="1_6ycpq"]
+[ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_3wliv"]
+[ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="3_hcxxg"]
+[ext_resource type="Script" path="res://Objects/Players/PlayerData.gd" id="4_faxi0"]
+
+[resource]
+script = ExtResource("4_faxi0")
+player_name = "R. Spitaleri"
+player_in_game_texture = ExtResource("1_6ycpq")
+player_portrait_texture = ExtResource("1_6ycpq")
+player_special = ExtResource("3_hcxxg")
+player_skin = ExtResource("2_3wliv")
+player_winner_speech = "Easy Fix!"
