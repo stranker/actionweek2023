@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://uilxl85m85by"]
+[gd_scene load_steps=17 format=3 uid="uid://uilxl85m85by"]
 
 [ext_resource type="Texture2D" uid="uid://bjy7jhukp7enl" path="res://UI/electric_background_effect.jpg" id="1_c8g8b"]
 [ext_resource type="Script" path="res://Scenes/loading_scene.gd" id="1_cnf1a"]
@@ -256,7 +256,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Animation_3eids"]
 resource_name = "start"
-length = 2.0
+length = 3.0
 step = 0.05
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -337,7 +337,7 @@ tracks/6/path = NodePath("LoadingBar:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 1.9, 2),
+"times": PackedFloat32Array(0, 2.3, 2.4),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -349,10 +349,10 @@ tracks/7/path = NodePath("Background:flip_h")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false]
+"values": [true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -361,7 +361,7 @@ tracks/8/path = NodePath("P1:modulate")
 tracks/8/interp = 1
 tracks/8/loop_wrap = true
 tracks/8/keys = {
-"times": PackedFloat32Array(0, 1.55, 1.75),
+"times": PackedFloat32Array(0, 2.15, 2.35),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -373,7 +373,7 @@ tracks/9/path = NodePath("P2:modulate")
 tracks/9/interp = 1
 tracks/9/loop_wrap = true
 tracks/9/keys = {
-"times": PackedFloat32Array(0, 1.55, 1.75),
+"times": PackedFloat32Array(0, 2.15, 2.35),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -385,7 +385,7 @@ tracks/10/path = NodePath("VS:modulate")
 tracks/10/interp = 1
 tracks/10/loop_wrap = true
 tracks/10/keys = {
-"times": PackedFloat32Array(0, 1.55, 1.75),
+"times": PackedFloat32Array(0, 2.15, 2.35),
 "transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
@@ -397,6 +397,24 @@ _data = {
 "loading": SubResource("Animation_7veej"),
 "start": SubResource("Animation_3eids")
 }
+
+[sub_resource type="LabelSettings" id="LabelSettings_diksw"]
+font = ExtResource("2_78wtx")
+font_size = 56
+outline_size = 20
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 8
+shadow_color = Color(1, 1, 1, 1)
+shadow_offset = Vector2(0, 10)
+
+[sub_resource type="LabelSettings" id="LabelSettings_pfwmt"]
+font = ExtResource("2_78wtx")
+font_size = 32
+outline_size = 10
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 6
+shadow_color = Color(1, 1, 1, 1)
+shadow_offset = Vector2(0, 4)
 
 [node name="LoadingScene" type="Control" node_paths=PackedStringArray("p1_texture", "p2_texture", "p1_name", "p2_name")]
 layout_mode = 3
@@ -421,6 +439,7 @@ grow_vertical = 2
 texture = ExtResource("1_c8g8b")
 expand_mode = 1
 flip_h = true
+metadata/_edit_lock_ = true
 
 [node name="P1" type="TextureRect" parent="."]
 layout_mode = 1
@@ -433,6 +452,7 @@ offset_bottom = 188.0
 grow_vertical = 2
 texture = ExtResource("1_fx44y")
 stretch_mode = 5
+metadata/_edit_lock_ = true
 
 [node name="P1Label" type="Label" parent="P1"]
 layout_mode = 1
@@ -463,6 +483,7 @@ grow_vertical = 2
 texture = ExtResource("1_fx44y")
 stretch_mode = 5
 flip_h = true
+metadata/_edit_lock_ = true
 
 [node name="P2Label" type="Label" parent="P2"]
 layout_mode = 1
@@ -488,15 +509,17 @@ anchor_bottom = 0.5
 offset_left = -102.944
 offset_top = -69.447
 offset_right = 134.057
-offset_bottom = 93.553
+offset_bottom = 93.5531
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.261799
 pivot_offset = Vector2(118.5, 81.5)
 text = "VS"
 label_settings = SubResource("LabelSettings_whj6h")
+metadata/_edit_lock_ = true
 
 [node name="LoadingBar" type="ProgressBar" parent="."]
+modulate = Color(1, 1, 1, 0.750001)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -512,6 +535,7 @@ grow_vertical = 0
 theme_override_styles/background = SubResource("StyleBoxFlat_gkqsy")
 theme_override_styles/fill = SubResource("StyleBoxFlat_xrubg")
 show_percentage = false
+metadata/_edit_lock_ = true
 
 [node name="Label" type="Label" parent="LoadingBar"]
 layout_mode = 1
@@ -550,11 +574,34 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -344.0
+offset_left = -440.0
 offset_top = -260.0
-offset_right = 344.0
-offset_bottom = 228.0
+offset_right = 448.0
+offset_bottom = 188.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="Controls" type="Label" parent="Controls"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -344.0
+offset_top = 24.0
+offset_right = 344.0
+offset_bottom = 84.0
+grow_horizontal = 2
+text = "CONTROLS"
+label_settings = SubResource("LabelSettings_diksw")
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="Controls"]
+layout_mode = 0
+offset_left = 48.0
+offset_top = 144.0
+offset_right = 192.0
+offset_bottom = 192.0
+text = "Move"
+label_settings = SubResource("LabelSettings_pfwmt")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

@@ -1,6 +1,5 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=6 format=3 uid="uid://cx1u76omo50vp"]
+[gd_resource type="Resource" script_class="PlayerData" load_steps=5 format=3 uid="uid://cnvkt8naoqgrx"]
 
-[ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="1_g5c18"]
 [ext_resource type="Texture2D" uid="uid://bwr5yh02xrv1c" path="res://Objects/Players/In Game - Gabi - Gabriel Castro.png" id="1_vpwxm"]
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_dqmgp"]
 [ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="3_oy0qg"]
@@ -8,9 +7,9 @@
 
 [resource]
 script = ExtResource("4_xmc1e")
-player_name = "D. Natarelli"
+player_name = "Gabi"
 player_in_game_texture = ExtResource("1_vpwxm")
-player_portrait_texture = ExtResource("1_g5c18")
+player_portrait_texture = ExtResource("1_vpwxm")
 player_special = ExtResource("3_oy0qg")
 player_skin = ExtResource("2_dqmgp")
 player_winner_speech = "Más facilito que Godot"
