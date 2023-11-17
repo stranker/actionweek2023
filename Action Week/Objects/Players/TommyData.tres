@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="PlayerData" load_steps=5 format=3 uid="uid://djs47u8dct8a0"]
+[gd_resource type="Resource" script_class="PlayerData" load_steps=5 format=3 uid="uid://4g6le13x6qu5"]
 
 [ext_resource type="Texture2D" uid="uid://dx5m1lek0rek2" path="res://Objects/Players/Tommy face.png" id="1_871hq"]
-[ext_resource type="Texture2D" uid="uid://dxxxpjvnfjahk" path="res://Objects/Skins/River.png" id="2_x5t2m"]
+[ext_resource type="Texture2D" uid="uid://b0p4mls3me2br" path="res://Objects/Skins/Boke.png" id="2_elb1f"]
 [ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="3_wbc4f"]
 [ext_resource type="Script" path="res://Objects/Players/PlayerData.gd" id="4_veo5a"]
 
@@ -11,5 +11,5 @@ player_name = "T. Ayala"
 player_in_game_texture = ExtResource("1_871hq")
 player_portrait_texture = ExtResource("1_871hq")
 player_special = ExtResource("3_wbc4f")
-player_skin = ExtResource("2_x5t2m")
+player_skin = ExtResource("2_elb1f")
 player_winner_speech = "Wakanda Forever"
