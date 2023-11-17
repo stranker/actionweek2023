@@ -1,6 +1,6 @@
 [gd_scene load_steps=33 format=3 uid="uid://15d5oep18nq8"]
 
-[ext_resource type="PackedScene" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
+[ext_resource type="PackedScene" uid="uid://cmywqdysf10rc" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
 [ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="2_wcd2t"]
 [ext_resource type="Texture2D" uid="uid://dsm8hjf1wghb" path="res://UI/selection_background.png" id="3_8pp4q"]
 [ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="3_80k5r"]
@@ -292,7 +292,7 @@ attractor_interaction_enabled = false
 
 [sub_resource type="LabelSettings" id="LabelSettings_jnkje"]
 font = ExtResource("4_0kjve")
-font_size = 32
+font_size = 28
 outline_size = 20
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 10
@@ -670,6 +670,7 @@ p1_special = NodePath("SpecialP1")
 p2_special = NodePath("SpecialP2")
 p1_special_label = NodePath("SpecialP1/Special")
 p2_special_label = NodePath("SpecialP2/Special2")
+metadata/_edit_lock_ = true
 
 [node name="BackgroundStars" type="TextureRect" parent="."]
 layout_mode = 1
@@ -732,9 +733,8 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 16.0
 offset_top = -260.0
-offset_right = 368.0
+offset_right = 336.0
 offset_bottom = 116.0
 grow_vertical = 2
 texture = ExtResource("4_1k682")
@@ -765,10 +765,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -384.0
+offset_left = -336.0
 offset_top = -260.0
-offset_right = -16.0
-offset_bottom = 124.0
+offset_bottom = 116.0
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("3_80k5r")
@@ -801,9 +800,9 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -108.0
-offset_top = -292.0
+offset_top = -284.0
 offset_right = 102.0
-offset_bottom = -242.0
+offset_bottom = -234.0
 grow_horizontal = 2
 grow_vertical = 2
 text = "SELECT"
@@ -818,9 +817,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -192.0
-offset_top = -220.0
-offset_right = 160.0
+offset_left = -228.0
+offset_top = -212.0
+offset_right = 228.0
 offset_bottom = 276.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -836,7 +835,7 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_constants/h_separation = 0
 theme_override_constants/v_separation = 0
-columns = 2
+columns = 3
 
 [node name="RoundPanel" type="Panel" parent="."]
 visible = false
@@ -911,9 +910,9 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 40.0
+offset_left = 24.0
 offset_top = 164.0
-offset_right = 344.0
+offset_right = 328.0
 offset_bottom = 260.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_yo43e")
@@ -978,9 +977,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -344.0
+offset_left = -320.0
 offset_top = 164.0
-offset_right = -40.0
+offset_right = -16.0
 offset_bottom = 260.0
 grow_horizontal = 0
 grow_vertical = 2
