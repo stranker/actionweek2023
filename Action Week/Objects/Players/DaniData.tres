@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" path="res://Objects/Players/PlayerData.gd" id="1_c78w6"]
 [ext_resource type="Texture2D" uid="uid://edrmsda8qusl" path="res://Objects/Players/dani face.png" id="1_hqpnx"]
+[ext_resource type="Texture2D" uid="uid://dxxxpjvnfjahk" path="res://Objects/Skins/River.png" id="2_6gu3p"]
 [ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="2_doppb"]
-[ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_e4yra"]
 
 [resource]
 script = ExtResource("1_c78w6")
@@ -11,5 +11,5 @@ player_name = "D. Natarelli"
 player_in_game_texture = ExtResource("1_hqpnx")
 player_portrait_texture = ExtResource("1_hqpnx")
 player_special = ExtResource("2_doppb")
-player_skin = ExtResource("2_e4yra")
+player_skin = ExtResource("2_6gu3p")
 player_winner_speech = "Más facilito que Godot"

@@ -1,7 +1,7 @@
-[gd_scene load_steps=38 format=3 uid="uid://b1c8msk3p2gkp"]
+[gd_scene load_steps=39 format=3 uid="uid://b1c8msk3p2gkp"]
 
 [ext_resource type="Script" path="res://Objects/dummy.gd" id="1_3prxl"]
-[ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_0j6c5"]
+[ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Skins/Default.png" id="2_feh0x"]
 [ext_resource type="Texture2D" uid="uid://bwr5yh02xrv1c" path="res://Objects/Players/In Game - Gabi - Gabriel Castro.png" id="3_ggkkc"]
 [ext_resource type="AudioStream" uid="uid://dpq8mimucscnt" path="res://Audio/SFx/jump.wav" id="4_61bu2"]
 [ext_resource type="Texture2D" uid="uid://bucme7b1vh8pn" path="res://Objects/Specials/CircleParticle.png" id="5_y0rpl"]
@@ -12,6 +12,31 @@
 [ext_resource type="AudioStream" uid="uid://da6kn0wa5uhki" path="res://Audio/SFx/dead.wav" id="10_leo1g"]
 [ext_resource type="AudioStream" uid="uid://hdd5l6syuvtc" path="res://Audio/SFx/take_it.wav" id="11_gny64"]
 [ext_resource type="AudioStream" uid="uid://durd2v1qi6v0b" path="res://Audio/SFx/special_start.wav" id="12_3j83g"]
+
+[sub_resource type="GDScript" id="GDScript_gpp1l"]
+resource_name = "player_skin"
+script/source = "extends Node2D
+
+@export var body : Sprite2D
+@export var head : Sprite2D
+@export var left_hand : Sprite2D
+@export var right_hand : Sprite2D
+@export var left_foot : Sprite2D
+@export var right_foot : Sprite2D
+
+func _ready():
+	pass
+
+
+func _on_dummy_player_data_update(data : PlayerData):
+	body.texture = data.player_skin
+	left_hand.texture = data.player_skin
+	right_hand.texture = data.player_skin
+	left_foot.texture = data.player_skin
+	right_foot.texture = data.player_skin
+	head.texture = data.player_in_game_texture
+	pass # Replace with function body.
+"
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_iux6w"]
 size = Vector2(32, 32)
@@ -2241,13 +2266,20 @@ grab_area = NodePath("Visible/Skin/GrabArea")
 
 [node name="Visible" type="Node2D" parent="."]
 
-[node name="Skin" type="Node2D" parent="Visible"]
+[node name="Skin" type="Node2D" parent="Visible" node_paths=PackedStringArray("body", "head", "left_hand", "right_hand", "left_foot", "right_foot")]
 scale = Vector2(2.4, 2.4)
+script = SubResource("GDScript_gpp1l")
+body = NodePath("Body")
+head = NodePath("Body/Head")
+left_hand = NodePath("Body/LeftHand")
+right_hand = NodePath("Body/RightHand")
+left_foot = NodePath("Body/LeftFoot")
+right_foot = NodePath("Body/RightFoot")
 
 [node name="Body" type="Sprite2D" parent="Visible/Skin"]
 z_index = 3
 texture_filter = 1
-texture = ExtResource("2_0j6c5")
+texture = ExtResource("2_feh0x")
 region_enabled = true
 region_rect = Rect2(67.3519, 42.8136, 58.651, 37.8239)
 
@@ -2264,7 +2296,7 @@ region_rect = Rect2(4.42368, 7.33629, 60.3268, 57.6935)
 z_index = 3
 texture_filter = 1
 position = Vector2(-30, 2.66667)
-texture = ExtResource("2_0j6c5")
+texture = ExtResource("2_feh0x")
 offset = Vector2(1.92617, 2.4578)
 region_enabled = true
 region_rect = Rect2(70.7277, 95.2967, 21.8911, 21.3506)
@@ -2283,7 +2315,7 @@ debug_color = Color(0.992157, 0, 0.266667, 0.419608)
 z_index = 2
 texture_filter = 1
 position = Vector2(24, 0.666667)
-texture = ExtResource("2_0j6c5")
+texture = ExtResource("2_feh0x")
 offset = Vector2(1.1828, 2.81273)
 region_enabled = true
 region_rect = Rect2(70.7277, 95.2967, 21.8911, 21.3506)
@@ -2302,7 +2334,7 @@ debug_color = Color(0.992157, 0, 0.266667, 0.419608)
 z_index = 2
 texture_filter = 1
 position = Vector2(-14.6667, 28)
-texture = ExtResource("2_0j6c5")
+texture = ExtResource("2_feh0x")
 offset = Vector2(9.31558, 6.50177)
 region_enabled = true
 region_rect = Rect2(7.24438, 75.1528, 33.3772, 21.756)
@@ -2311,7 +2343,7 @@ region_rect = Rect2(7.24438, 75.1528, 33.3772, 21.756)
 z_index = -1
 texture_filter = 1
 position = Vector2(12.6667, 28)
-texture = ExtResource("2_0j6c5")
+texture = ExtResource("2_feh0x")
 offset = Vector2(9.27186, 7.06351)
 region_enabled = true
 region_rect = Rect2(7.24438, 75.1528, 33.3772, 21.756)
@@ -2433,6 +2465,7 @@ position = Vector2(13, -66)
 stream = ExtResource("12_3j83g")
 volume_db = 8.0
 
+[connection signal="player_data_update" from="." to="Visible/Skin" method="_on_dummy_player_data_update"]
 [connection signal="body_entered" from="Visible/Skin/Body/LeftHand/LeftAttackArea" to="." method="_on_left_attack_area_body_entered"]
 [connection signal="body_entered" from="Visible/Skin/Body/RightHand/RightAttackArea" to="." method="_on_right_attack_area_body_entered"]
 [connection signal="body_entered" from="Visible/Skin/Body/RightFoot/FootAttackArea" to="." method="_on_foot_attack_area_body_entered"]

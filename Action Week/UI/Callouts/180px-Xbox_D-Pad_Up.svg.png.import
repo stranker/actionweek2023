@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b7vkjialh8ic1"
-path="res://.godot/imported/Player.png-f70f2ed0ad623ee0977c93a1042f5f11.ctex"
+uid="uid://x1blnajmrp80"
+path="res://.godot/imported/180px-Xbox_D-Pad_Up.svg.png-dde69ced01037361a0f2526bbb2939f4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Objects/Player.png"
-dest_files=["res://.godot/imported/Player.png-f70f2ed0ad623ee0977c93a1042f5f11.ctex"]
+source_file="res://UI/Callouts/180px-Xbox_D-Pad_Up.svg.png"
+dest_files=["res://.godot/imported/180px-Xbox_D-Pad_Up.svg.png-dde69ced01037361a0f2526bbb2939f4.ctex"]
 
 [params]
 

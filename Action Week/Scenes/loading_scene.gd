@@ -22,7 +22,7 @@ func _ready():
 
 func _process(delta):
 	if finish_loading: return
-	$LoadingBar.value = lerp($LoadingBar.value, $LoadingBar.value + randf_range(0,50), delta)
+	$LoadingBar.value = lerp($LoadingBar.value, $LoadingBar.value + randf_range(0,20), delta)
 	if $LoadingBar.value >= $LoadingBar.max_value:
 		finish_loading = true
 		start_game.emit()

@@ -1,10 +1,18 @@
-[gd_scene load_steps=17 format=3 uid="uid://uilxl85m85by"]
+[gd_scene load_steps=26 format=3 uid="uid://uilxl85m85by"]
 
 [ext_resource type="Texture2D" uid="uid://bjy7jhukp7enl" path="res://UI/electric_background_effect.jpg" id="1_c8g8b"]
 [ext_resource type="Script" path="res://Scenes/loading_scene.gd" id="1_cnf1a"]
 [ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="1_fx44y"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="2_78wtx"]
 [ext_resource type="AudioStream" uid="uid://cuhgcxv55bqfn" path="res://Audio/Music/loading_theme.mp3" id="5_4is1s"]
+[ext_resource type="Texture2D" uid="uid://dqsi3m3uuxwvn" path="res://UI/Callouts/180px-Xbox_Left_stick_button.svg.png" id="6_sojf6"]
+[ext_resource type="Texture2D" uid="uid://d1p3yki5336bo" path="res://UI/Callouts/Xbox_button_X.svg.png" id="7_0evr2"]
+[ext_resource type="Texture2D" uid="uid://c2it0sksphkyd" path="res://UI/Callouts/180px-Xbox_D-Pad_Down.svg.png" id="8_pvy1r"]
+[ext_resource type="Texture2D" uid="uid://x1blnajmrp80" path="res://UI/Callouts/180px-Xbox_D-Pad_Up.svg.png" id="9_t73hc"]
+[ext_resource type="Texture2D" uid="uid://bkhqyo7tuoq4x" path="res://UI/Callouts/Xbox_button_A.svg.png" id="10_ay271"]
+[ext_resource type="Texture2D" uid="uid://jrcjiqinjrqw" path="res://UI/Callouts/Xbox_button_Y.svg.png" id="11_bmjsd"]
+[ext_resource type="Texture2D" uid="uid://c2k6seiox4hhs" path="res://UI/Callouts/Xbox_Right_Bumper.svg.png" id="12_cweqs"]
+[ext_resource type="Texture2D" uid="uid://capv3bt2yn1vy" path="res://UI/Callouts/16px-Xbox_Left_Bumper.svg.png" id="13_c5s67"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_22kol"]
 font = ExtResource("2_78wtx")
@@ -212,6 +220,18 @@ tracks/12/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1)]
 }
+tracks/13/type = "value"
+tracks/13/imported = false
+tracks/13/enabled = true
+tracks/13/path = NodePath("Controls:modulate")
+tracks/13/interp = 1
+tracks/13/loop_wrap = true
+tracks/13/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
 
 [sub_resource type="Animation" id="Animation_7veej"]
 resource_name = "loading"
@@ -337,7 +357,7 @@ tracks/6/path = NodePath("LoadingBar:modulate")
 tracks/6/interp = 1
 tracks/6/loop_wrap = true
 tracks/6/keys = {
-"times": PackedFloat32Array(0, 2.3, 2.4),
+"times": PackedFloat32Array(0, 2.75, 2.85),
 "transitions": PackedFloat32Array(1, 0.5, 1),
 "update": 0,
 "values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
@@ -349,10 +369,10 @@ tracks/7/path = NodePath("Background:flip_h")
 tracks/7/interp = 1
 tracks/7/loop_wrap = true
 tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false]
+"values": [true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true, false, true]
 }
 tracks/8/type = "value"
 tracks/8/imported = false
@@ -390,6 +410,18 @@ tracks/10/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
 }
+tracks/11/type = "value"
+tracks/11/imported = false
+tracks/11/enabled = true
+tracks/11/path = NodePath("Controls:modulate")
+tracks/11/interp = 1
+tracks/11/loop_wrap = true
+tracks/11/keys = {
+"times": PackedFloat32Array(0, 2.3, 2.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_7igbw"]
 _data = {
@@ -397,6 +429,17 @@ _data = {
 "loading": SubResource("Animation_7veej"),
 "start": SubResource("Animation_3eids")
 }
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_0l2e7"]
+bg_color = Color(0.0156863, 0.00784314, 0, 0.768627)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
 [sub_resource type="LabelSettings" id="LabelSettings_diksw"]
 font = ExtResource("2_78wtx")
@@ -446,9 +489,9 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -300.0
+offset_top = 24.0
 offset_right = 512.0
-offset_bottom = 188.0
+offset_bottom = 512.0
 grow_vertical = 2
 texture = ExtResource("1_fx44y")
 stretch_mode = 5
@@ -474,10 +517,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -512.0
-offset_top = -300.0
-offset_right = -0.000732422
-offset_bottom = 188.0
+offset_left = 640.0
+offset_top = 24.0
+offset_right = 1152.0
+offset_bottom = 512.0
 grow_horizontal = 0
 grow_vertical = 2
 texture = ExtResource("1_fx44y")
@@ -506,10 +549,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -102.944
-offset_top = -69.447
-offset_right = 134.057
-offset_bottom = 93.5531
+offset_left = 473.056
+offset_top = 254.553
+offset_right = 710.057
+offset_bottom = 417.553
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.261799
@@ -519,7 +562,6 @@ label_settings = SubResource("LabelSettings_whj6h")
 metadata/_edit_lock_ = true
 
 [node name="LoadingBar" type="ProgressBar" parent="."]
-modulate = Color(1, 1, 1, 0.750001)
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -568,6 +610,7 @@ volume_db = -8.0
 autoplay = true
 
 [node name="Controls" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -580,6 +623,7 @@ offset_right = 448.0
 offset_bottom = 188.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_0l2e7")
 
 [node name="Controls" type="Label" parent="Controls"]
 layout_mode = 1
@@ -597,11 +641,180 @@ horizontal_alignment = 1
 
 [node name="Label" type="Label" parent="Controls"]
 layout_mode = 0
-offset_left = 48.0
-offset_top = 144.0
-offset_right = 192.0
-offset_bottom = 192.0
+offset_left = 120.0
+offset_top = 136.0
+offset_right = 264.0
+offset_bottom = 184.0
 text = "Move"
 label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect" type="TextureRect" parent="Controls/Label"]
+layout_mode = 0
+offset_left = 136.0
+offset_right = 176.0
+offset_bottom = 40.0
+texture = ExtResource("6_sojf6")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label3" type="Label" parent="Controls"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 192.0
+offset_right = 264.0
+offset_bottom = 240.0
+text = "Punch"
+label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect" type="TextureRect" parent="Controls/Label3"]
+layout_mode = 0
+offset_left = 136.0
+offset_right = 176.0
+offset_bottom = 40.0
+texture = ExtResource("7_0evr2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label4" type="Label" parent="Controls"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 248.0
+offset_right = 264.0
+offset_bottom = 296.0
+text = "Kick"
+label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect2" type="TextureRect" parent="Controls/Label4"]
+layout_mode = 0
+offset_left = 136.0
+offset_right = 176.0
+offset_bottom = 40.0
+texture = ExtResource("7_0evr2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label5" type="Label" parent="Controls/Label4"]
+layout_mode = 0
+offset_left = 192.0
+offset_right = 211.0
+offset_bottom = 48.0
+text = "+"
+label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect" type="TextureRect" parent="Controls/Label4"]
+layout_mode = 0
+offset_left = 224.0
+offset_right = 264.0
+offset_bottom = 40.0
+texture = ExtResource("8_pvy1r")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label5" type="Label" parent="Controls"]
+layout_mode = 0
+offset_left = 120.0
+offset_top = 304.0
+offset_right = 264.0
+offset_bottom = 352.0
+text = "Hook"
+label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect2" type="TextureRect" parent="Controls/Label5"]
+layout_mode = 0
+offset_left = 136.0
+offset_right = 176.0
+offset_bottom = 40.0
+texture = ExtResource("7_0evr2")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label5" type="Label" parent="Controls/Label5"]
+layout_mode = 0
+offset_left = 192.0
+offset_right = 211.0
+offset_bottom = 48.0
+text = "+"
+label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect" type="TextureRect" parent="Controls/Label5"]
+layout_mode = 0
+offset_left = 224.0
+offset_right = 264.0
+offset_bottom = 40.0
+texture = ExtResource("9_t73hc")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label2" type="Label" parent="Controls"]
+layout_mode = 0
+offset_left = 504.0
+offset_top = 144.0
+offset_right = 648.0
+offset_bottom = 192.0
+text = "Jump"
+label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect" type="TextureRect" parent="Controls/Label2"]
+layout_mode = 0
+offset_left = 184.0
+offset_right = 224.0
+offset_bottom = 40.0
+texture = ExtResource("10_ay271")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label8" type="Label" parent="Controls"]
+layout_mode = 0
+offset_left = 504.0
+offset_top = 200.0
+offset_right = 660.0
+offset_bottom = 248.0
+text = "SPECIAL"
+label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect2" type="TextureRect" parent="Controls/Label8"]
+layout_mode = 0
+offset_left = 184.0
+offset_right = 224.0
+offset_bottom = 40.0
+texture = ExtResource("11_bmjsd")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label6" type="Label" parent="Controls"]
+layout_mode = 0
+offset_left = 504.0
+offset_top = 256.0
+offset_right = 648.0
+offset_bottom = 304.0
+text = "Grab"
+label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect2" type="TextureRect" parent="Controls/Label6"]
+layout_mode = 0
+offset_left = 184.0
+offset_right = 224.0
+offset_bottom = 40.0
+texture = ExtResource("12_cweqs")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Label7" type="Label" parent="Controls"]
+layout_mode = 0
+offset_left = 504.0
+offset_top = 312.0
+offset_right = 660.0
+offset_bottom = 360.0
+text = "DEFEND"
+label_settings = SubResource("LabelSettings_pfwmt")
+
+[node name="TextureRect2" type="TextureRect" parent="Controls/Label7"]
+layout_mode = 0
+offset_left = 184.0
+offset_right = 224.0
+offset_bottom = 40.0
+texture = ExtResource("13_c5s67")
+expand_mode = 1
+stretch_mode = 5
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

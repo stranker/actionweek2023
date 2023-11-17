@@ -27,6 +27,7 @@ signal end_connect_hit()
 signal big_impact()
 signal hit_floor()
 signal initialized(player)
+signal player_data_update(data)
 
 enum State {
 	IDLE,
@@ -109,7 +110,7 @@ func _ready(): #Start()
 func _get_player_data():
 	if not GameManager.current_players_data.is_empty():
 		player_data = GameManager.current_players_data[str(id)]
-	$Visible/Skin/Body/Head.texture = player_data.player_in_game_texture
+		player_data_update.emit(player_data)
 	pass
 
 func on_start_round():
