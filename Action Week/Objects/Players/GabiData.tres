@@ -7,9 +7,9 @@
 
 [resource]
 script = ExtResource("4_xmc1e")
-player_name = "Gabi"
+player_name = "G. Castro"
 player_in_game_texture = ExtResource("1_vpwxm")
 player_portrait_texture = ExtResource("1_vpwxm")
 player_special = ExtResource("3_oy0qg")
-player_skin = ExtResource("2_ca1dk")
-player_winner_speech = "Más facilito que Godot"
+player_skin = ExtResource("2_dqmgp")
+player_winner_speech = "Wildear"

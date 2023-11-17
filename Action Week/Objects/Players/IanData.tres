@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="PlayerData" load_steps=5 format=3 uid="uid://bf015mdftpwqw"]
+
+[ext_resource type="Texture2D" uid="uid://rvrwbqewypdm" path="res://Objects/Players/Ian Geier face.png" id="1_peusr"]
+[ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="2_u8rkk"]
+[ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="3_yseln"]
+[ext_resource type="Script" path="res://Objects/Players/PlayerData.gd" id="4_rw6rq"]
+
+[resource]
+script = ExtResource("4_rw6rq")
+player_name = "I. Geier"
+player_in_game_texture = ExtResource("1_peusr")
+player_portrait_texture = ExtResource("1_peusr")
+player_special = ExtResource("3_yseln")
+player_skin = ExtResource("2_u8rkk")
+player_winner_speech = "Pechito es el mas grande papaaaa!"

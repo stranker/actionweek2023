@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="PlayerData" load_steps=4 format=3 uid="uid://cr0qqkuxv0syl"]
+
+[ext_resource type="Texture2D" uid="uid://crj8duwh2fe7f" path="res://Objects/Players/Ivan face.png" id="1_ryamv"]
+[ext_resource type="PackedScene" uid="uid://dsk8ym0h5fu7f" path="res://Objects/Specials/raybeam.tscn" id="2_hsgg2"]
+[ext_resource type="Script" path="res://Objects/Players/PlayerData.gd" id="3_vmd8x"]
+
+[resource]
+script = ExtResource("3_vmd8x")
+player_name = "I. Federici"
+player_in_game_texture = ExtResource("1_ryamv")
+player_portrait_texture = ExtResource("1_ryamv")
+player_special = ExtResource("2_hsgg2")
+player_winner_speech = "ここに何が書いてあるのか分かりません"

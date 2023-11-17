@@ -11,5 +11,4 @@ player_name = "E. Papasidero"
 player_in_game_texture = ExtResource("1_wfjdd")
 player_portrait_texture = ExtResource("1_wfjdd")
 player_special = ExtResource("2_wn6de")
-player_skin = ExtResource("2_1vovl")
-player_winner_speech = "Dale boooookeee"
+player_winner_speech = "Se viene boca"
