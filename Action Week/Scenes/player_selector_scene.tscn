@@ -1,4 +1,4 @@
-[gd_scene load_steps=33 format=3 uid="uid://15d5oep18nq8"]
+[gd_scene load_steps=34 format=3 uid="uid://15d5oep18nq8"]
 
 [ext_resource type="PackedScene" uid="uid://cmywqdysf10rc" path="res://UI/player_select_widget.tscn" id="1_1oh1v"]
 [ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="2_wcd2t"]
@@ -9,6 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://vd5yefw3waaw" path="res://Objects/Players/In Game - Alex.png" id="4_1k682"]
 [ext_resource type="AudioStream" uid="uid://dhysl3q4sfle8" path="res://Audio/Music/select_soundtrack.mp3" id="7_f04vv"]
 [ext_resource type="AudioStream" uid="uid://bv37m2csrjy51" path="res://Audio/SFx/button_hover.wav" id="8_181c8"]
+[ext_resource type="Texture2D" uid="uid://bkhqyo7tuoq4x" path="res://UI/Callouts/Xbox_button_A.svg.png" id="8_cww08"]
 [ext_resource type="AudioStream" uid="uid://drrdup5ap67iy" path="res://Audio/SFx/button_select.wav" id="9_1xu41"]
 
 [sub_resource type="GDScript" id="GDScript_ybyqa"]
@@ -799,9 +800,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -108.0
+offset_left = -136.0
 offset_top = -284.0
-offset_right = 102.0
+offset_right = 74.0
 offset_bottom = -234.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -809,6 +810,15 @@ text = "SELECT"
 label_settings = SubResource("LabelSettings_7opnj")
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="Select"]
+layout_mode = 0
+offset_left = 224.0
+offset_right = 272.0
+offset_bottom = 48.0
+texture = ExtResource("8_cww08")
+expand_mode = 1
+stretch_mode = 5
 
 [node name="PlayersPanel" type="Panel" parent="."]
 layout_mode = 1
@@ -977,9 +987,9 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -320.0
+offset_left = -328.0
 offset_top = 164.0
-offset_right = -16.0
+offset_right = -24.0
 offset_bottom = 260.0
 grow_horizontal = 0
 grow_vertical = 2
