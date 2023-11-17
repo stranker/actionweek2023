@@ -87,6 +87,7 @@ func _ready(): #Start()
 	GameManager.reset_game.connect(reset_player)
 	GameManager.start_round.connect(on_start_round)
 	GameManager.end_game.connect(on_end_game)
+	GameManager.end_round.connect(on_end_round)
 	initialized.connect(GameManager.add_player)
 	dead.connect(GameManager.resolve_victory)
 	set_collision_layer_value(player_layer, true )
@@ -576,6 +577,10 @@ func on_end_game(winner):
 	$AnimationPlayer.play("victory")
 	set_process(false)
 	set_physics_process(false)
+	pass
+
+func on_end_round(winner):
+	only_move = true
 	pass
 
 func _on_foot_attack_area_body_entered(body):

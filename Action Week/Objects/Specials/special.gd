@@ -10,6 +10,10 @@ var ref_player : Dummy
 signal start(name)
 signal finish()
 
+func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	pass
+
 func _on_start():
 	start.emit(special_name)
 	GameManager.start_special.connect(_on_start_special)

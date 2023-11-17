@@ -35,6 +35,7 @@ var hits_control_initial_pos : Vector2
 
 var hits_tween : Tween
 
+signal start_special()
 signal throw_special()
 
 # Called when the node enters the scene tree for the first time.
@@ -52,6 +53,7 @@ func _ready():
 		victories_elements[i].visible = true
 	GameManager.victories_update.connect(on_victory_update)
 	throw_special.connect(GameManager.init_special)
+	start_special.connect(GameManager.on_start_special)
 	ulti_text.hide()
 	hits_control.hide()
 	update_flipped()
@@ -151,7 +153,6 @@ func hide_connect_hit():
 func _on_anim_animation_finished(anim_name):
 	if anim_name == \"special\":
 		throw_special.emit()
-		Engine.time_scale = 1
 	pass # Replace with function body.
 "
 
@@ -225,7 +226,7 @@ border_width_left = 4
 border_width_top = 4
 border_width_right = 4
 border_width_bottom = 4
-border_color = Color(0.815686, 0.545098, 0.129412, 1)
+border_color = Color(0.85098, 0.34902, 0.129412, 1)
 corner_radius_top_left = 10
 corner_radius_top_right = 10
 corner_radius_bottom_right = 10
@@ -237,13 +238,12 @@ expand_margin_bottom = 5.0
 shadow_color = Color(1, 0.878431, 0, 0.941176)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wrwp5"]
-bg_color = Color(0.85098, 0.72549, 0.227451, 1)
+bg_color = Color(0.984314, 0.72549, 0, 1)
 skew = Vector2(-0.76, 0)
 corner_radius_top_left = 6
 corner_radius_top_right = 6
 corner_radius_bottom_right = 6
 corner_radius_bottom_left = 6
-shadow_size = 10
 
 [sub_resource type="LabelSettings" id="LabelSettings_smkcq"]
 font = ExtResource("2_rv2cw")
@@ -653,6 +653,7 @@ offset_bottom = 623.0
 theme_override_styles/background = SubResource("StyleBoxFlat_16wq2")
 theme_override_styles/fill = SubResource("StyleBoxFlat_wrwp5")
 max_value = 50.0
+value = 26.26
 show_percentage = false
 
 [node name="Label" type="Label" parent="SuperBar"]
@@ -767,9 +768,8 @@ anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = -800.0
-offset_top = -324.0
 offset_right = -224.0
-offset_bottom = 324.0
+offset_bottom = 648.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_nucmr")
 

@@ -1,23 +1,22 @@
-[gd_scene load_steps=15 format=3 uid="uid://cmywqdysf10rc"]
+[gd_scene load_steps=16 format=3 uid="uid://cmywqdysf10rc"]
 
 [ext_resource type="Texture2D" uid="uid://b7vkjialh8ic1" path="res://Objects/Player.png" id="1_27ens"]
 [ext_resource type="FontFile" uid="uid://25uy57qn7mrb" path="res://Fonts/crang/Crang.ttf" id="2_qe3gp"]
 [ext_resource type="AudioStream" uid="uid://bv37m2csrjy51" path="res://Audio/SFx/button_hover.wav" id="3_bhajk"]
+[ext_resource type="Texture2D" uid="uid://dq4h6e10ej2oa" path="res://UI/select_frame_1.png" id="3_q3mf6"]
+[ext_resource type="Texture2D" uid="uid://ealfjblgg1gv" path="res://UI/select_frame_2.png" id="4_ad4q0"]
 [ext_resource type="AudioStream" uid="uid://drrdup5ap67iy" path="res://Audio/SFx/button_select.wav" id="4_yw51p"]
 
 [sub_resource type="GDScript" id="GDScript_hem5y"]
 resource_name = "player_select_widget"
 script/source = "extends Control
 
-@export var select_panel : Panel
 @export var anim : AnimationPlayer
-@export var p1_label : Label
-@export var p2_label : Label
+@export var p1_frame : TextureRect
+@export var p2_frame : TextureRect
 @export var player_texture : TextureRect
 @export var hovered : bool = false
 @export var selected : bool = false
-
-var control_colors : Array = [ Color.RED, Color.BLUE ]
 
 var players_inside : Array
 
@@ -43,14 +42,10 @@ func hover(controller_id : int):
 	if not players_inside.has(controller_id):
 		players_inside.append(controller_id)
 	hovered = true
-	var final_color : Color = control_colors[controller_id - 1]
-	if players_inside.size() > 1:
-		final_color = control_colors[0].lerp(control_colors[1], 0.5)
-	select_panel.modulate = final_color
 	if controller_id == 1:
-		p1_label.show()
+		p1_frame.show()
 	if controller_id == 2:
-		p2_label.show()
+		p2_frame.show()
 	hover_player.emit(controller_id, ref_data)
 	anim.play(\"hover\")
 	$Hover.play()
@@ -60,15 +55,17 @@ func hover(controller_id : int):
 func _ready():
 	hovered = false
 	selected = false
+	p1_frame.hide()
+	p2_frame.hide()
 	anim.play(\"RESET\")
 	pass # Replace with function body.
 
 func deselect(controller_id):
 	players_inside.erase(controller_id)
 	if controller_id == 1:
-		p1_label.hide()
+		p1_frame.hide()
 	if controller_id == 2:
-		p2_label.hide()
+		p2_frame.hide()
 	if players_inside.is_empty():
 		hovered = false
 		anim.play(\"RESET\")
@@ -77,10 +74,23 @@ func deselect(controller_id):
 	pass
 "
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_i2x2d"]
-bg_color = Color(1, 1, 1, 1)
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_fjoel"]
+bg_color = Color(0.921569, 0.921569, 0.921569, 0)
+border_width_left = 8
+border_width_top = 8
+border_width_right = 8
+border_width_bottom = 8
+border_color = Color(1, 0.87451, 0, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
+expand_margin_left = 8.0
+expand_margin_top = 8.0
+expand_margin_right = 8.0
+expand_margin_bottom = 8.0
+shadow_color = Color(0, 0, 0, 0.152941)
+shadow_size = 2
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a1jdx"]
 atlas = ExtResource("1_27ens")
@@ -88,20 +98,24 @@ region = Rect2(0.275879, 0.181709, 65.3193, 69.7801)
 
 [sub_resource type="LabelSettings" id="LabelSettings_j3j18"]
 font = ExtResource("2_qe3gp")
-font_size = 26
+font_size = 18
 font_color = Color(1, 0, 0, 1)
+shadow_color = Color(0.988235, 0.988235, 0.988235, 0.647059)
+shadow_offset = Vector2(1, 3)
 
 [sub_resource type="LabelSettings" id="LabelSettings_p74t2"]
 font = ExtResource("2_qe3gp")
-font_size = 26
+font_size = 18
 font_color = Color(0, 0, 1, 1)
+shadow_color = Color(1, 1, 1, 1)
+shadow_offset = Vector2(1, 3)
 
 [sub_resource type="Animation" id="Animation_gj7s4"]
 length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Container/SelectPanel:self_modulate")
+tracks/0/path = NodePath("Container/Panel/Frame1:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -113,7 +127,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Container/Panel/P1:self_modulate")
+tracks/1/path = NodePath("Container/Panel/Frame2:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -125,36 +139,36 @@ tracks/1/keys = {
 tracks/2/type = "value"
 tracks/2/imported = false
 tracks/2/enabled = true
-tracks/2/path = NodePath("Container/Panel/P2:self_modulate")
+tracks/2/path = NodePath("Container/Panel/Frame1/P1:scale")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(1, 1)]
 }
 tracks/3/type = "value"
 tracks/3/imported = false
 tracks/3/enabled = true
-tracks/3/path = NodePath("Container/SelectPanel:modulate")
+tracks/3/path = NodePath("Container/Panel/Frame2/P2:scale")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [Vector2(1, 1)]
 }
 
 [sub_resource type="Animation" id="Animation_m3p8g"]
 resource_name = "hover"
-length = 0.4
+length = 0.5
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Container/Panel/P1:self_modulate")
+tracks/0/path = NodePath("Container/Panel/Frame1:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
@@ -166,7 +180,7 @@ tracks/0/keys = {
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Container/Panel/P2:self_modulate")
+tracks/1/path = NodePath("Container/Panel/Frame2:modulate")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
@@ -175,21 +189,45 @@ tracks/1/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.364706), Color(1, 1, 1, 1)]
 }
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Container/Panel/Frame1/P1:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1.1, 1.1), Vector2(1, 1), Vector2(1.1, 1.1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Container/Panel/Frame2/P2:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1.1, 1.1), Vector2(1, 1), Vector2(1.1, 1.1)]
+}
 
 [sub_resource type="Animation" id="Animation_q5ori"]
 resource_name = "select"
-length = 0.9
+length = 0.6
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Container/SelectPanel:self_modulate")
+tracks/0/path = NodePath("Container/Panel/Frame1:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1), Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_0qm23"]
@@ -199,7 +237,8 @@ _data = {
 "select": SubResource("Animation_q5ori")
 }
 
-[node name="PlayerSelectWidget" type="Control" node_paths=PackedStringArray("select_panel", "anim", "p1_label", "p2_label", "player_texture")]
+[node name="PlayerSelectWidget" type="Control" node_paths=PackedStringArray("anim", "p1_frame", "p2_frame", "player_texture")]
+custom_minimum_size = Vector2(176, 120)
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -208,14 +247,11 @@ offset_right = -976.0
 offset_bottom = -528.0
 grow_horizontal = 2
 grow_vertical = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
 script = SubResource("GDScript_hem5y")
-select_panel = NodePath("Container/SelectPanel")
 anim = NodePath("Container/AnimationPlayer")
-p1_label = NodePath("Container/Panel/P1")
-p2_label = NodePath("Container/Panel/P2")
-player_texture = NodePath("Container/Panel/TextureRect")
+p1_frame = NodePath("Container/Panel/Frame1")
+p2_frame = NodePath("Container/Panel/Frame2")
+player_texture = NodePath("Container/Panel/Icon")
 
 [node name="Container" type="Control" parent="."]
 layout_mode = 1
@@ -225,31 +261,22 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="SelectPanel" type="Panel" parent="Container"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-pivot_offset = Vector2(112, 80)
-theme_override_styles/panel = SubResource("StyleBoxFlat_i2x2d")
-
 [node name="Panel" type="Panel" parent="Container"]
-clip_contents = true
 layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 8.0
-offset_right = -8.0
-offset_bottom = -8.0
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -80.0
+offset_top = -52.0
+offset_right = 80.0
+offset_bottom = 52.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_fjoel")
 
-[node name="TextureRect" type="TextureRect" parent="Container/Panel"]
+[node name="Icon" type="TextureRect" parent="Container/Panel"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -260,29 +287,47 @@ texture = SubResource("AtlasTexture_a1jdx")
 expand_mode = 1
 stretch_mode = 5
 
-[node name="P1" type="Label" parent="Container/Panel"]
-visible = false
+[node name="Frame1" type="TextureRect" parent="Container/Panel"]
 layout_mode = 1
-offset_left = 3.0
-offset_top = 3.0
-offset_right = 43.0
-offset_bottom = 33.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_q3mf6")
+
+[node name="P1" type="Label" parent="Container/Panel/Frame1"]
+layout_mode = 1
+offset_left = 7.0
+offset_top = 2.0
+offset_right = 31.0
+offset_bottom = 24.0
 text = "P1
 "
 label_settings = SubResource("LabelSettings_j3j18")
 vertical_alignment = 1
 
-[node name="P2" type="Label" parent="Container/Panel"]
-visible = false
+[node name="Frame2" type="TextureRect" parent="Container/Panel"]
 layout_mode = 1
-anchors_preset = 1
-anchor_left = 1.0
+anchors_preset = 15
 anchor_right = 1.0
-offset_left = -43.0
-offset_top = 3.0
-offset_right = -3.0
-offset_bottom = 33.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("4_ad4q0")
+
+[node name="P2" type="Label" parent="Container/Panel/Frame2"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -30.0
+offset_right = -8.0
 grow_horizontal = 0
+grow_vertical = 0
 text = "P2"
 label_settings = SubResource("LabelSettings_p74t2")
 horizontal_alignment = 2

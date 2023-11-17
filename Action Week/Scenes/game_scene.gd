@@ -19,6 +19,7 @@ func _ready():
 	reset_game_state.connect(GameManager.reset_game_state)
 	end_game.connect(GameManager.on_end_game)
 	intro_animation.play("init")
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	pass
 
 func _process(delta):

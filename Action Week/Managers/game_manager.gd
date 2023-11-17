@@ -77,7 +77,7 @@ func reset_game_state():
 
 func init_special():
 	start_special.emit()
-	Engine.time_scale = 0
+	Engine.time_scale = 1
 	pass
 
 func on_player_selected(controller_id : int, idx : int):
@@ -105,4 +105,8 @@ func set_round_count(count : int):
 
 func start_round_game():
 	start_round.emit()
+	pass
+
+func on_start_special():
+	Engine.time_scale = 0
 	pass
