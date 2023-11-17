@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://vjagegjkfuip"]
+[gd_scene load_steps=18 format=3 uid="uid://vjagegjkfuip"]
 
 [ext_resource type="Texture2D" uid="uid://bg6bojkfn4kkx" path="res://UI/selection_background_stars.jpg" id="1_fef04"]
 [ext_resource type="Texture2D" uid="uid://de2of75ie2ekk" path="res://Objects/Players/santi face.png" id="2_7n557"]
@@ -163,7 +163,6 @@ visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
 [node name="Stars2" type="GPUParticles2D" parent="."]
 position = Vector2(8.00002, 608)
 rotation = 2.27564
-scale = Vector2(1, 1)
 process_material = SubResource("ParticleProcessMaterial_q30cs")
 texture = ExtResource("2_sq5ob")
 visibility_rect = Rect2(-511.028, -501.68, 590.851, 599.509)
